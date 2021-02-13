@@ -1,0 +1,65 @@
+CREATE DATABASE IF NOT EXISTS movie_site;
+USE movie_site;
+
+START TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS movies(
+    movieID INT NOT NULL PRIMARY KEY, 
+    movieTitle VARCHAR(255) NOT NULL, 
+    movieAlias VARCHAR(255), 
+    movieReleased INT,
+    imdbId INT,
+    tmdbId INT
+);
+
+CREATE TABLE IF NOT EXISTS genres(
+    genreID INT NOT NULL PRIMARY KEY, 
+    genreName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS moviesGenres(
+    movieID INT, 
+    genreID INT,
+    FOREIGN KEY (movieID) REFERENCES movies(movieID),
+    FOREIGN KEY (genreID) REFERENCES genres(genreID)
+);
+
+CREATE TABLE IF NOT EXISTS users(
+    userID INT NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE IF NOT EXISTS admins(
+    userID INT NOT NULL PRIMARY KEY,
+    adminLevel INT,
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
+
+CREATE TABLE IF NOT EXISTS tags(
+    tagID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    tagName VARCHAR(255)
+);
+
+
+CREATE TABLE IF NOT EXISTS ratings(
+    ratingID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    movieID INT NOT NULL,
+    userID INT NOT NULL,
+    ratingFigure FLOAT NOT NULL,
+    ts TIMESTAMP NOT NULL,
+    FOREIGN KEY (movieID) REFERENCES movies(movieID),
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
+
+CREATE TABLE IF NOT EXISTS userTagsMovie(
+    userID INT NOT NULL,
+    movieID INT NOT NULL,
+    tagID INT NOT NULL,
+    ts TIMESTAMP NOT NULL,
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (movieID) REFERENCES movies(movieID),
+    FOREIGN KEY (tagID) REFERENCES tags(tagID)
+);
+
+COMMIT;
+
+SHOW TABLES;
