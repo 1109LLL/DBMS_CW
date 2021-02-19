@@ -8,18 +8,27 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db import connection
 
-def movie_summary(request):
-    movies = Movie.objects.raw('SELECT * FROM movieapp_movie')
-    context = {
-        'movies': movies
-    }
-    return render(request, 'movieapp/index.html', context)
 
-def movie_summary2(request):
-    query = 'SELECT * FROM movieapp_movie'
+def index(request):
+    movie_search = request.GET.get('search')
+    query = ''
+    if movie_search:
+        query = 'SELECT * FROM movies WHERE `title` ='
+    else:
+        query = 'SELECT * FROM movies'
     with connection.cursor() as cursor:
-        row = cursor.execute(query) 
+        cursor.execute(query)
+        row = cursor.fetchall()
         return render(request, 'movieapp/index.html', {'movies': row})
+
+def movie_edit(request):
+    search = request.GET.get('search')
+    query = ''
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        row = cursor.fetchall()
+        return render(request, 'movieapp/index.html', {'movies': row})
+
 
 def create(request):
     if request.method == 'POST':
