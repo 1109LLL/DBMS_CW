@@ -1,32 +1,49 @@
 version: "3.2"
 services:
-  php:
-    build: 
-      context: './php/'
-      args:
-       PHP_VERSION: ${PHP_VERSION}
-    networks:
-      - backend
-    volumes:
-      - ${PROJECT_ROOT}/:/var/www/html/
-    # container_name: php
+  # php:
+  #   build: 
+  #     context: './php/'
+  #     args:
+  #      PHP_VERSION: ${PHP_VERSION}
+  #   networks:
+  #     - backend
+  #   volumes:
+  #     - ${PROJECT_ROOT}/:/var/www/html/
+  #   # container_name: php
 
-  apache:
+  # apache:
+  #   build:
+  #     context: './apache/'
+  #     args:
+  #      APACHE_VERSION: ${APACHE_VERSION}
+  #   depends_on:
+  #     - php
+  #     - mysql
+  #   networks:
+  #     - frontend
+  #     - backend
+  #   ports:
+  #     - "8080:80"
+  #   volumes:
+  #     - ${PROJECT_ROOT}/:/var/www/html/
+    # container_name: apache
+
+  django:
     build:
-      context: './apache/'
-      args:
-       APACHE_VERSION: ${APACHE_VERSION}
+      context: './django/'
+    command: python manage.py runserver 0.0.0.0:8000
+    # command: django-admin startproject composeexample
+      # sh -c "python manage.py runserver 0.0.0.0:8000
+      #        && django-admin startproject composeexample"
+    ports:
+      - "8000:8000"
+    volumes:
+      # - .:/app
+      - ./mysql/tmp/app/mysqld:/run/mysqld
     depends_on:
-      - php
       - mysql
     networks:
-      - frontend
       - backend
-    ports:
-      - "8080:80"
-    volumes:
-      - ${PROJECT_ROOT}/:/var/www/html/
-    # container_name: apache
 
   mysql:
     build:
@@ -34,18 +51,16 @@ services:
     restart: always
     ports:
       - "3306:3306"
-    # volumes:
-      # - ./scripts/:/docker-entrypoint-initdb.d
-      # - ./generated/:/var/lib/mysql
-      # - /conf/:/etc/mysql/conf.d
+    volumes:
+      - ./mysql/tmp/app/mysqld:/var/run/mysqld
     networks:
       - backend
-    environment:
-      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
-      # MYSQL_DATABASE: "${DB_NAME}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-    # container_name: mysql
+    # environment:
+    #   - MYSQL_DATABASE="${DB_NAME}"
+    #   - MYSQL_ROOT_PASSWORD="${DB_ROOT_PASSWORD}"
+    #   - MYSQL_USER="${DB_USERNAME}"
+    #   - MYSQL_PASSWORD="${DB_PASSWORD}"
+    container_name: db
 
   
 networks:

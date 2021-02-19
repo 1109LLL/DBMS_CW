@@ -1,5 +1,8 @@
 Containerize This: PHP/Apache/MySQL
 ===================================
+### Manual
+After pulling, cd into directory with `docker-compose.yml` file
+
 
 ### Intro
 Continuing with the Containerize This! series, we're looking at common web application technologies and how they can be used within Docker containers effectively. PHP/Apache/MySQL have a very large market share on content management systems and web applications on the internet, and with so many developers using these technologies, there is a lot of interest to modernize the way that they use them from from local development all the way to production. Today we'll take a look at several ways to containerize and link PHP, Apache, and MySQL together while demonstrating some tips, tricks, and best-practices that will help you take a modern approach when developing and deploying your PHP applications!
