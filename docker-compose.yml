@@ -31,7 +31,7 @@ services:
   django:
     build:
       context: './django/'
-    command: python manage.py runserver 0.0.0.0:8000
+    restart: always
     # command: django-admin startproject composeexample
       # sh -c "python manage.py runserver 0.0.0.0:8000
       #        && django-admin startproject composeexample"
@@ -42,6 +42,7 @@ services:
       - ./mysql/tmp/app/mysqld:/run/mysqld
     depends_on:
       - mysql
+    command: python manage.py runserver 0.0.0.0:8000
     networks:
       - backend
 
