@@ -32,17 +32,13 @@ services:
     build:
       context: './django/'
     restart: always
-    # command: django-admin startproject composeexample
-      # sh -c "python manage.py runserver 0.0.0.0:8000
-      #        && django-admin startproject composeexample"
     ports:
       - "8000:8000"
     volumes:
-      # - .:/app
       - ./mysql/tmp/app/mysqld:/run/mysqld
     depends_on:
       - mysql
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ["./wait-for-it.sh", "db:3306", "--strict", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
     networks:
       - backend
 
@@ -56,11 +52,6 @@ services:
       - ./mysql/tmp/app/mysqld:/var/run/mysqld
     networks:
       - backend
-    # environment:
-    #   - MYSQL_DATABASE="${DB_NAME}"
-    #   - MYSQL_ROOT_PASSWORD="${DB_ROOT_PASSWORD}"
-    #   - MYSQL_USER="${DB_USERNAME}"
-    #   - MYSQL_PASSWORD="${DB_PASSWORD}"
     container_name: db
 
   
