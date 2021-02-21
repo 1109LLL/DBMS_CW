@@ -13,13 +13,17 @@ def index(request):
     movie_search = request.GET.get('search')
     query = ''
     if movie_search:
-        query = 'SELECT * FROM movies WHERE `title` ='
+        query = 'SELECT * FROM movies WHERE movieTitle = %s'
+        with connection.cursor() as cursor:
+            cursor.execute(query, [movie_search])
+            row = cursor.fetchall()
+            return render(request, 'movieapp/index.html', {'movies': row})
     else:
         query = 'SELECT * FROM movies'
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        row = cursor.fetchall()
-        return render(request, 'movieapp/index.html', {'movies': row})
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            row = cursor.fetchall()
+            return render(request, 'movieapp/index.html', {'movies': row})
 
 def movie_edit(request):
     search = request.GET.get('search')
