@@ -2,6 +2,9 @@ Containerize This: PHP/Apache/MySQL
 ===================================
 ### Manual
 After pulling, cd into directory with `docker-compose.yml` file
+1) docker-compose build
+2) docker-compose up
+3) docker-compose down
 
 
 ### Intro
