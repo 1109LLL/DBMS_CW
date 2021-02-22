@@ -13,7 +13,7 @@ def index(request):
     movie_search = request.GET.get('search')
     query = ''
     if movie_search:
-        query = 'SELECT * FROM movies WHERE `title` ='
+        query = 'SELECT * FROM movies WHERE movieTitle ="{}"'.format(movie_search)
     else:
         query = 'SELECT * FROM movies'
     with connection.cursor() as cursor:
