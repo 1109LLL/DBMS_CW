@@ -13,3 +13,16 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.movieID
+
+def get_avg_rating_by_movie_id(movie_id):
+    query = '''
+            SELECT AVG(ratingFigure)
+            FROM ratings
+            WHERE movieID = %s;
+            '''
+    with connection.cursor() as cursor:
+        cursor.execute(query, [movie_id])
+        row = cursor.fetchall()
+        return row
+
+    return None
