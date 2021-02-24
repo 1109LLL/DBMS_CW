@@ -8,18 +8,18 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Title</th>
-            <th scope="col">Average Rating</th>
+            <th scope="col">Publish Year</th>
             <th scope="col">Genres</th>
           </tr>
         </thead>
         
         <tbody>
-        {% for movie in movies%}
+        {% for infor in infors%}
           <tr>
-            <td>{{movie.0}}</td>
-            <td>{{movie.1}}</td>
-            <td>{{movie.3}}</td>
-            <td>{{movie.4}}</td>
+            <td>{{infor.0.0}}</td>
+            <td>{{infor.0.1}}</td>
+            <td>{{infor.0.2}}</td>
+            <td>{{infor.1}}</td>
           </tr>
         {% endfor %}
         </tbody>
