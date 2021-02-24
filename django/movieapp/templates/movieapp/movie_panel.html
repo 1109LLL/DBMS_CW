@@ -1,0 +1,20 @@
+{% extends "movieapp/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container pt-3">
+    <div class="card" style="width:1100px">
+        <img class="card-img-top" src="https://betravingknows.com/wp-content/uploads/2017/06/video-movie-placeholder-image-grey.png" alt="Card image">
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item"><h3>{{movie}}</h3></li>
+                <li class="list-group-item">Released Year:</li>
+                <li class="list-group-item">Average rating: {{rating}}</li>
+                <li class="list-group-item">Tags: {%for tag in tags%} <h6><span class="badge badge-pill badge-secondary">{{tag.0}}</span></h6> {%endfor%}</li>
+                <li class="list-group-item">Genres:</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

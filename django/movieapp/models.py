@@ -14,15 +14,42 @@ class Movie(models.Model):
     def __str__(self):
         return self.movieID
 
+def execute_query(query, params=[]):
+    with connection.cursor() as cursor:
+        cursor.execute(query, params)
+        row = cursor.fetchall()
+        return row
+    return None
+
 def get_avg_rating_by_movie_id(movie_id):
+    if not movie_id:
+        return None
     query = '''
             SELECT AVG(ratingFigure)
             FROM ratings
             WHERE movieID = %s;
             '''
-    with connection.cursor() as cursor:
-        cursor.execute(query, [movie_id])
-        row = cursor.fetchall()
-        return row
+    result = execute_query(query, [movie_id])
+    return result[0][0] if result else 'N/A'
 
-    return None
+def get_movie_id_by_title(movie_title):
+    if not movie_title:
+        return None
+    query = '''
+            SELECT movieID
+            FROM movies
+            WHERE movieTitle = %s;
+            '''
+    result = execute_query(query, [movie_title])
+    return result if result else None
+
+def get_tag_names_by_movie_id(movie_id):
+    if not movie_id:
+        return None
+    query = '''
+            SELECT t.tagName
+            FROM tags AS t, userTagsMovie AS utm
+            WHERE t.tagID = utm.tagID AND utm.movieID = %s;
+            '''
+    result = execute_query(query, [movie_id])
+    return result if result else []
