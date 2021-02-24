@@ -51,3 +51,10 @@ def edit(request, pk, template_name='movieapp/edit.html'):
         form.save()
         return redirect('index')
     return render(request, template_name, {'form':form})
+
+def most_polarising(requeset):
+    query = 'SELECT * FROM movies WHERE movieTitle = %s'
+    with connection.cursor() as cursor:
+        cursor.execute(query, [movie_search])
+        row = cursor.fetchall()
+        return render(request, 'movieapp/index.html', {'movies': row})
