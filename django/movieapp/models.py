@@ -32,6 +32,7 @@ def get_avg_rating_by_movie_id(movie_id):
     result = execute_query(query, [movie_id])
     return result[0][0] if result else 'N/A'
 
+# May not be appropriate in some cases e.g. dumplicate names
 def get_movie_id_by_title(movie_title):
     if not movie_title:
         return None
@@ -41,7 +42,7 @@ def get_movie_id_by_title(movie_title):
             WHERE movieTitle = %s;
             '''
     result = execute_query(query, [movie_title])
-    return result if result else None
+    return result[0][0] if result else None
 
 def get_tag_names_by_movie_id(movie_id):
     if not movie_id:
@@ -53,3 +54,14 @@ def get_tag_names_by_movie_id(movie_id):
             '''
     result = execute_query(query, [movie_id])
     return result if result else []
+
+def get_imdb_link_by_movie_id(movie_id):
+    if not movie_id:
+        return None
+    query = '''
+            SELECT imdbId
+            FROM movies
+            WHERE movieID = %s;
+            '''
+    result = execute_query(query, [movie_id])
+    return result[0][0] if result else None
