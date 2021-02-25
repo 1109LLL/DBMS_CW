@@ -2,11 +2,16 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from .models import Movie
+from .models import *
+from .crawler import *
 from .forms import MovieForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db import connection
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger('debug')
 
 def get_genres_by_movieid(movieID):
     query = '''select g.genreName from genres as g, moviesGenres as mg, movies as m 
@@ -52,6 +57,22 @@ def index(request):
                 full_genres_list.append(get_genres_by_movieid(id))
             infors = zip(row, full_genres_list)
             return render(request, 'movieapp/index.html', {'infors': infors})
+
+def movie_panel(request):
+    movie_selected = request.GET.get('select')
+    movie_id = get_movie_id_by_title(movie_selected)
+    if movie_selected and movie_id:
+        # TODO add movie info logics
+        # TODO can do in one search
+        movie_title = movie_selected
+        avg_rating = get_avg_rating_by_movie_id(movie_id)
+        tags = get_tag_names_by_movie_id(movie_id)
+        logger.debug(tags)
+        imdb_id = get_imdb_link_by_movie_id(movie_id)
+        url_img = get_imdb_img(imdb_id, movie_title)
+        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'rating': avg_rating, 'tags': tags, 'img': url_img})
+    else:
+        return redirect('index')
 
 def movie_edit(request):
     search = request.GET.get('search')
