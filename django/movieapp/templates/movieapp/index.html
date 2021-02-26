@@ -10,6 +10,7 @@
             <th scope="col">Title</th>
             <th scope="col">Alias</th>
             <th scope="col">Publish Year</th>
+
             <th scope="col">Genres</th>
           </tr>
         </thead>
@@ -18,7 +19,7 @@
         {% for infor in infors%}
           <tr>
             <td>{{infor.0.0}}</td>
-            <td>{{infor.0.1}}</td>
+            <td><a href="movie_panel?select={{infor.0.1}}"><button type="button" class="btn btn-outline-light text-dark">{{infor.0.1}}</button><a></td>
             <td>{{infor.0.2}}</td>
             <td>{{infor.0.3}}</td>
             <td>{{infor.1}}</td>
