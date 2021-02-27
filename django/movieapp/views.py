@@ -8,15 +8,10 @@ from .forms import MovieForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db import connection
-<<<<<<< HEAD
-from django.core.paginator import Paginator
-import math
-=======
 import logging
 
 # Get an instance of a logger
 logger = logging.getLogger('debug')
->>>>>>> eb42d5d87f6d17cfb3457be43069646c3b84823e
 
 def get_genres_by_movieid(movieID):
     if movieID:
