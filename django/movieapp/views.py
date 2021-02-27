@@ -8,17 +8,21 @@ from .forms import MovieForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db import connection
+from django.core.paginator import Paginator
+import math
 import logging
 
 # Get an instance of a logger
 logger = logging.getLogger('debug')
 
-def get_genres_by_movieid(movieID):
-    if movieID:
-        query = '''select g.genreName from genres as g, moviesGenres as mg, movies as m 
-        where g.genreID = mg.genreID and m.movieID = mg.movieID and m.movieID = %s'''
+def get_genres_by_movieid(movie_id):
+    if movie_id:
+        query = '''
+                SELECT g.genreName FROM genres AS g, moviesGenres AS mg, movies AS m 
+                WHERE g.genreID = mg.genreID AND m.movieID = mg.movieID AND m.movieID = %s;
+                '''
         with connection.cursor() as cursor:
-            cursor.execute(query, [movieID])
+            cursor.execute(query, [movie_id])
             row = cursor.fetchall()
             genre_list = []
             for i in row:
@@ -27,16 +31,16 @@ def get_genres_by_movieid(movieID):
     else:
         return []
 
-def get_movieID_by_title(movieTitle):
+def get_movieID_by_title(movie_title):
     #find movieID based on movie title 
     query = '''select movieID from movies where movieTitle = %s'''
     with connection.cursor() as cursor:
-        cursor.execute(query, [movieTitle.strip()])
+        cursor.execute(query, [movie_title.strip()])
         row = cursor.fetchall()
         return row # row[0][0]
 
-def get_table_row_number(tableName):
-    query = 'SELECT COUNT(*) FROM ' + tableName
+def get_table_row_number(table_name):
+    query = 'SELECT COUNT(*) FROM ' + table_name
     with connection.cursor() as cursor:
         cursor.execute(query)
         row = cursor.fetchall()
@@ -46,9 +50,13 @@ def index(request):
     movie_search = request.GET.get('search')
     query = ''
     if movie_search:
-        movieid = get_movieID_by_title(movie_search)
-        genre_list = get_genres_by_movieid(movieid)
-        query = "select movieID, movieTitle, movieAlias, MovieReleased from movies where movieTitle = %s"        
+        movie_id = get_movieID_by_title(movie_search)
+        genre_list = get_genres_by_movieid(movie_id)
+        query = """
+                SELECT movieID, movieTitle, movieAlias, MovieReleased 
+                FROM movies 
+                WHERE movieTitle = %s
+                """
         with connection.cursor() as cursor:
             cursor.execute(query, [movie_search.strip()])
             row = cursor.fetchall()
@@ -56,7 +64,11 @@ def index(request):
             return render(request, 'movieapp/index.html', {'infors': infors})
     else:
         page = request.GET.get('page')
-        query = 'SELECT movieID, movieTitle, movieAlias, MovieReleased FROM movies limit {}, 20'.format((int(page))*20 - 20)
+        page = page if page else 1
+        query = '''
+                SELECT movieID, movieTitle, movieAlias, MovieReleased 
+                FROM movies limit {}, 20;
+                '''.format((int(page))*20 - 20)
         with connection.cursor() as cursor:
             cursor.execute(query)
             row = cursor.fetchall()
