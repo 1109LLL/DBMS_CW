@@ -125,9 +125,25 @@ def edit(request, pk, template_name='movieapp/edit.html'):
         return redirect('index')
     return render(request, template_name, {'form':form})
 
-def most_polarising(requeset):
-    query = 'SELECT * FROM movies WHERE movieTitle = %s'
-    with connection.cursor() as cursor:
-        cursor.execute(query, [movie_search])
-        row = cursor.fetchall()
-        return render(request, 'movieapp/index.html', {'movies': row})
+def polarising(request):
+    if request.method == 'GET':
+        movie_id_list = get_movie_id_list()
+
+        polarizing_movies = []
+        for movie_id in movie_id_list:
+            ratings = get_ratings_by_movie_id(movie_id)
+            polarized, good_ratio, bad_ratio = determine_polarizition(ratings)
+
+            info = []
+            # info :: [movie_name, movie_id, good_ratings%, bad_ratings%, genres, tags]
+            if polarized:
+                info.append(get_movie_name_by_movie_id(movie_id)[0][0])
+                info.append(movie_id[0])
+                info.append(good_ratio)
+                info.append(bad_ratio)
+                info.append(get_genres_by_movieid(movie_id))
+                info.append(get_tag_names_by_movie_id(movie_id))
+
+                polarizing_movies.append(info)
+
+        return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies})
