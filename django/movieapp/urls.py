@@ -19,5 +19,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('most_polarising', views.index, name='')
+    path('movie_panel', views.movie_panel, name='movie_panel'),
+    path('movies/edit/<int:pk>/', views.edit, name='edit'),
 ]
