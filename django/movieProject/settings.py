@@ -89,7 +89,45 @@ DATABASES = {
     }
 }
 
+# Logging
+# https://docs.djangoproject.com/en/3.1/topics/logging/
 
+# In settings.py
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'normal': {
+            'format': '[%(levelname)s] %(asctime)s | %(name)s:%(lineno)d | %(message)s'
+        },
+        'simple': {
+            'format': '[%(levelname)s] %(message)s'
+        },
+    },
+    # 'filters': {
+    #     'require_debug_true': {
+    #         '()': 'django.utils.log.RequireDebugTrue',
+    #     },
+    # },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',  # Default logs to stderr
+            'formatter': 'normal',  # use the above "normal" formatter
+            # 'filters': ['require_debug_true'],  # add filters
+        },
+    },
+    'loggers': {
+        '': {  # means "root logger"
+            'handlers': ['console'],  # use the above "console" handler
+            'level': 'INFO',  # logging level
+        },
+        'debug': {  # Modify logger in some modules
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True, 
+        },
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

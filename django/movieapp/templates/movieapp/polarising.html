@@ -1,0 +1,32 @@
+{% extends "movieapp/base.html" %}
+{% load static %}
+{% block content %}
+<h1>Most polarising movies</h1>
+<div class="row">
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Movie name</th>
+            <th scope="col">Movie ID</th>
+            <th scope="col">Good ratings (%)</th>
+            <th scope="col">Bad ratings (%)</th>
+            <th scope="col">Genres</th>
+            <th scope="col">Tags</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            {% for items in polarizing_movies%}
+              <tr>
+                <td><a href="movie_panel?select={{items.0}}"><button type="button" class="btn btn-outline-light text-dark">{{items.0}}</button><a></td>
+                <td>{{items.1}}</td>
+                <td>{{items.2}}</td>
+                <td>{{items.3}}</td>
+                <td>{{items.4}}</td>
+                <td>{{items.5}}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+    </table>
+</div>
+{% endblock %}
