@@ -53,13 +53,20 @@ def index(request):
             infors = zip(row, full_genres_list)
             return render(request, 'movieapp/index.html', {'infors': infors})
 
-def movie_edit(request):
-    search = request.GET.get('search')
-    query = ''
+def most_popular(request):
+    query = "SELECT m.movieID, m.movieTitle, m.movieReleased, ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) FROM movies m JOIN ratings r ON m.movieID = r.movieID GROUP BY m.movieID ORDER BY COUNT(m.movieID), m.movieReleased DESC limit 50"
     with connection.cursor() as cursor:
         cursor.execute(query)
         row = cursor.fetchall()
-        return render(request, 'movieapp/index.html', {'movies': row})
+        return render(request, 'movieapp/popular.html', {'movies': row})
+
+def movie_detail(request, movie_id):
+    #page = (int)(request.GET.get('page'))
+    query = "select movieID, movieTitle, MovieReleased from movies where movieID = %s"
+    with connection.cursor() as cursor:
+        cursor.execute(query, movie_id)
+        row = cursor.fetchall()
+        return render(request, 'movieapp/movie.html', {'movies': row, 'page': 1})
 
 
 def create(request):
