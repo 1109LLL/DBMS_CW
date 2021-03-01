@@ -66,6 +66,17 @@ def get_imdb_link_by_movie_id(movie_id):
     result = execute_query(query, [movie_id])
     return result[0][0] if result else None
 
+def get_released_year_by_movie_id(movie_id):
+    if not movie_id:
+        return None
+    query = '''
+            SELECT movieReleased
+            FROM movies
+            WHERE movieID = %s;
+            '''
+    result = execute_query(query, [movie_id])
+    return result[0][0] if result else None
+
 def get_movie_id_list():
     query = '''
             SELECT movieID

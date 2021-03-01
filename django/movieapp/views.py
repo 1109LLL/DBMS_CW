@@ -89,12 +89,14 @@ def movie_panel(request):
         # TODO add movie info logics
         # TODO can do in one search
         movie_title = movie_selected
+        released_year = get_released_year_by_movie_id(movie_id)
         avg_rating = get_avg_rating_by_movie_id(movie_id)
+        avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
         tags = get_tag_names_by_movie_id(movie_id)
-        logger.debug(tags)
+        genres = get_genres_by_movieid(movie_id)
         imdb_id = get_imdb_link_by_movie_id(movie_id)
         url_img = get_imdb_img(imdb_id, movie_title)
-        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'rating': avg_rating, 'tags': tags, 'img': url_img})
+        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags, 'genres': genres, 'img': url_img})
     else:
         return redirect('index')
 
