@@ -79,7 +79,8 @@ def get_table_row_number(table_name):
     with connection.cursor() as cursor:
         cursor.execute(query)
         row = cursor.fetchall()
-        return row 
+        return row
+         
 def get_released_year_by_movie_id(movie_id):
     if not movie_id:
         return None

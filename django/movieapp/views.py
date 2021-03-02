@@ -14,7 +14,6 @@ import logging
 
 # Get an instance of a logger
 logger = logging.getLogger('debug')
-
 def get_genres_by_movieid(movie_id):
     if movie_id:
         query = '''
@@ -117,14 +116,32 @@ def edit(request, pk, template_name='movieapp/edit.html'):
 
 def soon_to_be_released_movie_prediction(request):
     # if request.method == 'GET':
+    page = request.GET.get('page')
+    page = page if page else 1
     query = '''
             SELECT movieID, movieTitle, movieAlias, movieReleased 
             FROM movies
             WHERE movieReleased = 0
-            LIMIT 10
-            '''
+            LIMIT {}, 20;
+            '''.format((int(page))*20 - 20)
     result = execute_query(query)
-    return render(request, 'movieapp/soon_released_prediction.html', {'soon_to_be_released':result})
+    avg_rating_list = []
+    for movie_search in result:
+        movie_search = movie_search[1]
+        movie_id = get_movieID_by_title(movie_search)
+        # TODO can select parts of user as 先看过的人
+        avg_rating = get_avg_rating_by_movie_id(movie_id[0][0])
+        avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
+        avg_rating_list.append([avg_rating])
+    infors = zip(result, avg_rating_list)
+    # logger.info(avg_rating_list)
+    # logger.info(result)
+
+
+    total_pages = 252 ## need change...
+    movie_number = math.ceil(total_pages / 20)
+    return render(request, 'movieapp/soon_released_prediction.html', {'soon_to_be_released':result, 'cur_page':page, 'movie_number': movie_number, 'infors':infors})    
+
 def polarising(request):
     if request.method == 'GET':
         movie_id_list = get_movie_id_list()
