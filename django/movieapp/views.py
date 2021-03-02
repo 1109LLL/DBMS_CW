@@ -91,6 +91,7 @@ def movie_panel(request):
         movie_title = movie_selected
         released_year = get_released_year_by_movie_id(movie_id)
         avg_rating = get_avg_rating_by_movie_id(movie_id)
+        # round the rating to 2s.f.
         avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
         tags = get_tag_names_by_movie_id(movie_id)
         genres = get_genres_by_movieid(movie_id)
