@@ -66,6 +66,21 @@ def get_imdb_link_by_movie_id(movie_id):
     result = execute_query(query, [movie_id])
     return result[0][0] if result else None
 
+def get_movieID_by_title(movie_title):
+    #find movieID based on movie title 
+    query = '''select movieID from movies where movieTitle = %s'''
+    with connection.cursor() as cursor:
+        cursor.execute(query, [movie_title.strip()])
+        row = cursor.fetchall()
+        return row # row[0][0]
+
+def get_table_row_number(table_name):
+    query = 'SELECT COUNT(*) FROM ' + table_name
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        row = cursor.fetchall()
+        return row
+         
 def get_released_year_by_movie_id(movie_id):
     if not movie_id:
         return None
