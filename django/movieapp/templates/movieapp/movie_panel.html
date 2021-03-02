@@ -8,10 +8,10 @@
         <div class="card-body">
             <ul class="list-group">
                 <li class="list-group-item"><h3>{{movie}}</h3></li>
-                <li class="list-group-item">Released Year:</li>
-                <li class="list-group-item">Average rating: {{rating}}</li>
+                <li class="list-group-item">Released Year:<br>{{year}}</li>
+                <li class="list-group-item">Average rating:<br>{{rating}}</li>
                 <li class="list-group-item">Tags: {%for tag in tags%} <h6><span class="badge badge-pill badge-secondary">{{tag.0}}</span></h6> {%endfor%}</li>
-                <li class="list-group-item">Genres:</li>
+                <li class="list-group-item">Genres:{%for genre in genres%} <h6><span class="badge badge-pill badge-secondary">{{genre}}</span></h6> {%endfor%}</li>
             </ul>
         </div>
     </div>

@@ -77,12 +77,14 @@ def movie_panel(request):
         # TODO add movie info logics
         # TODO can do in one search
         movie_title = movie_selected
+        released_year = get_released_year_by_movie_id(movie_id)
         avg_rating = get_avg_rating_by_movie_id(movie_id)
+        avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
         tags = get_tag_names_by_movie_id(movie_id)
-        logger.debug(tags)
+        genres = get_genres_by_movieid(movie_id)
         imdb_id = get_imdb_link_by_movie_id(movie_id)
         url_img = get_imdb_img(imdb_id, movie_title)
-        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'rating': avg_rating, 'tags': tags, 'img': url_img})
+        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags, 'genres': genres, 'img': url_img})
     else:
         return redirect('index')
 
@@ -123,3 +125,25 @@ def soon_to_be_released_movie_prediction(request):
             '''
     result = execute_query(query)
     return render(request, 'movieapp/soon_released_prediction.html', {'soon_to_be_released':result})
+def polarising(request):
+    if request.method == 'GET':
+        movie_id_list = get_movie_id_list()
+
+        polarizing_movies = []
+        for movie_id in movie_id_list:
+            ratings = get_ratings_by_movie_id(movie_id)
+            polarized, good_ratio, bad_ratio = determine_polarizition(ratings)
+
+            info = []
+            # info :: [movie_name, movie_id, good_ratings%, bad_ratings%, genres, tags]
+            if polarized:
+                info.append(get_movie_name_by_movie_id(movie_id)[0][0])
+                info.append(movie_id[0])
+                info.append(good_ratio)
+                info.append(bad_ratio)
+                info.append(get_genres_by_movieid(movie_id))
+                info.append(get_tag_names_by_movie_id(movie_id))
+
+                polarizing_movies.append(info)
+
+        return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies})
