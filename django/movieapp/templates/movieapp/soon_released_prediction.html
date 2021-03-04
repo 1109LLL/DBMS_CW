@@ -1,33 +1,31 @@
 {% extends "movieapp/base.html" %}
 {% load static %}
 {% block content %}
-<h1>Movies</h1>
-<div class="row">
-    <table class="table table-hover">
+<h1>Soon To Be Released Movies</h1>
+<table class="table table-hover">
         <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">Title</th>
             <th scope="col">Alias</th>
-            <th scope="col">Publish Year</th>
+            <th scope="col">Ratings</th>
 
             <th scope="col">Genres</th>
           </tr>
         </thead>
         
         <tbody>
-        {% for infor in infors%}
+        {% for soon in infors%}
           <tr>
-            <td>{{infor.0.0}}</td>
-            <td><a href="movie_panel?select={{infor.0.1}}"><button type="button" class="btn btn-outline-light text-dark">{{infor.0.1}}</button><a></td>
-            <td>{{infor.0.2}}</td>
-            <td>{{infor.0.3}}</td>
-            <td>{{infor.1}}</td>
+            <td>{{soon.0.0}}</td>
+            <td>{{soon.0.1}}</td>
+            <td>{{soon.0.2}}</td>
+            <td>{{soon.1.0}}</td>
           </tr>
         {% endfor %}
         </tbody>
       </table>
-      <ul class="pagination">
+	  <ul class="pagination">
         {% if cur_page != "1"%}
           <li class="page-item"><a class="page-link" href="?page={{cur_page|add:"-1"}}">Previous</a></li>
         {% endif %}
@@ -47,5 +45,4 @@
           <li class="page-item"><a class="page-link" href="?page={{movie_number}}">{{movie_number}}</a></li>
           <li class="page-item"><a class="page-link" href="?page={{cur_page|add:"1"}}">Next</a></li>
       </ul>
-</div>
 {% endblock %}

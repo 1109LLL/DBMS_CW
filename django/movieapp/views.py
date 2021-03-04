@@ -14,7 +14,6 @@ import logging
 
 # Get an instance of a logger
 logger = logging.getLogger('debug')
-
 def get_genres_by_movieid(movie_id):
     if movie_id:
         query = '''
@@ -31,20 +30,7 @@ def get_genres_by_movieid(movie_id):
     else:
         return []
 
-def get_movieID_by_title(movie_title):
-    #find movieID based on movie title 
-    query = '''select movieID from movies where movieTitle = %s'''
-    with connection.cursor() as cursor:
-        cursor.execute(query, [movie_title.strip()])
-        row = cursor.fetchall()
-        return row # row[0][0]
 
-def get_table_row_number(table_name):
-    query = 'SELECT COUNT(*) FROM ' + table_name
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        row = cursor.fetchall()
-        return row 
 
 def index(request):
     movie_search = request.GET.get('search')
@@ -79,7 +65,8 @@ def index(request):
             for id in movieID_list:
                 full_genres_list.append(get_genres_by_movieid(id))
             infors = zip(row, full_genres_list) 
-            movie_number = math.ceil(get_table_row_number('movies')[0][0] / 20)
+            total_pages = get_table_row_number('movies')[0][0] 
+            movie_number = math.ceil(total_pages / 20)
             return render(request, 'movieapp/index.html', {'infors': infors, 'cur_page':page, 'movie_number': movie_number})
 
 def movie_panel(request):
@@ -89,12 +76,15 @@ def movie_panel(request):
         # TODO add movie info logics
         # TODO can do in one search
         movie_title = movie_selected
+        released_year = get_released_year_by_movie_id(movie_id)
         avg_rating = get_avg_rating_by_movie_id(movie_id)
+        # round the rating to 2s.f.
+        avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
         tags = get_tag_names_by_movie_id(movie_id)
-        logger.debug(tags)
+        genres = get_genres_by_movieid(movie_id)
         imdb_id = get_imdb_link_by_movie_id(movie_id)
         url_img = get_imdb_img(imdb_id, movie_title)
-        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'rating': avg_rating, 'tags': tags, 'img': url_img})
+        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags, 'genres': genres, 'img': url_img})
     else:
         return redirect('index')
 
@@ -131,6 +121,34 @@ def edit(request, pk, template_name='movieapp/edit.html'):
         form.save()
         return redirect('index')
     return render(request, template_name, {'form':form})
+
+def soon_to_be_released_movie_prediction(request):
+    # if request.method == 'GET':
+    page = request.GET.get('page')
+    page = page if page else 1
+    query = '''
+            SELECT movieID, movieTitle, movieAlias, movieReleased 
+            FROM movies
+            WHERE movieReleased = 0
+            LIMIT {}, 20;
+            '''.format((int(page))*20 - 20)
+    result = execute_query(query)
+    avg_rating_list = []
+    for movie_search in result:
+        movie_search = movie_search[1]
+        movie_id = get_movieID_by_title(movie_search)
+        # TODO can select parts of user as 先看过的人
+        avg_rating = get_avg_rating_by_movie_id(movie_id[0][0])
+        avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
+        avg_rating_list.append([avg_rating])
+    infors = zip(result, avg_rating_list)
+    # logger.info(avg_rating_list)
+    # logger.info(result)
+
+
+    total_pages = 252 ## need change...
+    movie_number = math.ceil(total_pages / 20)
+    return render(request, 'movieapp/soon_released_prediction.html', {'soon_to_be_released':result, 'cur_page':page, 'movie_number': movie_number, 'infors':infors})    
 
 def polarising(request):
     if request.method == 'GET':
