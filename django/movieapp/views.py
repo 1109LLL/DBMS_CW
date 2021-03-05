@@ -82,9 +82,13 @@ def movie_panel(request):
         avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
         tags = get_tag_names_by_movie_id(movie_id)
         genres = get_genres_by_movieid(movie_id)
-        imdb_id = get_imdb_link_by_movie_id(movie_id)
+        link_ids = get_link_ids_by_movie_id(movie_id)
+        imdb_id = link_ids[0]
+        tmdb_id = link_ids[1] 
         url_img = get_imdb_img(imdb_id, movie_title)
-        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags, 'genres': genres, 'img': url_img})
+        logger.info(get_summary_text(movie_id, movie_title))
+        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags,\
+                                                             'genres': genres, 'img': url_img, 'imdb_id': imdb_id, 'tmdb_id': tmdb_id})
     else:
         return redirect('index')
 
