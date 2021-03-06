@@ -5,6 +5,11 @@ from django.db import models
 
 from django.db import connection
 
+from .crawler import Crawler, LinkType
+
+import logging
+
+logger = logging.getLogger('debug')
 
 class Movie(models.Model):
     movieID = models.CharField("movieID", max_length=255, blank = True, null = True)
@@ -66,6 +71,17 @@ def get_imdb_link_by_movie_id(movie_id):
     result = execute_query(query, [movie_id])
     return result[0][0] if result else None
 
+def get_link_ids_by_movie_id(movie_id):
+    if not movie_id:
+        return None
+    query = '''
+            SELECT imdbId, tmdbId
+            FROM movies
+            WHERE movieID = %s;
+            '''
+    result = execute_query(query, [movie_id])
+    return result[0] if result else ["N/A", "N/A"]
+
 def get_movieID_by_title(movie_title):
     #find movieID based on movie title 
     query = '''select movieID from movies where movieTitle = %s'''
@@ -121,6 +137,22 @@ def get_movie_name_by_movie_id(movie_id):
             '''
     result = execute_query(query, [movie_id])
     return result if result else []
+
+def get_imdb_img(movie_id, movie_title):
+    crawler = Crawler(movie_id, movie_title, LinkType.IMDB)
+    if crawler:
+        return crawler.get_imdb_img_url()
+    else:
+        return "" 
+    
+def get_summary_text(movie_id, movie_title):
+    crawler = Crawler(movie_id, movie_title, LinkType.IMDB)
+    if crawler:
+        logger.info("HTML found!")
+        return crawler.get_summary_context()
+    else:
+        logger.info("NOT found!")
+        return "" 
 
 def determine_polarizition(ratings):
     polarized = False

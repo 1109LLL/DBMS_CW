@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="container pt-3">
-    <div class="card" style="width:300px">
+    <div class="card mx-auto" style="width:400px">
         <img class="card-img-top" src="{{img}}" onerror="this.src='https://betravingknows.com/wp-content/uploads/2017/06/video-movie-placeholder-image-grey.png';" alt="Missing Image" class="rounded">
         <div class="card-body">
             <ul class="list-group">
@@ -12,6 +12,10 @@
                 <li class="list-group-item">Average rating:<br>{{rating}}</li>
                 <li class="list-group-item">Tags: {%for tag in tags%} <h6><span class="badge badge-pill badge-secondary">{{tag.0}}</span></h6> {%endfor%}</li>
                 <li class="list-group-item">Genres:{%for genre in genres%} <h6><span class="badge badge-pill badge-secondary">{{genre}}</span></h6> {%endfor%}</li>
+                <li class="list-group-item">More info referring to:<br><br>
+                    <a href="https://www.imdb.com/title/tt0{{imdb_id}}/"><button type="button" class="btn btn-outline-dark">IMDB</button></a>
+                    <a href="https://www.themoviedb.org/movie/{{tmdb_id}}"><button type="button" class="btn btn-outline-dark">TMDB</button></a>
+                </li>
             </ul>
         </div>
     </div>

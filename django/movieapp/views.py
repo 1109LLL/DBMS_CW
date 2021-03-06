@@ -78,22 +78,34 @@ def movie_panel(request):
         movie_title = movie_selected
         released_year = get_released_year_by_movie_id(movie_id)
         avg_rating = get_avg_rating_by_movie_id(movie_id)
+        # round the rating to 2s.f.
         avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
         tags = get_tag_names_by_movie_id(movie_id)
         genres = get_genres_by_movieid(movie_id)
-        imdb_id = get_imdb_link_by_movie_id(movie_id)
+        link_ids = get_link_ids_by_movie_id(movie_id)
+        imdb_id = link_ids[0]
+        tmdb_id = link_ids[1] 
         url_img = get_imdb_img(imdb_id, movie_title)
-        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags, 'genres': genres, 'img': url_img})
+        logger.info(get_summary_text(movie_id, movie_title))
+        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags,\
+                                                             'genres': genres, 'img': url_img, 'imdb_id': imdb_id, 'tmdb_id': tmdb_id})
     else:
         return redirect('index')
 
-def movie_edit(request):
-    search = request.GET.get('search')
-    query = ''
+def most_popular(request):
+    query = "SELECT m.movieID, m.movieTitle, m.movieReleased, ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) FROM movies m JOIN ratings r ON m.movieID = r.movieID GROUP BY m.movieID ORDER BY COUNT(m.movieID), m.movieReleased DESC limit 50"
     with connection.cursor() as cursor:
         cursor.execute(query)
         row = cursor.fetchall()
-        return render(request, 'movieapp/index.html', {'movies': row})
+        return render(request, 'movieapp/popular.html', {'movies': row})
+
+def movie_detail(request, movie_id):
+    #page = (int)(request.GET.get('page'))
+    query = "select movieID, movieTitle, MovieReleased from movies where movieID = %s"
+    with connection.cursor() as cursor:
+        cursor.execute(query, movie_id)
+        row = cursor.fetchall()
+        return render(request, 'movieapp/movie.html', {'movies': row, 'page': 1})
 
 
 def create(request):
