@@ -80,7 +80,7 @@ def get_table_row_number(table_name):
         cursor.execute(query)
         row = cursor.fetchall()
         return row
-         
+
 def get_released_year_by_movie_id(movie_id):
     if not movie_id:
         return None
@@ -141,3 +141,13 @@ def determine_polarizition(ratings):
         polarized = True
 
     return polarized, good_ratio*100, bad_ratio*100
+
+def get_prediction_movies_row_number():
+    query = '''
+            SELECT COUNT(*)
+            FROM movies
+            WHERE movieReleased = 0
+            '''
+    result = execute_query(query)
+    return result[0][0]
+

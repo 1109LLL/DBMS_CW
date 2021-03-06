@@ -1,7 +1,7 @@
 {% extends "movieapp/base.html" %}
 {% load static %}
 {% block content %}
-<h1>Soon To Be Released Movies</h1>
+<h1>Soon To Be Released Movies {{movieid}}</h1>
 <table class="table table-hover">
         <thead>
           <tr>
@@ -9,8 +9,6 @@
             <th scope="col">Title</th>
             <th scope="col">Alias</th>
             <th scope="col">Ratings</th>
-
-            <th scope="col">Genres</th>
           </tr>
         </thead>
         
