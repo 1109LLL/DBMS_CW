@@ -86,7 +86,6 @@ def movie_panel(request):
         imdb_id = link_ids[0]
         tmdb_id = link_ids[1] 
         url_img = get_imdb_img(imdb_id, movie_title)
-        logger.info(get_summary_text(movie_id, movie_title))
         return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags,\
                                                              'genres': genres, 'img': url_img, 'imdb_id': imdb_id, 'tmdb_id': tmdb_id})
     else:
@@ -95,21 +94,38 @@ def movie_panel(request):
 def predicted_movie_panel(request):
     movie_selected = request.GET.get('select')
     movie_id = get_movie_id_by_title(movie_selected)
+    
+
     if movie_selected and movie_id:
         # TODO add movie info logics
         # TODO can do in one search
-        movie_title = movie_selected
-        released_year = get_released_year_by_movie_id(movie_id)
-        avg_rating = get_avg_rating_by_movie_id(movie_id)
+        
+        # get predicted rating
+        genres_list = get_genre_lists_from_movieid(movie_id)
+        movies_list = []
+        for genre in genres_list:
+            movieid = get_movieid_by_genreid(genre)
+            if movieid == None:
+                continue
+            else:
+                movies_list.append(movieid)
+        logger.info(genres_list)
+
+        avg_rating1 = get_avg_rating_by_movie_id(movie_id)
+        avg_rating2 = get_avg_ratings_of_lists_of_movies(movies_list[0])
+        avg_rating = 0.5 * (avg_rating1+avg_rating2[0])
         # round the rating to 2s.f.
         avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
+
+        movie_title = movie_selected
+        released_year = get_released_year_by_movie_id(movie_id)
         tags = get_tag_names_by_movie_id(movie_id)
         genres = get_genres_by_movieid(movie_id)
         link_ids = get_link_ids_by_movie_id(movie_id)
         imdb_id = link_ids[0]
         tmdb_id = link_ids[1] 
         url_img = get_imdb_img(imdb_id, movie_title)
-        logger.info(get_summary_text(movie_id, movie_title))
+
         return render(request, 'movieapp/predicted_movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags,\
                                                              'genres': genres, 'img': url_img, 'imdb_id': imdb_id, 'tmdb_id': tmdb_id})
     else:
