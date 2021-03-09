@@ -175,3 +175,48 @@ def get_prediction_movies_row_number():
     result = execute_query(query)
     return result[0][0]
 
+def get_limited_movies(limit):
+    query = '''
+            SELECT movieID
+            FROM movies
+            LIMIT %s, 20;
+            '''
+    result = execute_query(query, [limit])
+    return result
+
+def total_number_of_movies():
+    query = '''
+            SELECT COUNT(movieID)
+            FROM movies;
+            '''
+    result = execute_query(query)
+    return result
+
+def gather_user_groups(movie_id):
+    query1 = '''
+            SELECT * 
+            FROM 
+            (SELECT COUNT(userID) AS like_total 
+                FROM ratings 
+                WHERE movieID = %s AND ratingFigure >= 4) AS likers,
+            (SELECT COUNT(userID) AS dislike_total 
+                FROM ratings 
+                WHERE movieID = %s AND ratingFigure <= 2) AS haters;
+            '''
+    counts = execute_query(query1, [movie_id,movie_id])
+
+    query2 = '''
+            SELECT userID
+            FROM ratings
+            WHERE movieID = %s AND ratingFigure >= 4
+            '''
+    result2 = execute_query(query2, [movie_id])
+
+    query3 = '''
+            SELECT userID
+            FROM ratings
+            WHERE movieID = %s AND ratingFigure <= 2
+            '''
+    result3 = execute_query(query3, [movie_id])
+
+    return counts, result2, result3
