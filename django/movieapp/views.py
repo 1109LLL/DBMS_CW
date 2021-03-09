@@ -49,7 +49,7 @@ def index(request):
             return render(request, 'movieapp/index.html', {'infors': infors})
     else:
         page = request.GET.get('page')
-        page = page if page else 1
+        page = int(page) if page else 1
         query = '''
                 SELECT movieID, movieTitle, movieAlias, MovieReleased 
                 FROM movies limit {}, 20;
