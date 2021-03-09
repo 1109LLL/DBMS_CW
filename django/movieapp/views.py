@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from .models import *
 from .crawler import *
-from .forms import MovieForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db import connection
