@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from .models import *
 from .crawler import *
-from .forms import MovieForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db import connection
@@ -50,7 +49,7 @@ def index(request):
             return render(request, 'movieapp/index.html', {'infors': infors})
     else:
         page = request.GET.get('page')
-        page = page if page else 1
+        page = int(page) if page else 1
         query = '''
                 SELECT movieID, movieTitle, movieAlias, MovieReleased 
                 FROM movies limit {}, 20;
@@ -86,8 +85,47 @@ def movie_panel(request):
         imdb_id = link_ids[0]
         tmdb_id = link_ids[1] 
         url_img = get_imdb_img(imdb_id, movie_title)
-        logger.info(get_summary_text(movie_id, movie_title))
         return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags,\
+                                                             'genres': genres, 'img': url_img, 'imdb_id': imdb_id, 'tmdb_id': tmdb_id})
+    else:
+        return redirect('index')
+
+def predicted_movie_panel(request):
+    movie_selected = request.GET.get('select')
+    movie_id = get_movie_id_by_title(movie_selected)
+    
+
+    if movie_selected and movie_id:
+        # TODO add movie info logics
+        # TODO can do in one search
+        
+        # get predicted rating
+        genres_list = get_genre_lists_from_movieid(movie_id)
+        movies_list = []
+        for genre in genres_list:
+            movieid = get_movieid_by_genreid(genre)
+            if movieid == None:
+                continue
+            else:
+                movies_list.append(movieid)
+        logger.info(genres_list)
+
+        avg_rating1 = get_avg_rating_by_movie_id(movie_id)
+        avg_rating2 = get_avg_ratings_of_lists_of_movies(movies_list[0])
+        avg_rating = 0.5 * (avg_rating1+avg_rating2[0])
+        # round the rating to 2s.f.
+        avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
+
+        movie_title = movie_selected
+        released_year = get_released_year_by_movie_id(movie_id)
+        tags = get_tag_names_by_movie_id(movie_id)
+        genres = get_genres_by_movieid(movie_id)
+        link_ids = get_link_ids_by_movie_id(movie_id)
+        imdb_id = link_ids[0]
+        tmdb_id = link_ids[1] 
+        url_img = get_imdb_img(imdb_id, movie_title)
+
+        return render(request, 'movieapp/predicted_movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags,\
                                                              'genres': genres, 'img': url_img, 'imdb_id': imdb_id, 'tmdb_id': tmdb_id})
     else:
         return redirect('index')
@@ -100,7 +138,6 @@ def most_popular(request):
         return render(request, 'movieapp/popular.html', {'movies': row})
 
 def movie_detail(request, movie_id):
-    #page = (int)(request.GET.get('page'))
     query = "select movieID, movieTitle, MovieReleased from movies where movieID = %s"
     with connection.cursor() as cursor:
         cursor.execute(query, movie_id)
