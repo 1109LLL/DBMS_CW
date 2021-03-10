@@ -314,8 +314,6 @@ def user_segmentation_by_ratings(request):
             users_list.append(haters)
 
             likers_general, haters_general = general_preference_by_tag(curr_tag)
-            print("LIKERS = {}".format(likers_general))
-            print("HATERS = {}".format(haters_general))
             general_users_list.append(likers_general)
             general_users_list.append(haters_general)
 
