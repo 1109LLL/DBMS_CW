@@ -9,8 +9,8 @@
             <ul class="list-group">
                 <li class="list-group-item"><h3>{{movie}}</h3></li>
                 <li class="list-group-item">Predicted Average Rating:<br>{{rating}}</li>
-                <li class="list-group-item">Tags: {%for tag in tags%} <h6><span class="badge badge-pill badge-secondary">{{tag.0}}</span></h6> {%endfor%}</li>
-                <li class="list-group-item">Genres:{%for genre in genres%} <h6><span class="badge badge-pill badge-secondary">{{genre}}</span></h6> {%endfor%}</li>
+                <li class="list-group-item">Tags: <h6>{%for tag in tags%} <span class="badge badge-pill badge-secondary">{{tag.0}}</span> {%endfor%}</h6></li>
+                <li class="list-group-item">Genres: <h6>{%for genre in genres%} <span class="badge badge-pill badge-secondary">{{genre}}</span> {%endfor%}</h6></li>
                 <li class="list-group-item">More info referring to:<br><br>
                     <a href="https://www.imdb.com/title/tt0{{imdb_id}}/"><button type="button" class="btn btn-outline-dark">IMDB</button></a>
                     <a href="https://www.themoviedb.org/movie/{{tmdb_id}}"><button type="button" class="btn btn-outline-dark">TMDB</button></a>
