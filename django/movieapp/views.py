@@ -289,10 +289,12 @@ def user_segmentation_by_ratings(request):
     page = request.GET.get('page')
     page = page if page else 1
     limit = (int(page))*20 - 20
-
     movie_id_list = get_limited_movies(limit)
 
     segmented = []
+    tags = []
+    #  tags = [movie1[zip(tag_names|users(likers,haters|general_users_list))]]
+
     for movie_id in movie_id_list:
         info = []
         counts, likers, haters= gather_user_groups(movie_id[0])
@@ -301,17 +303,27 @@ def user_segmentation_by_ratings(request):
         info.append(counts[0][1])
         info.append(likers)
         info.append(haters)
-        genres = get_genres_by_movieid(movie_id)
-        info.append(genres)
+        
+        tag_names = get_tag_names_by_movie_id(movie_id)
+        users_list = []
+        general_users_list = []
+        for tag in tag_names:
+            curr_tag = tag[0]
+            likers, haters = preference_by_tag(curr_tag)
+            users_list.append(likers)
+            users_list.append(haters)
+
+            likers_general, haters_general = general_preference_by_tag(curr_tag)
+            print("LIKERS = {}".format(likers_general))
+            print("HATERS = {}".format(haters_general))
+            general_users_list.append(likers_general)
+            general_users_list.append(haters_general)
+
+        tags.append(zip(tag_names, users_list, general_users_list))
         segmented.append(info)
+
+    doc = zip(segmented, tags)
 
     total_pages = total_number_of_movies()[0][0]
     movie_number = math.ceil(total_pages / 20)
-    return render(request, 'movieapp/user_segmentation.html', {'segments':segmented, 'cur_page':page, 'movie_number': movie_number})
-
-def user_segmentation_by_genres(request):
-    # genre = request.POST.get()
-    
-    # print("THE received genere = {}".format(genre))
-    data = ("123")
-    return render(request, 'movieapp/user_segmentation.html',{'info':data})
+    return render(request, 'movieapp/user_segmentation.html', {'segments':doc, 'cur_page':page, 'movie_number':movie_number})
