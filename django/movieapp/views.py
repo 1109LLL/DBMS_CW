@@ -339,13 +339,14 @@ def user_segmentation_by_ratings(request):
             general_users_list.append(likers_general)
             general_users_list.append(haters_general)
 
-        tags.append(zip(tag_names, users_list, general_users_list))
+        tags.append(list(zip(tag_names, users_list, general_users_list)))
         segmented.append(info)
-    logger.info(segmented[0][4]) # Debug
 
-    movie_number = total_number_of_movies()[0][0]
-    page = math.ceil(movie_number / 20)
-    return render(request, 'movieapp/user_segmentation.html', {'segments':segmented, 'cur_page':page, 'movie_number': movie_number})
+    doc = list(zip(segmented, tags))
+
+    total_pages = total_number_of_movies()[0][0]
+    movie_number = math.ceil(total_pages / 20)
+    return render(request, 'movieapp/user_segmentation.html', {'segments':doc, 'cur_page':page, 'movie_number':movie_number})
 
 def user_segmentation_by_genres(request):
     # genre = request.POST.get()
@@ -362,3 +363,4 @@ def predict_personality_traits(request):
     logger.info(movies_info[-1][-1])
 
     return render(request, 'movieapp/predict_personality_traits.html', {'infors': infors, 'cur_page': 1, 'movie_number': page_number, 'page_title': "Predict Personality Traits"})
+    
