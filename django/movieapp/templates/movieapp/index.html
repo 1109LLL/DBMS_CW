@@ -19,7 +19,7 @@
         {% for infor in infors%}
           <tr>
             <td><h5><span class="badge badge-pill badge-light">{{infor.0.0}}</span></h5></td>
-             <td><a class="nav-link" href="movie_panel?select={{infor.0.1}}">{{infor.0.1}}</a></td>
+             <td><a class="nav-link movie-link" href="movie_panel?select={{infor.0.1}}">{{infor.0.1}}</a></td>
             <td>{{infor.0.2}}</td>
             <td>{{infor.0.3}}</td>
             <td><h5>{%for genre in infor.1%} <span class="badge badge-pill badge-light">{{genre}}</span> {%endfor%}</h5></td>

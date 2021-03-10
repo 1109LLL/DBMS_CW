@@ -361,6 +361,4 @@ def predict_personality_traits(request):
     page_number = math.ceil(movie_number / 20)
     logger.info(movies_info[-1][-1])
 
-    total_pages = total_number_of_movies()[0][0]
-    movie_number = math.ceil(total_pages / 20)
-    return render(request, 'movieapp/user_segmentation.html', {'segments':doc, 'cur_page':page, 'movie_number':movie_number})
+    return render(request, 'movieapp/predict_personality_traits.html', {'infors': infors, 'cur_page': 1, 'movie_number': page_number, 'page_title': "Predict Personality Traits"})
