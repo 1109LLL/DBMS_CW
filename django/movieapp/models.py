@@ -163,8 +163,25 @@ def determine_polarizition(ratings):
 
     if (good_ratio >= 0.45 and bad_ratio >= 0.45):
         polarized = True
+    
+    
 
     return polarized, good_ratio*100, bad_ratio*100
+
+def determine_polarization2(movie_id):
+    query = '''
+            SELECT g, b, (g/(g+b)) AS goodRatio, (b/(g+b)) AS badRatio
+            FROM 
+                (SELECT COUNT(ratingFigure) AS g
+                FROM ratings
+                WHERE movieID = '1' AND ratingFigure >= 4) AS goodRatings,
+                (SELECT COUNT(ratingFigure) AS b
+                FROM ratings
+                WHERE movieID = '1' AND ratingFigure <= 2) AS badRatings;
+
+            '''
+    result = execute_query(query, [movie_id])
+    
 
 def get_prediction_movies_row_number():
     query = '''
