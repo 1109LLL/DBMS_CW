@@ -16,90 +16,110 @@
 
 <h1>Users segmentation</h1>
 <div class="row">
-    <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">Movie name</th>
-            <th scope="col">Segmentation by ratings<br/>
-              <span class="badge bg-success rounded-pill text-white">Users who would enjoy this movie </span><br/>
-              <span class="badge bg-danger rounded-pill text-white">Users who wouldn't enjoy this movie </span>
-            </th>
-            <th scope="col">Segmentation by genres</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for segment in segments %}
-              <tr>
-                <td><a href="movie_panel?select={{segment.0}}"><button type="button" class="btn btn-outline-light text-dark">{{segment.0}}</button><a></td>
-                <td>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      {{segment.1}}
-                    </button>
-                    <div class="dropdown-menu scrollable-menu">
-                        <li>{{ segment.3|safe }}</li>
-                    </div>
-                  </div>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      {{segment.2}}
-                    </button>
-                    <div class="dropdown-menu scrollable-menu">
-                      <li>{{ segment.4|safe }}</li>
-                    </div>
-                  </div>
-                </td>
-                <!-- <td>
-                  {% for genre in segment.5 %}
-                    <form action={% url 'user_segmentation_by_genres' genre %} method="POST">
-                      <button type="submit" value={{genre}} name='user_segmentation_by_genres' class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{genre}}
-                      </button>
-                    </form> -->
-
-
-                    <!-- <button type="submit" value={{genre}} onclick="location.href='{% url 'user_segmentation_by_genres' %}'" name='thebutton' class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      {{genre}}
-                    </button> -->
-
-                    <!-- <form action="{% url 'user_segmentation_by_genres' %}" method="post" id="genreButton">
-                      {% csrf_token %}
-                      <input type="hidden" name="input" value="{{ genre }}" />
-                      <div class="btn-group">
-                        <button type="submit" name="thebutton" form="genreButton" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          {{genre}}
-                        </button>
-                        <div class="dropdown-menu scrollable-menu">
-                          {{data}}
-                        </div>
-                      </div>
-                    </form> -->
-                  <!-- {% endfor %}
-                </td> -->
-              </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <ul class="pagination">
-      {% if cur_page != "1"%}
-        <li class="page-item"><a class="page-link" href="?page={{cur_page|add:"-1"}}">Previous</a></li>
-      {% endif %}
-
-        <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">...</a></li>
-      
-      {% if cur_page == "1"%}
-        <li class="page-item"><a class="page-link" href="?page={{cur_page}}">...</a></li>
-      {% elif cur_page ==  movie_number|stringformat:"i" %}
-        <li class="page-item"><a class="page-link" href="?page={{cur_page}}">...</a></li>
-      {% else %}
-        <li class="page-item"><a class="page-link" href="?page={{cur_page}}">{{cur_page}}</a></li>
-      {% endif %}
-        
-        <li class="page-item"><a class="page-link" href="#">...</a></li>
-        <li class="page-item"><a class="page-link" href="?page={{movie_number}}">{{movie_number}}</a></li>
-        <li class="page-item"><a class="page-link" href="?page={{cur_page|add:"1"}}">Next</a></li>
-    </ul>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Movie name</th>
+        <th scope="col">Segmentation by ratings<br/>
+          <span class="badge bg-success rounded-pill text-white">Users who would enjoy this movie </span><br/>
+          <span class="badge bg-danger rounded-pill text-white">Users who wouldn't enjoy this movie </span>
+        </th>
+        <th scope="col">Segmentation by tags (users who did watch this movie)</th>
+        <th scope="col">Segmentation by tags (users in general)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for segment, tags in segments%}
+        <tr>
+          <th scope="row"><a href="movie_panel?select={{segment.0}}"><button type="button" class="btn btn-outline-light text-dark">{{segment.0}}</button><a></th>
+          <td>
+            <div class="btn-group">
+              <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{segment.1}}
+              </button>
+              <div class="dropdown-menu scrollable-menu">
+                {% for userID in segment.3 %}
+                  <li>{{userID.0}}</li>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{segment.2}}
+              </button>
+              <div class="dropdown-menu scrollable-menu">
+                {% for userID in segment.4 %}
+                  <li>{{userID.0}}</li>
+                {% endfor %}
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="btn-group">
+              {% for tag, users_list, general_users_list in tags %}
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{tag.0}}
+                </button>
+                <div class="dropdown-menu scrollable-menu">
+                  <li>Liked:</li>
+                  {% for users in users_list %}
+                    <li>{{users.0}}</li>
+                  {% endfor %}
+                  <div class="dropdown-divider"></div>
+                  <li>Disliked:</li>
+                  {% for users in users_list %}
+                    <li>{{users.1}}</li>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          </td>
+          <td>
+            <div class="btn-group">
+              {% for tag, users_list, general_users_list in tags %}
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{tag.0}}
+                </button>
+                <div class="dropdown-menu scrollable-menu">
+                  <li>Liked:</li>
+                  {% for general_users in general_users_list %}
+                    <li>{{general_users.0}}</li>
+                  {% endfor %}
+                  <div class="dropdown-divider"></div>
+                  <li>Disliked:</li>
+                  {% for general_users in general_users_list %}
+                    <li>{{general_users.1}}</li>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
+
+<nav>
+  <ul class="pagination justify-content-center">
+    {% if cur_page != 1 %}
+      <li class="page-item"><a class="page-link" href="?page={{cur_page|add:-1}}">Previous</a></li>
+      <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+      {% if cur_page > 2 %}
+      <li class="page-item"><a class="page-link">...</a></li>
+      {% endif %}
+    {% endif %}
+
+      <li class="page-item active"><a class="page-link" href="?page={{cur_page}}">{{cur_page}}</a></li>
+
+    {% if cur_page != movie_number %}
+      {% if cur_page < movie_number|add:-1 %}
+      <li class="page-item"><a class="page-link">...</a></li>
+      {% endif %}
+      <li class="page-item"><a class="page-link" href="?page={{movie_number}}">{{movie_number}}</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{cur_page|add:1}}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>
 
 {% endblock %}

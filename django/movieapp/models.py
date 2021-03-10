@@ -196,26 +196,26 @@ def gather_user_groups(movie_id):
     query1 = '''
             SELECT * 
             FROM 
-            (SELECT COUNT(userID) AS like_total 
-                FROM ratings 
-                WHERE movieID = %s AND ratingFigure >= 4) AS likers,
-            (SELECT COUNT(userID) AS dislike_total 
-                FROM ratings 
-                WHERE movieID = %s AND ratingFigure <= 2) AS haters;
+                (SELECT COUNT(userID) AS like_total 
+                    FROM ratings 
+                    WHERE movieID = %s AND ratingFigure >= 4) AS likers,
+                (SELECT COUNT(userID) AS dislike_total 
+                    FROM ratings 
+                    WHERE movieID = %s AND ratingFigure <= 2) AS haters;
             '''
     counts = execute_query(query1, [movie_id,movie_id])
 
     query2 = '''
             SELECT userID
             FROM ratings
-            WHERE movieID = %s AND ratingFigure >= 4
+            WHERE movieID = %s AND ratingFigure >= 4;
             '''
     result2 = execute_query(query2, [movie_id])
 
     query3 = '''
             SELECT userID
             FROM ratings
-            WHERE movieID = %s AND ratingFigure <= 2
+            WHERE movieID = %s AND ratingFigure <= 2;
             '''
     result3 = execute_query(query3, [movie_id])
 
@@ -283,3 +283,75 @@ def get_personality_traits(user_group):
     user_group_str = ",".join(user_group_list)
     result_traints = execute_query(query_traits.format(*personalitiy_avgs, user_group_str), [])
     return result_traints
+def preference_by_tag(tag):
+    likers = '''
+            SELECT ratings.userID
+            FROM
+                ratings,
+                (SELECT userTagsMovie.userID, userTagsMovie.movieID
+                    FROM 
+                        userTagsMovie
+                    INNER JOIN 
+                            (SELECT tagID
+                            FROM tags 
+                            WHERE tagName = %s) AS selected_tagID
+                    ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
+            WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.movieID = associated_user_movie_ID.movieID AND ratings.ratingFigure >= 4
+            GROUP BY ratings.userID;
+            '''
+    likers_list = execute_query(likers, [tag])
+
+    haters = '''
+            SELECT ratings.userID
+            FROM
+                ratings,
+                (SELECT userTagsMovie.userID, userTagsMovie.movieID
+                    FROM 
+                        userTagsMovie
+                    INNER JOIN 
+                            (SELECT tagID
+                            FROM tags 
+                            WHERE tagName = %s) AS selected_tagID
+                    ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
+            WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.movieID = associated_user_movie_ID.movieID AND ratings.ratingFigure <= 2
+            GROUP BY ratings.userID;
+            '''
+    haters_list = execute_query(haters, [tag])
+    return likers_list, haters_list
+
+def general_preference_by_tag(tag):
+    likers = '''
+            SELECT ratings.userID
+                FROM
+                    ratings,
+                    (SELECT userTagsMovie.userID
+                        FROM 
+                            userTagsMovie
+                        INNER JOIN 
+                                (SELECT tagID
+                                FROM tags 
+                                WHERE tagName = %s) AS selected_tagID
+                        ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
+                WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.ratingFigure >= 4
+                GROUP BY ratings.userID;
+            '''
+    likers_list = execute_query(likers, [tag])
+
+    haters = '''
+            SELECT ratings.userID
+                FROM
+                    ratings,
+                    (SELECT userTagsMovie.userID
+                        FROM 
+                            userTagsMovie
+                        INNER JOIN 
+                                (SELECT tagID
+                                FROM tags 
+                                WHERE tagName = %s) AS selected_tagID
+                        ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
+                WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.ratingFigure <= 2
+                GROUP BY ratings.userID;
+            '''
+    haters_list = execute_query(haters, [tag])
+
+    return likers_list, haters_list

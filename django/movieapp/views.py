@@ -311,10 +311,12 @@ def user_segmentation_by_ratings(request):
     page = request.GET.get('page')
     page = page if page else 1
     limit = (int(page))*20 - 20
-
     movie_id_list = get_limited_movies(limit)
 
     segmented = []
+    tags = []
+    #  tags = [movie1[zip(tag_names|users(likers,haters|general_users_list))]]
+
     for movie_id in movie_id_list:
         info = []
         counts, likers, haters = gather_user_groups(movie_id[0])
@@ -323,8 +325,21 @@ def user_segmentation_by_ratings(request):
         info.append(counts[0][1])
         info.append(likers)
         info.append(haters)
-        genres = get_genres_by_movieid(movie_id)
-        info.append([1,2,3,4])
+        
+        tag_names = get_tag_names_by_movie_id(movie_id)
+        users_list = []
+        general_users_list = []
+        for tag in tag_names:
+            curr_tag = tag[0]
+            likers, haters = preference_by_tag(curr_tag)
+            users_list.append(likers)
+            users_list.append(haters)
+
+            likers_general, haters_general = general_preference_by_tag(curr_tag)
+            general_users_list.append(likers_general)
+            general_users_list.append(haters_general)
+
+        tags.append(zip(tag_names, users_list, general_users_list))
         segmented.append(info)
     logger.info(segmented[0][4]) # Debug
 
@@ -346,4 +361,6 @@ def predict_personality_traits(request):
     page_number = math.ceil(movie_number / 20)
     logger.info(movies_info[-1][-1])
 
-    return render(request, 'movieapp/predict_personality_traits.html', {'infors': infors, 'cur_page': 1, 'movie_number': page_number, 'page_title': "Predict Personality Traits"})
+    total_pages = total_number_of_movies()[0][0]
+    movie_number = math.ceil(total_pages / 20)
+    return render(request, 'movieapp/user_segmentation.html', {'segments':doc, 'cur_page':page, 'movie_number':movie_number})
