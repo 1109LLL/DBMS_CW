@@ -1,0 +1,9 @@
+{% include "./index.html" %}
+
+<script>
+    var links = document.getElementsByClassName("nav-link");
+    for (var i = 0; i < links.length; i++) {
+        linkHref = links[i].href;
+        links[i].href = linkHref.concat("&traits=1");
+    }
+</script>

@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<h1>Movies</h1>
+<h1>{% if not page_title %}Movies{% else %}{{page_title}}{% endif %}</h1>
 <div class="row">
     <table class="table table-hover">
         <thead>

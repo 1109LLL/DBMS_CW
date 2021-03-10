@@ -220,3 +220,66 @@ def gather_user_groups(movie_id):
     result3 = execute_query(query3, [movie_id])
 
     return counts, result2, result3
+
+# non-null tags, soon to be released, from personality rating tables
+def get_personality_qualified_movies():
+    query = """
+            SELECT DISTINCT m.movieID, m.movieTitle, m.movieAlias, "Coming soon...", GROUP_CONCAT(DISTINCT g.genreName) AS genres
+            FROM movies AS m INNER JOIN userMovieRatings AS u
+            ON m.movieID = u.movieID,
+            genres AS g LEFT JOIN moviesGenres AS mg 
+            ON g.genreID = mg.genreID
+            WHERE mg.movieID = m.movieID
+                AND
+                EXISTS (SELECT tagID
+                        FROM userTagsMovie AS t
+                        WHERE t.movieID = m.movieID)
+                AND
+                movieReleased = 0
+            GROUP BY m.movieID, m.movieTitle, m.movieAlias
+            ;
+            """
+    result = execute_query(query, [])
+    return result
+
+def get_personality_user_group_by_movie_id(movie_id):
+    query = """
+            SELECT b.userID
+            FROM movies AS a INNER JOIN userMovieRatings AS b 
+            ON a.movieID = b.movieID
+            WHERE a.movieID = %s
+                  AND 
+                  b.predictedRating >= (SELECT AVG(predictedRating)
+                                       FROM userMovieRatings
+                                       WHERE movieID = a.movieID)
+            ;
+            """
+    result = execute_query(query, [movie_id])
+    return result
+
+def get_personality_traits(user_group):
+    if not user_group:
+        return []
+    personalities = ["openness", "agreeableness", "emotionalStability", "conscientiousness", "extraversion"]
+    personalitiy_avgs = []
+    query_avg = """
+                SELECT AVG({})
+                FROM userPersonality;
+                """
+    for personality in personalities:
+        avg = execute_query(query_avg.format(personality), [])[0][0]
+        personalitiy_avgs.append(avg)
+    query_traits = """
+                   SELECT AVG(p.openness) - {0}, 
+                          AVG(p.agreeableness) - {1}, 
+                          AVG(p.emotionalStability) - {2}, 
+                          AVG(p.conscientiousness) - {3}, 
+                          AVG(p.extraversion) - {4}
+                   FROM userPersonality AS p 
+                   WHERE p.userID IN ({5});
+                   """
+    # safe to format sql string since inputs are from another sql that is safe
+    user_group_list = ["\"{0}\"".format(user_tuple[0]) for user_tuple in user_group]
+    user_group_str = ",".join(user_group_list)
+    result_traints = execute_query(query_traits.format(*personalitiy_avgs, user_group_str), [])
+    return result_traints
