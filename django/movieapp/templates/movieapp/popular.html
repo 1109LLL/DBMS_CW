@@ -1,14 +1,33 @@
 {% extends "movieapp/base.html" %}
 {% load static %}
 {% block content %}
-<h1>Movies</h1>
+<h1>Most Popular Movies</h1>
+<div class="row">
+  <div class="col-sm"></div>
+  <form class="form-inline" action="{% url 'popular' %}" >
+    <div class="form-group mx-sm-3 mb-2">
+      <select class="form-control" name="option">
+        {% if option == 1 %}
+        <option value="all">All time</option>
+        <option value="past_year">Past Year</option>
+        {% else %}
+        <option value="past Year">Past Year</option>
+        <option value="all">All time</option>
+        {% endif %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Apply</button>
+  </form>
+</div>
+<br>
 <div class="row">
     <table class="table table-hover">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            <th scope="col">Rank</th>
             <th scope="col">Title</th>
             <th scope="col">Year Released</th>
+            <th scope="col">No. Ratings</th>
             <th scope="col">Rating</th>
           </tr>
         </thead>
@@ -16,10 +35,11 @@
         <tbody>
         {% for movie in movies%}
           <tr>
-            <td></td>
-            <td><a href="movie_panel?select={{items.0}}"><button type="button" class="btn btn-outline-light text-dark">{{movie.1}}</button><a></td>
+            <td><h5><span class="badge badge-pill badge-light">{{forloop.counter}}</span></td>
+            <td><a class="nav-link movie-link" href="movie_panel?select={{movie.0}}">{{movie.1}}</a></td>
             <td>{{movie.2}}</td>
-            <td>⭐ {{movie.3}}</td>
+            <td>{{movie.3}}</td>
+            <td>{{movie.4}}</td>
           </tr>
         {% endfor %}
         </tbody>

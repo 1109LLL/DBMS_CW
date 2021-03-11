@@ -23,7 +23,6 @@ urlpatterns = [
     path('movie_panel', views.movie_panel, name='movie_panel'),
     path('predicted_movie_panel', views.predicted_movie_panel, name='predicted_movie_panel'),
     path('polarising', views.polarising, name='polarising'),
-    path('movies/edit/<int:pk>/', views.edit, name='edit'),
     path('soon_released_prediction', views.soon_to_be_released_movie_prediction, name='soon_released_prediction'),
     path('user_segmentation_by_ratings', views.user_segmentation_by_ratings, name='user_segmentation_by_ratings'),
     path('predict_personality_traits', views.predict_personality_traits, name="predict_personality_traits")
