@@ -287,12 +287,18 @@ def soon_to_be_released_movie_prediction(request):
     return render(request, 'movieapp/soon_released_prediction.html', {'soon_to_be_released':result, 'cur_page':page, 'movie_number': movie_number, 'infors':infors, 'movieid':avg_rating_from_3_factors})
 
 def polarising(request):
+    pointer = request.GET.get('pointer')
+    if pointer is None:
+        pointer = 0
+    else:
+        pointer = int(pointer)
     movie_id_list = get_movie_id_list()
 
     polarizing_movies = []
-    for movie_id in movie_id_list:
-        ratings = get_ratings_by_movie_id(movie_id)
-        polarized, good_ratio, bad_ratio = determine_polarizition(ratings)
+    i = pointer
+    for movie_id in movie_id_list[pointer:]:
+        i += 1
+        polarized, good_ratio, bad_ratio, good_rating_count, bad_rating_count = determine_polarization(movie_id[0])
 
         info = []
         # info :: [movie_name, movie_id, good_ratings%, bad_ratings%, genres, tags]
@@ -303,9 +309,14 @@ def polarising(request):
             info.append(bad_ratio)
             info.append(get_genres_by_movieid(movie_id))
             info.append(get_tag_names_by_movie_id(movie_id))
+            info.append(good_rating_count)
+            info.append(bad_rating_count)
             polarizing_movies.append(info)
+        
+        if len(polarizing_movies) == 20:
+            return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies, 'list_pointer':i})
 
-    return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies})
+    return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies, 'list_pointer':i})
 
 def user_segmentation_by_ratings(request):
     page = request.GET.get('page')
@@ -348,12 +359,6 @@ def user_segmentation_by_ratings(request):
     movie_number = math.ceil(total_pages / 20)
     return render(request, 'movieapp/user_segmentation.html', {'segments':doc, 'cur_page':page, 'movie_number':movie_number})
 
-def user_segmentation_by_genres(request):
-    # genre = request.POST.get()
-    
-    # print("THE received genere = {}".format(genre))
-    data = ("123")
-    return render(request, 'movieapp/user_segmentation.html',{'info':data})
 
 def predict_personality_traits(request):
     movies_info = get_personality_qualified_movies()

@@ -8,8 +8,8 @@
           <tr>
             <th scope="col">Movie name</th>
             <th scope="col">Movie ID</th>
-            <th scope="col">Good ratings (%)</th>
-            <th scope="col">Bad ratings (%)</th>
+            <th scope="col">Good ratings (%) / Counts</th>
+            <th scope="col">Bad ratings (%) / Counts</th>
             <th scope="col">Genres</th>
             <th scope="col">Tags</th>
           </tr>
@@ -19,14 +19,24 @@
             {% for items in polarizing_movies%}
               <tr>
                 <td><a href="movie_panel?select={{items.0}}"><button type="button" class="btn btn-outline-light text-dark">{{items.0}}</button><a></td>
-                <td>{{items.1}}</td>
-                <td>{{items.2}}</td>
-                <td>{{items.3}}</td>
-                <td>{{items.4}}</td>
-                <td>{{items.5}}</td>
+                <td><h5><span class="badge badge-pill badge-light">{{items.1}}</span></h5></td>
+                <td>{{items.2}} | {{items.6}}</td>
+                <td>{{items.3}} | {{items.7}}</td>
+                <td><h5>{%for genre in items.4%} <span class="badge badge-pill badge-light">{{genre}}</span> {%endfor%}</h5></td>
+                <td><h5>{%for tag in items.5%} <span class="badge badge-pill badge-dark">{{tag.0}}</span> {%endfor%}</h5></td>
+
               </tr>
             {% endfor %}
             </tbody>
     </table>
 </div>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item"><a class="page-link" href="javascript:history.back()">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="?pointer={{list_pointer}}">Next</a></li>
+  </ul>
+</nav>
+
 {% endblock %}
+

@@ -146,42 +146,35 @@ def get_summary_text(movie_id, movie_title):
         logger.info("NOT found!")
         return "" 
 
-def determine_polarizition(ratings):
+def determine_polarization(movie_id):
     polarized = False
-
-    number_of_ratings = len(ratings)
-    if number_of_ratings == 0:
-        return polarized, 0, 0,
-
-    ratings_list = list(ratings)
-
-    good_ratings = sum(float(rating[0]) >= 4 for rating in ratings_list)
-    bad_ratings = sum(float(rating[0]) <= 2 for rating in ratings_list)
-    
-    good_ratio = good_ratings/number_of_ratings
-    bad_ratio = bad_ratings/number_of_ratings
-
-    if (good_ratio >= 0.45 and bad_ratio >= 0.45):
-        polarized = True
-    
-    
-
-    return polarized, good_ratio*100, bad_ratio*100
-
-def determine_polarization2(movie_id):
     query = '''
             SELECT g, b, (g/(g+b)) AS goodRatio, (b/(g+b)) AS badRatio
             FROM 
                 (SELECT COUNT(ratingFigure) AS g
                 FROM ratings
-                WHERE movieID = '1' AND ratingFigure >= 4) AS goodRatings,
+                WHERE movieID = %s AND ratingFigure >= 4) AS goodRatings,
                 (SELECT COUNT(ratingFigure) AS b
                 FROM ratings
-                WHERE movieID = '1' AND ratingFigure <= 2) AS badRatings;
+                WHERE movieID = %s AND ratingFigure <= 2) AS badRatings;
 
             '''
-    result = execute_query(query, [movie_id])
+    result = execute_query(query, [movie_id, movie_id])
     
+    
+    if result[0][2] is None or result[0][3] is None:
+        return polarized, 0, 0, 0, 0
+    else:
+        good_ratio = float(format(float(result[0][2])*100, '.1f'))
+        bad_ratio = float(format(float(result[0][3])*100, '.1f'))
+
+        if (good_ratio >= 45 and bad_ratio >= 45):
+            polarized = True
+
+        g = result[0][0]
+        b = result[0][1]
+        return polarized, good_ratio, bad_ratio, g, b
+
 
 def get_prediction_movies_row_number():
     query = '''
