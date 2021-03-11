@@ -115,7 +115,8 @@ def predicted_movie_panel(request):
 
         avg_rating1 = get_avg_rating_by_movie_id(movie_id)
         avg_rating2 = get_avg_ratings_of_lists_of_movies(movies_list[0])
-        avg_rating = 0.5 * (avg_rating1+avg_rating2[0])
+        avg_rating3 = get_avg_rating_by_tags(movie_id)
+        avg_rating = (avg_rating1+avg_rating2[0]+avg_rating3) / 3
         # round the rating to 2s.f.
         avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
 
@@ -133,38 +134,56 @@ def predicted_movie_panel(request):
     else:
         return redirect('index')
 
+# Get average review of all similar tags
+def get_avg_rating_by_tags(movie_id):
+    tags = get_tag_names_by_movie_id(movie_id)
+    if len(tags) > 0:
+        total = 0
+        for tag in tags:
+            total += get_tag_average(tag[0])
+        return total / len(tags)
+    return -1
+
+        
+# Get average review of one tag
+def get_tag_average(tag_name):
+    query = '''
+            SELECT AVG(ratingFigure) FROM ratings
+            INNER JOIN (SELECT m.userID, m.movieID
+            FROM (SELECT tagID FROM tags WHERE tagName = %s) t
+            INNER JOIN userTagsMovie m ON t.tagID = m.tagID) table1
+            ON ratings.userID = table1.userID AND ratings.movieID = table1.movieID
+
+            '''
+    row = execute_query(query, tag_name)
+    return row[0][0]
+
+
 def most_popular(request):
-    query = "SELECT m.movieID, m.movieTitle, m.movieReleased, ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) FROM movies m JOIN ratings r ON m.movieID = r.movieID GROUP BY m.movieID ORDER BY COUNT(m.movieID), m.movieReleased DESC limit 50"
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        row = cursor.fetchall()
-        return render(request, 'movieapp/popular.html', {'movies': row})
-
-def movie_detail(request, movie_id):
-    query = "select movieID, movieTitle, MovieReleased from movies where movieID = %s"
-    with connection.cursor() as cursor:
-        cursor.execute(query, movie_id)
-        row = cursor.fetchall()
-        return render(request, 'movieapp/movie.html', {'movies': row, 'page': 1})
-
-
-def create(request):
-    if request.method == 'POST':
-        form = MovieForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('index')
-    form = MovieForm()
-
-    return render(request,'movieapp/create.html',{'form': form})
-
-def edit(request, pk, template_name='movieapp/edit.html'):
-    Movie = get_object_or_404(Movie, pk=pk)
-    form = MovieForm(request.POST or None, instance=post)
-    if form.is_valid():
-        form.save()
-        return redirect('index')
-    return render(request, template_name, {'form':form})
+    year = request.GET.get('option')
+    row = []
+    option = 1
+    if year == "past_year":
+        query = '''
+                SELECT m.movieID, m.movieTitle, m.movieReleased, COUNT(m.movieID), ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) 
+                FROM movies m JOIN ratings r ON m.movieID = r.movieID AND m.movieReleased = 2018
+                GROUP BY m.movieID 
+                ORDER BY COUNT(m.movieID) DESC
+                limit 100
+            '''
+        option = 2
+        row = execute_query(query)
+    else:
+        option = 1
+        query = '''
+                SELECT m.movieID, m.movieTitle, m.movieReleased, COUNT(m.movieID), ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) 
+                FROM movies m JOIN ratings r ON m.movieID = r.movieID
+                GROUP BY m.movieID 
+                ORDER BY COUNT(m.movieID) DESC
+                limit 100
+            '''
+        row = execute_query(query)
+    return render(request, 'movieapp/popular.html', {'movies': row, 'option': option})
 
 def get_genre_lists_from_movieid(movieid):
     if not movieid:
@@ -285,7 +304,10 @@ def soon_to_be_released_movie_prediction(request):
     
     avg_rating_from_3_factors = []
     for i in range(0, len(avg_rating_list)):
-        temp_rating = 0.5 * (avg_rating_list[i][0] + avg_rating_list_by_genres[i][0])
+        if avg_rating_list_by_tags[i] != -1:
+            temp_rating = (avg_rating_list[i][0] + avg_rating_list_by_genres[i][0] + avg_rating_list_by_tags[i]) / 3
+        else:
+            temp_rating = (avg_rating_list[i][0] + avg_rating_list_by_genres[i][0]) / 2
         temp_rating = round(float(temp_rating), 1) if temp_rating else temp_rating
         avg_rating_from_3_factors.append([temp_rating])
     infors = zip(result, avg_rating_from_3_factors)
