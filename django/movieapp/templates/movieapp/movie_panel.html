@@ -3,18 +3,91 @@
 {% block content %}
 
 <div class="container pt-3">
-    <div class="card" style="width:300px">
+    <div class="card mx-auto" style="width:400px">
         <img class="card-img-top" src="{{img}}" onerror="this.src='https://betravingknows.com/wp-content/uploads/2017/06/video-movie-placeholder-image-grey.png';" alt="Missing Image" class="rounded">
         <div class="card-body">
             <ul class="list-group">
                 <li class="list-group-item"><h3>{{movie}}</h3></li>
-                <li class="list-group-item">Released Year:<br>{{year}}</li>
+                <li class="list-group-item">Released Year:<br>{%if year != 0 %} {{year}} {% else %} Coming soon... {% endif %}</li>
                 <li class="list-group-item">Average rating:<br>{{rating}}</li>
-                <li class="list-group-item">Tags: {%for tag in tags%} <h6><span class="badge badge-pill badge-secondary">{{tag.0}}</span></h6> {%endfor%}</li>
-                <li class="list-group-item">Genres:{%for genre in genres%} <h6><span class="badge badge-pill badge-secondary">{{genre}}</span></h6> {%endfor%}</li>
+                <li class="list-group-item">Tags: <h6>{%for tag in tags%} <span class="badge badge-pill badge-secondary">{{tag.0}}</span> {%endfor%}</h6></li>
+                <li class="list-group-item">Genres:<h6>{%for genre in genres%} <span class="badge badge-pill badge-secondary">{{genre}}</span> {%endfor%}</h6></li>
+                <li class="list-group-item">More info referring to:<br>
+                    <a href="https://www.imdb.com/title/tt0{{imdb_id}}/"><button type="button" class="btn btn-outline-dark">IMDB</button></a>
+                    <a href="https://www.themoviedb.org/movie/{{tmdb_id}}"><button type="button" class="btn btn-outline-dark">TMDB</button></a>
+                </li>
             </ul>
         </div>
     </div>
+</div><br><br>
+
+{% if traits %}
+
+<style>
+div.colour-bar {
+    height: 25px;
+    background: linear-gradient(to right, #33ccff 0%, #ff66cc 100%)
+}
+div.pivot {
+    height: 25px;
+    width: 5px;
+    background-color: rgb(57, 61, 66);
+}
+.pivot-row {
+    position: absolute;
+}
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 offset-md-3">
+            <h4>Personality Scores Deviation from the Averages</h4>
+        </div>
+    </div><br>
+    {% for trait in traits %}
+    <div class="row">
+        <div class="col-md-5 offset-md-3">
+            <h5><span class="badge badge-light">{{trait.0|title}}:</span></h5>
+        </div>
+        <div class="col-md-3">
+            <h5><span class="badge badge-light">{{trait.1}}</span></h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="colour-bar col-md-6 offset-md-3" mx-auto></div>
+        <div class="col-md-1 offset-md-4 pivot-row">
+            <div class="row">
+                <div class="pivot"></div>
+            </div>
+        </div>
+    </div><br>
+    {% endfor %}
 </div>
+<br><br>
+
+<script>
+    traits = []
+    traits.push('{{ traits.0.1 | safe }}');
+    traits.push('{{ traits.1.1 | safe }}');
+    traits.push('{{ traits.2.1 | safe }}');
+    traits.push('{{ traits.3.1 | safe }}');
+    traits.push('{{ traits.4.1 | safe }}');
+    
+    /* round to fit the bar */
+    for (var i = 0; i < traits.length; i++) {
+        trait = traits[i];
+        traits[i] = (Math.abs(trait) < 1.425)? trait : (trait > 0)? 1.425 : -1.425;
+        console.log(traits[i]);
+    }
+
+    var width = document.body.clientWidth; // .style.left = width/6 + "px"
+    var rows = document.getElementsByClassName("pivot-row");
+
+    for (var i = 0; i < traits.length; i++) {
+        rows[i].style.left = traits[i]*200 + width/6 + "px";
+    }
+</script>
+
+{% endif %}
 
 {% endblock %}

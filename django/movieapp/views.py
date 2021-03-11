@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from .models import *
 from .crawler import *
-from .forms import MovieForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db import connection
@@ -50,7 +49,7 @@ def index(request):
             return render(request, 'movieapp/index.html', {'infors': infors})
     else:
         page = request.GET.get('page')
-        page = page if page else 1
+        page = int(page) if page else 1
         query = '''
                 SELECT movieID, movieTitle, movieAlias, MovieReleased 
                 FROM movies limit {}, 20;
@@ -71,10 +70,12 @@ def index(request):
 
 def movie_panel(request):
     movie_selected = request.GET.get('select')
+    has_traits = True if request.GET.get('traits') else False
     movie_id = get_movie_id_by_title(movie_selected)
     if movie_selected and movie_id:
         # TODO add movie info logics
         # TODO can do in one search
+
         movie_title = movie_selected
         released_year = get_released_year_by_movie_id(movie_id)
         avg_rating = get_avg_rating_by_movie_id(movie_id)
@@ -82,11 +83,101 @@ def movie_panel(request):
         avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
         tags = get_tag_names_by_movie_id(movie_id)
         genres = get_genres_by_movieid(movie_id)
-        imdb_id = get_imdb_link_by_movie_id(movie_id)
+        link_ids = get_link_ids_by_movie_id(movie_id)
+        imdb_id = link_ids[0]
+        tmdb_id = link_ids[1] 
         url_img = get_imdb_img(imdb_id, movie_title)
-        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags, 'genres': genres, 'img': url_img})
+
+        context = {
+            'movie': movie_title, 
+            'year': released_year, 
+            'rating': avg_rating, 
+            'tags': tags,
+            'genres': genres, 
+            'img': url_img, 
+            'imdb_id': imdb_id, 
+            'tmdb_id': tmdb_id
+                   }
+
+        # predict personality trait
+        if has_traits:
+            user_group = get_personality_user_group_by_movie_id(movie_id)
+            logger.info(user_group)
+            traits = get_personality_traits(user_group)
+            traits = [round(trait, 2) for trait in traits[0]] if traits else []
+            personalities = ["openness", "agreeableness", "emotionalStability", "conscientiousness", "extraversion"]
+            personality_traits = list(zip(personalities, traits))
+            context['traits'] = personality_traits
+            
+        return render(request, 'movieapp/movie_panel.html', context)
     else:
         return redirect('index')
+
+def predicted_movie_panel(request):
+    movie_selected = request.GET.get('select')
+    movie_id = get_movie_id_by_title(movie_selected)
+    
+    if movie_selected and movie_id:
+        # TODO add movie info logics
+        # TODO can do in one search
+        
+        # get predicted rating
+        genres_list = get_genre_lists_from_movieid(movie_id)
+        movies_list = []
+        for genre in genres_list:
+            movieid = get_movieid_by_genreid(genre)
+            if movieid == None:
+                continue
+            else:
+                movies_list.append(movieid)
+        logger.info(genres_list)
+
+        avg_rating1 = get_avg_rating_by_movie_id(movie_id)
+        avg_rating2 = get_avg_ratings_of_lists_of_movies(movies_list[0])
+        avg_rating3 = get_avg_rating_by_tags(movie_id)
+        avg_rating = (avg_rating1+avg_rating2[0]+avg_rating3) / 3
+        # round the rating to 2s.f.
+        avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
+
+        movie_title = movie_selected
+        released_year = get_released_year_by_movie_id(movie_id)
+        tags = get_tag_names_by_movie_id(movie_id)
+        genres = get_genres_by_movieid(movie_id)
+        link_ids = get_link_ids_by_movie_id(movie_id)
+        imdb_id = link_ids[0]
+        tmdb_id = link_ids[1] 
+        url_img = get_imdb_img(imdb_id, movie_title)
+
+        return render(request, 'movieapp/predicted_movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags,\
+                                                             'genres': genres, 'img': url_img, 'imdb_id': imdb_id, 'tmdb_id': tmdb_id})
+    else:
+        return redirect('index')
+
+def get_avg_rating_by_tags(movie_id):
+    tags = get_tag_names_by_movie_id(movie_id)
+    if len(tags) > 0:
+        total = 0
+        for tag in tags:
+            total += get_tag_average(tag[0])
+        return total / len(tags)
+    return []
+
+        
+
+def get_tag_average(tag_name):
+    query = '''
+            SELECT AVG(ratingFigure) FROM ratings
+            INNER JOIN (SELECT m.userID, m.movieID
+            FROM (SELECT tagID FROM tags WHERE tagName = %s) t
+            INNER JOIN userTagsMovie m ON t.tagID = m.tagID) table1
+            ON ratings.userID = table1.userID AND ratings.movieID = table1.movieID
+
+            '''
+    with connection.cursor() as cursor:
+        cursor.execute(query, tag_name)
+        row = cursor.fetchall()
+        return row[0][0]
+
 
 def most_popular(request):
     query = '''
@@ -101,7 +192,6 @@ def most_popular(request):
         return render(request, 'movieapp/popular.html', {'movies': row})
 
 def movie_detail(request, movie_id):
-    #page = (int)(request.GET.get('page'))
     query = "select movieID, movieTitle, MovieReleased from movies where movieID = %s"
     with connection.cursor() as cursor:
         cursor.execute(query, movie_id)
@@ -127,8 +217,65 @@ def edit(request, pk, template_name='movieapp/edit.html'):
         return redirect('index')
     return render(request, template_name, {'form':form})
 
+def get_genre_lists_from_movieid(movieid):
+    if not movieid:
+        return None
+    query = '''
+            SELECT genreID
+            FROM moviesGenres
+            WHERE movieID = %s; 
+            '''
+    genres = execute_query(query, [movieid])
+    genres_list = []
+    for i in genres:
+        genres_list.append(i[0])
+    return genres_list
+
+def get_movieid_by_genreid(genreid):
+    if not genreid:
+        return None
+    query = '''
+            SELECT movieID from moviesGenres
+            WHERE genreID = %s;
+            '''
+    result = execute_query(query, [genreid])
+    movieid_list = []
+    for i in result:
+        movieid_list.append(i[0])
+    return movieid_list
+
+def get_movie_list_containing_same_genres(genreid_lists): # [[0, 6, 4, 11, 12], [3, 6, 5]]
+    movies_list = []
+    for genreid_list in genreid_lists:
+        temp_list = []
+        for genreid in genreid_list:
+            temp = get_movieid_by_genreid(genreid)
+            if temp == None:
+                continue
+            else:
+                temp_list = temp_list + temp
+        movies_list.append(temp_list)
+    return movies_list
+
+def get_avg_ratings_of_lists_of_movies(movies_list):
+    if not movies_list:
+        return None
+    splicing_movies_list = ""
+    for i in movies_list:
+        splicing_movies_list = splicing_movies_list + str(i) + ','
+    splicing_movies_list = splicing_movies_list.strip(",") 
+    query = '''
+            SELECT AVG(ratingFigure)
+            FROM ratings
+            WHERE movieID in (%s);
+            '''
+    result = execute_query(query, [splicing_movies_list])
+    avg_rating = []
+    for i in result:
+        avg_rating.append(i[0])
+    return avg_rating
+
 def soon_to_be_released_movie_prediction(request):
-    # if request.method == 'GET':
     page = request.GET.get('page')
     page = page if page else 1
     query = '''
@@ -139,56 +286,118 @@ def soon_to_be_released_movie_prediction(request):
             '''.format((int(page))*20 - 20)
     result = execute_query(query)
     avg_rating_list = []
+    genreid_lists = []
+    for i in result:
+        genreid_lists.append(get_genre_lists_from_movieid(i[0]))
+
+    avg_rating_list_by_genres = [] # ratings from movies with same genres as soon to be released movies
+    movies_list = get_movie_list_containing_same_genres(genreid_lists) # lists storing movies with same genres as soon to be released movies
+    for i in movies_list:
+        avg_rating_list_by_genres.append(get_avg_ratings_of_lists_of_movies(i))
+
+    ##################################################################################
+    # James TODO add ratings from movies with same tags as soon to be released movies#
+    ##################################################################################
+    
     for movie_search in result:
         movie_search = movie_search[1]
         movie_id = get_movieID_by_title(movie_search)
         # TODO can select parts of user as 先看过的人
-        avg_rating = get_avg_rating_by_movie_id(movie_id[0][0])
-        avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
+        avg_rating = get_avg_rating_by_movie_id(movie_id[0][0]) # soon to be realeased movies avg ratings from people who have seen
         avg_rating_list.append([avg_rating])
-    infors = zip(result, avg_rating_list)
-    # logger.info(avg_rating_list)
-    # logger.info(result)
 
+    # calculate average ratings calculated from three different factors (JAMES TODO here :))
+    avg_rating_from_3_factors = []
+    for i in range(0, len(avg_rating_list)):
+        temp_rating = 0.5 * (avg_rating_list[i][0] + avg_rating_list_by_genres[i][0])
+        temp_rating = round(float(temp_rating), 1) if temp_rating else temp_rating
+        avg_rating_from_3_factors.append([temp_rating])
+    infors = zip(result, avg_rating_from_3_factors)
 
-    total_pages = 252 ## need change...
+    total_pages = get_prediction_movies_row_number()
     movie_number = math.ceil(total_pages / 20)
-    return render(request, 'movieapp/soon_released_prediction.html', {'soon_to_be_released':result, 'cur_page':page, 'movie_number': movie_number, 'infors':infors})    
+    return render(request, 'movieapp/soon_released_prediction.html', {'soon_to_be_released':result, 'cur_page':page, 'movie_number': movie_number, 'infors':infors, 'movieid':avg_rating_from_3_factors})
 
 def polarising(request):
-    if request.method == 'GET':
-        movie_id_list = get_movie_id_list()
+    pointer = request.GET.get('pointer')
+    if pointer is None:
+        pointer = 0
+    else:
+        pointer = int(pointer)
+    movie_id_list = get_movie_id_list()
 
-        polarizing_movies = []
-        for movie_id in movie_id_list:
-            ratings = get_ratings_by_movie_id(movie_id)
-            polarized, good_ratio, bad_ratio = determine_polarizition(ratings)
+    polarizing_movies = []
+    i = pointer
+    for movie_id in movie_id_list[pointer:]:
+        i += 1
+        polarized, good_ratio, bad_ratio, good_rating_count, bad_rating_count = determine_polarization(movie_id[0])
 
-            info = []
-            # info :: [movie_name, movie_id, good_ratings%, bad_ratings%, genres, tags]
-            if polarized:
-                info.append(get_movie_name_by_movie_id(movie_id)[0][0])
-                info.append(movie_id[0])
-                info.append(good_ratio)
-                info.append(bad_ratio)
-                info.append(get_genres_by_movieid(movie_id))
-                info.append(get_tag_names_by_movie_id(movie_id))
+        info = []
+        # info :: [movie_name, movie_id, good_ratings%, bad_ratings%, genres, tags]
+        if polarized:
+            info.append(get_movie_name_by_movie_id(movie_id)[0][0])
+            info.append(movie_id[0])
+            info.append(good_ratio)
+            info.append(bad_ratio)
+            info.append(get_genres_by_movieid(movie_id))
+            info.append(get_tag_names_by_movie_id(movie_id))
+            info.append(good_rating_count)
+            info.append(bad_rating_count)
+            polarizing_movies.append(info)
+        
+        if len(polarizing_movies) == 20:
+            return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies, 'list_pointer':i})
 
-                polarizing_movies.append(info)
+    return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies, 'list_pointer':i})
 
-        return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies})
+def user_segmentation_by_ratings(request):
+    page = request.GET.get('page')
+    page = page if page else 1
+    limit = (int(page))*20 - 20
+    movie_id_list = get_limited_movies(limit)
+
+    segmented = []
+    tags = []
+    #  tags = [movie1[zip(tag_names|users(likers,haters|general_users_list))]]
+
+    for movie_id in movie_id_list:
+        info = []
+        counts, likers, haters = gather_user_groups(movie_id[0])
+        info.append(get_movie_name_by_movie_id(movie_id)[0][0])
+        info.append(counts[0][0])
+        info.append(counts[0][1])
+        info.append(likers)
+        info.append(haters)
+        
+        tag_names = get_tag_names_by_movie_id(movie_id)
+        users_list = []
+        general_users_list = []
+        for tag in tag_names:
+            curr_tag = tag[0]
+            likers, haters = preference_by_tag(curr_tag)
+            users_list.append(likers)
+            users_list.append(haters)
+
+            likers_general, haters_general = general_preference_by_tag(curr_tag)
+            general_users_list.append(likers_general)
+            general_users_list.append(haters_general)
+
+        tags.append(list(zip(tag_names, users_list, general_users_list)))
+        segmented.append(info)
+
+    doc = list(zip(segmented, tags))
+
+    total_pages = total_number_of_movies()[0][0]
+    movie_number = math.ceil(total_pages / 20)
+    return render(request, 'movieapp/user_segmentation.html', {'segments':doc, 'cur_page':page, 'movie_number':movie_number})
 
 
-def average_using_tags(request, movie_id):
-    tags = get_tag_names_by_movie_id(movie_id)
-    query = '''
-           SELECT AVG(ratingFigure) FROM ratings
-           INNER JOIN (SELECT m.userID, m.movieID 
-           FROM (SELECT tagID FROM tags WHERE tagName = '%s') t
-           INNER JOIN userTagsMovie m ON t.tagID = m.tagID) table1 
-           ON ratings.userID = table1.userID AND ratings.movieID = table1.movieID;
-           '''
-    with connection.cursor() as cursor:
-        cursor.execute(query, tags[0])
-        row = cursor.fetchall()
-        return render(request, 'movieapp/popular.html', {'movies': row})     
+def predict_personality_traits(request):
+    movies_info = get_personality_qualified_movies()
+    infors = [[movie_info] for movie_info in movies_info]
+    movie_number = len(movies_info)
+    page_number = math.ceil(movie_number / 20)
+    logger.info(movies_info[-1][-1])
+
+    return render(request, 'movieapp/predict_personality_traits.html', {'infors': infors, 'cur_page': 1, 'movie_number': page_number, 'page_title': "Predict Personality Traits"})
+    

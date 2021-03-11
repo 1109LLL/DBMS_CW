@@ -1,5 +1,4 @@
 -- Insert data into tables;
--- 如果要试试的话记得改path
 
 USE movie_site;
 

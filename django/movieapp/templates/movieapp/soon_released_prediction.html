@@ -3,46 +3,46 @@
 {% block content %}
 <h1>Soon To Be Released Movies</h1>
 <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Alias</th>
-            <th scope="col">Ratings</th>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Title</th>
+      <th scope="col">Alias</th>
+      <th scope="col">Ratings</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+  {% for soon in infors%}
+    <tr>
+      <td>{{soon.0.0}}</td>
+      <td><a class="nav-link" href="predicted_movie_panel?select={{soon.0.1}}">{{soon.0.1}}</a></td>
+      <td>{{soon.0.2}}</td>
+      <td>{{soon.1.0}}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
 
-            <th scope="col">Genres</th>
-          </tr>
-        </thead>
-        
-        <tbody>
-        {% for soon in infors%}
-          <tr>
-            <td>{{soon.0.0}}</td>
-            <td>{{soon.0.1}}</td>
-            <td>{{soon.0.2}}</td>
-            <td>{{soon.1.0}}</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-	  <ul class="pagination">
-        {% if cur_page != "1"%}
-          <li class="page-item"><a class="page-link" href="?page={{cur_page|add:"-1"}}">Previous</a></li>
-        {% endif %}
+<nav>
+  <ul class="pagination justify-content-center">
+    {% if cur_page != 1 %}
+      <li class="page-item"><a class="page-link" href="?page={{cur_page|add:-1}}">Previous</a></li>
+      <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+      {% if cur_page > 2 %}
+      <li class="page-item"><a class="page-link">...</a></li>
+      {% endif %}
+    {% endif %}
 
-          <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">...</a></li>
-        
-        {% if cur_page == "1"%}
-          <li class="page-item"><a class="page-link" href="?page={{cur_page}}">...</a></li>
-        {% elif cur_page ==  movie_number|stringformat:"i" %}
-          <li class="page-item"><a class="page-link" href="?page={{cur_page}}">...</a></li>
-        {% else %}
-          <li class="page-item"><a class="page-link" href="?page={{cur_page}}">{{cur_page}}</a></li>
-        {% endif %}
-          
-          <li class="page-item"><a class="page-link" href="#">...</a></li>
-          <li class="page-item"><a class="page-link" href="?page={{movie_number}}">{{movie_number}}</a></li>
-          <li class="page-item"><a class="page-link" href="?page={{cur_page|add:"1"}}">Next</a></li>
-      </ul>
+      <li class="page-item active"><a class="page-link" href="?page={{cur_page}}">{{cur_page}}</a></li>
+
+    {% if cur_page != movie_number %}
+      {% if cur_page < movie_number|add:-1 %}
+      <li class="page-item"><a class="page-link">...</a></li>
+      {% endif %}
+      <li class="page-item"><a class="page-link" href="?page={{movie_number}}">{{movie_number}}</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{cur_page|add:1}}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>
 {% endblock %}

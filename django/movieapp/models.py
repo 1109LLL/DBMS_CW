@@ -5,14 +5,11 @@ from django.db import models
 
 from django.db import connection
 
+from .crawler import Crawler, LinkType
 
-class Movie(models.Model):
-    movieID = models.CharField("movieID", max_length=255, blank = True, null = True)
-    title = models.CharField("title", max_length=255, blank = True, null = True)
+import logging
 
-
-    def __str__(self):
-        return self.movieID
+logger = logging.getLogger('debug')
 
 def execute_query(query, params=[]):
     with connection.cursor() as cursor:
@@ -66,6 +63,17 @@ def get_imdb_link_by_movie_id(movie_id):
     result = execute_query(query, [movie_id])
     return result[0][0] if result else None
 
+def get_link_ids_by_movie_id(movie_id):
+    if not movie_id:
+        return None
+    query = '''
+            SELECT imdbId, tmdbId
+            FROM movies
+            WHERE movieID = %s;
+            '''
+    result = execute_query(query, [movie_id])
+    return result[0] if result else ["N/A", "N/A"]
+
 def get_movieID_by_title(movie_title):
     #find movieID based on movie title 
     query = '''select movieID from movies where movieTitle = %s'''
@@ -80,7 +88,7 @@ def get_table_row_number(table_name):
         cursor.execute(query)
         row = cursor.fetchall()
         return row
-         
+
 def get_released_year_by_movie_id(movie_id):
     if not movie_id:
         return None
@@ -122,22 +130,238 @@ def get_movie_name_by_movie_id(movie_id):
     result = execute_query(query, [movie_id])
     return result if result else []
 
-def determine_polarizition(ratings):
-    polarized = False
-
-    number_of_ratings = len(ratings)
-    if number_of_ratings == 0:
-        return polarized, 0, 0,
-
-    ratings_list = list(ratings)
-
-    good_ratings = sum(float(rating[0]) >= 4 for rating in ratings_list)
-    bad_ratings = sum(float(rating[0]) <= 2 for rating in ratings_list)
+def get_imdb_img(movie_id, movie_title):
+    crawler = Crawler(movie_id, movie_title, LinkType.IMDB)
+    if crawler:
+        return crawler.get_imdb_img_url()
+    else:
+        return "" 
     
-    good_ratio = good_ratings/number_of_ratings
-    bad_ratio = bad_ratings/number_of_ratings
+def get_summary_text(movie_id, movie_title):
+    crawler = Crawler(movie_id, movie_title, LinkType.IMDB)
+    if crawler:
+        logger.info("HTML found!")
+        return crawler.get_summary_context()
+    else:
+        logger.info("NOT found!")
+        return "" 
 
-    if (good_ratio >= 0.45 and bad_ratio >= 0.45):
-        polarized = True
+def determine_polarization(movie_id):
+    polarized = False
+    query = '''
+            SELECT g, b, (g/(g+b)) AS goodRatio, (b/(g+b)) AS badRatio
+            FROM 
+                (SELECT COUNT(ratingFigure) AS g
+                FROM ratings
+                WHERE movieID = %s AND ratingFigure >= 4) AS goodRatings,
+                (SELECT COUNT(ratingFigure) AS b
+                FROM ratings
+                WHERE movieID = %s AND ratingFigure <= 2) AS badRatings;
 
-    return polarized, good_ratio*100, bad_ratio*100
+            '''
+    result = execute_query(query, [movie_id, movie_id])
+    
+    
+    if result[0][2] is None or result[0][3] is None:
+        return polarized, 0, 0, 0, 0
+    else:
+        good_ratio = float(format(float(result[0][2])*100, '.1f'))
+        bad_ratio = float(format(float(result[0][3])*100, '.1f'))
+
+        if (good_ratio >= 45 and bad_ratio >= 45):
+            polarized = True
+
+        g = result[0][0]
+        b = result[0][1]
+        return polarized, good_ratio, bad_ratio, g, b
+
+
+def get_prediction_movies_row_number():
+    query = '''
+            SELECT COUNT(*)
+            FROM movies
+            WHERE movieReleased = 0
+            '''
+    result = execute_query(query)
+    return result[0][0]
+
+def get_limited_movies(limit):
+    query = '''
+            SELECT movieID
+            FROM movies
+            LIMIT %s, 20;
+            '''
+    result = execute_query(query, [limit])
+    return result
+
+def total_number_of_movies():
+    query = '''
+            SELECT COUNT(movieID)
+            FROM movies;
+            '''
+    result = execute_query(query)
+    return result
+
+def gather_user_groups(movie_id):
+    query1 = '''
+            SELECT * 
+            FROM 
+                (SELECT COUNT(userID) AS like_total 
+                    FROM ratings 
+                    WHERE movieID = %s AND ratingFigure >= 4) AS likers,
+                (SELECT COUNT(userID) AS dislike_total 
+                    FROM ratings 
+                    WHERE movieID = %s AND ratingFigure <= 2) AS haters;
+            '''
+    counts = execute_query(query1, [movie_id,movie_id])
+
+    query2 = '''
+            SELECT userID
+            FROM ratings
+            WHERE movieID = %s AND ratingFigure >= 4;
+            '''
+    result2 = execute_query(query2, [movie_id])
+
+    query3 = '''
+            SELECT userID
+            FROM ratings
+            WHERE movieID = %s AND ratingFigure <= 2;
+            '''
+    result3 = execute_query(query3, [movie_id])
+
+    return counts, result2, result3
+
+# non-null tags, soon to be released, from personality rating tables
+def get_personality_qualified_movies():
+    query = """
+            SELECT DISTINCT m.movieID, m.movieTitle, m.movieAlias, "Coming soon...", GROUP_CONCAT(DISTINCT g.genreName) AS genres
+            FROM movies AS m INNER JOIN userMovieRatings AS u
+            ON m.movieID = u.movieID,
+            genres AS g LEFT JOIN moviesGenres AS mg 
+            ON g.genreID = mg.genreID
+            WHERE mg.movieID = m.movieID
+                AND
+                EXISTS (SELECT tagID
+                        FROM userTagsMovie AS t
+                        WHERE t.movieID = m.movieID)
+                AND
+                movieReleased = 0
+            GROUP BY m.movieID, m.movieTitle, m.movieAlias
+            ;
+            """
+    result = execute_query(query, [])
+    return result
+
+def get_personality_user_group_by_movie_id(movie_id):
+    query = """
+            SELECT b.userID
+            FROM movies AS a INNER JOIN userMovieRatings AS b 
+            ON a.movieID = b.movieID
+            WHERE a.movieID = %s
+                  AND 
+                  b.predictedRating >= (SELECT AVG(predictedRating)
+                                       FROM userMovieRatings
+                                       WHERE movieID = a.movieID)
+            ;
+            """
+    result = execute_query(query, [movie_id])
+    return result
+
+def get_personality_traits(user_group):
+    if not user_group:
+        return []
+    personalities = ["openness", "agreeableness", "emotionalStability", "conscientiousness", "extraversion"]
+    personalitiy_avgs = []
+    query_avg = """
+                SELECT AVG({})
+                FROM userPersonality;
+                """
+    for personality in personalities:
+        avg = execute_query(query_avg.format(personality), [])[0][0]
+        personalitiy_avgs.append(avg)
+    query_traits = """
+                   SELECT AVG(p.openness) - {0}, 
+                          AVG(p.agreeableness) - {1}, 
+                          AVG(p.emotionalStability) - {2}, 
+                          AVG(p.conscientiousness) - {3}, 
+                          AVG(p.extraversion) - {4}
+                   FROM userPersonality AS p 
+                   WHERE p.userID IN ({5});
+                   """
+    # safe to format sql string since inputs are from another sql that is safe
+    user_group_list = ["\"{0}\"".format(user_tuple[0]) for user_tuple in user_group]
+    user_group_str = ",".join(user_group_list)
+    result_traints = execute_query(query_traits.format(*personalitiy_avgs, user_group_str), [])
+    return result_traints
+def preference_by_tag(tag):
+    likers = '''
+            SELECT ratings.userID
+            FROM
+                ratings,
+                (SELECT userTagsMovie.userID, userTagsMovie.movieID
+                    FROM 
+                        userTagsMovie
+                    INNER JOIN 
+                            (SELECT tagID
+                            FROM tags 
+                            WHERE tagName = %s) AS selected_tagID
+                    ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
+            WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.movieID = associated_user_movie_ID.movieID AND ratings.ratingFigure >= 4
+            GROUP BY ratings.userID;
+            '''
+    likers_list = execute_query(likers, [tag])
+
+    haters = '''
+            SELECT ratings.userID
+            FROM
+                ratings,
+                (SELECT userTagsMovie.userID, userTagsMovie.movieID
+                    FROM 
+                        userTagsMovie
+                    INNER JOIN 
+                            (SELECT tagID
+                            FROM tags 
+                            WHERE tagName = %s) AS selected_tagID
+                    ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
+            WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.movieID = associated_user_movie_ID.movieID AND ratings.ratingFigure <= 2
+            GROUP BY ratings.userID;
+            '''
+    haters_list = execute_query(haters, [tag])
+    return likers_list, haters_list
+
+def general_preference_by_tag(tag):
+    likers = '''
+            SELECT ratings.userID
+                FROM
+                    ratings,
+                    (SELECT userTagsMovie.userID
+                        FROM 
+                            userTagsMovie
+                        INNER JOIN 
+                                (SELECT tagID
+                                FROM tags 
+                                WHERE tagName = %s) AS selected_tagID
+                        ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
+                WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.ratingFigure >= 4
+                GROUP BY ratings.userID;
+            '''
+    likers_list = execute_query(likers, [tag])
+
+    haters = '''
+            SELECT ratings.userID
+                FROM
+                    ratings,
+                    (SELECT userTagsMovie.userID
+                        FROM 
+                            userTagsMovie
+                        INNER JOIN 
+                                (SELECT tagID
+                                FROM tags 
+                                WHERE tagName = %s) AS selected_tagID
+                        ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
+                WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.ratingFigure <= 2
+                GROUP BY ratings.userID;
+            '''
+    haters_list = execute_query(haters, [tag])
+
+    return likers_list, haters_list
