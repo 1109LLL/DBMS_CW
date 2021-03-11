@@ -3,26 +3,27 @@
 {% block content %}
 <h1>Soon To Be Released Movies</h1>
 <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Alias</th>
-            <th scope="col">Ratings</th>
-          </tr>
-        </thead>
-        
-        <tbody>
-        {% for soon in infors%}
-          <tr>
-            <td>{{soon.0.0}}</td>
-            <td><a class="nav-link" href="predicted_movie_panel?select={{soon.0.1}}">{{soon.0.1}}</a></td>
-            <td>{{soon.0.2}}</td>
-            <td>{{soon.1.0}}</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Title</th>
+      <th scope="col">Alias</th>
+      <th scope="col">Ratings</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+  {% for soon in infors%}
+    <tr>
+      <td>{{soon.0.0}}</td>
+      <td><a class="nav-link" href="predicted_movie_panel?select={{soon.0.1}}">{{soon.0.1}}</a></td>
+      <td>{{soon.0.2}}</td>
+      <td>{{soon.1.0}}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
 <nav>
   <ul class="pagination justify-content-center">
     {% if cur_page != 1 %}

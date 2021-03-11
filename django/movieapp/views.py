@@ -70,10 +70,12 @@ def index(request):
 
 def movie_panel(request):
     movie_selected = request.GET.get('select')
+    has_traits = True if request.GET.get('traits') else False
     movie_id = get_movie_id_by_title(movie_selected)
     if movie_selected and movie_id:
         # TODO add movie info logics
         # TODO can do in one search
+
         movie_title = movie_selected
         released_year = get_released_year_by_movie_id(movie_id)
         avg_rating = get_avg_rating_by_movie_id(movie_id)
@@ -85,8 +87,29 @@ def movie_panel(request):
         imdb_id = link_ids[0]
         tmdb_id = link_ids[1] 
         url_img = get_imdb_img(imdb_id, movie_title)
-        return render(request, 'movieapp/movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags,\
-                                                             'genres': genres, 'img': url_img, 'imdb_id': imdb_id, 'tmdb_id': tmdb_id})
+
+        context = {
+            'movie': movie_title, 
+            'year': released_year, 
+            'rating': avg_rating, 
+            'tags': tags,
+            'genres': genres, 
+            'img': url_img, 
+            'imdb_id': imdb_id, 
+            'tmdb_id': tmdb_id
+                   }
+
+        # predict personality trait
+        if has_traits:
+            user_group = get_personality_user_group_by_movie_id(movie_id)
+            logger.info(user_group)
+            traits = get_personality_traits(user_group)
+            traits = [round(trait, 2) for trait in traits[0]] if traits else []
+            personalities = ["openness", "agreeableness", "emotionalStability", "conscientiousness", "extraversion"]
+            personality_traits = list(zip(personalities, traits))
+            context['traits'] = personality_traits
+            
+        return render(request, 'movieapp/movie_panel.html', context)
     else:
         return redirect('index')
 
@@ -94,7 +117,6 @@ def predicted_movie_panel(request):
     movie_selected = request.GET.get('select')
     movie_id = get_movie_id_by_title(movie_selected)
     
-
     if movie_selected and movie_id:
         # TODO add movie info logics
         # TODO can do in one search
@@ -265,12 +287,18 @@ def soon_to_be_released_movie_prediction(request):
     return render(request, 'movieapp/soon_released_prediction.html', {'soon_to_be_released':result, 'cur_page':page, 'movie_number': movie_number, 'infors':infors, 'movieid':avg_rating_from_3_factors})
 
 def polarising(request):
+    pointer = request.GET.get('pointer')
+    if pointer is None:
+        pointer = 0
+    else:
+        pointer = int(pointer)
     movie_id_list = get_movie_id_list()
 
     polarizing_movies = []
-    for movie_id in movie_id_list:
-        ratings = get_ratings_by_movie_id(movie_id)
-        polarized, good_ratio, bad_ratio = determine_polarizition(ratings)
+    i = pointer
+    for movie_id in movie_id_list[pointer:]:
+        i += 1
+        polarized, good_ratio, bad_ratio, good_rating_count, bad_rating_count = determine_polarization(movie_id[0])
 
         info = []
         # info :: [movie_name, movie_id, good_ratings%, bad_ratings%, genres, tags]
@@ -281,37 +309,63 @@ def polarising(request):
             info.append(bad_ratio)
             info.append(get_genres_by_movieid(movie_id))
             info.append(get_tag_names_by_movie_id(movie_id))
+            info.append(good_rating_count)
+            info.append(bad_rating_count)
             polarizing_movies.append(info)
+        
+        if len(polarizing_movies) == 20:
+            return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies, 'list_pointer':i})
 
-    return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies})
+    return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies, 'list_pointer':i})
 
 def user_segmentation_by_ratings(request):
     page = request.GET.get('page')
     page = page if page else 1
     limit = (int(page))*20 - 20
-
     movie_id_list = get_limited_movies(limit)
 
     segmented = []
+    tags = []
+    #  tags = [movie1[zip(tag_names|users(likers,haters|general_users_list))]]
+
     for movie_id in movie_id_list:
         info = []
-        counts, likers, haters= gather_user_groups(movie_id[0])
+        counts, likers, haters = gather_user_groups(movie_id[0])
         info.append(get_movie_name_by_movie_id(movie_id)[0][0])
         info.append(counts[0][0])
         info.append(counts[0][1])
         info.append(likers)
         info.append(haters)
-        genres = get_genres_by_movieid(movie_id)
-        info.append(genres)
+        
+        tag_names = get_tag_names_by_movie_id(movie_id)
+        users_list = []
+        general_users_list = []
+        for tag in tag_names:
+            curr_tag = tag[0]
+            likers, haters = preference_by_tag(curr_tag)
+            users_list.append(likers)
+            users_list.append(haters)
+
+            likers_general, haters_general = general_preference_by_tag(curr_tag)
+            general_users_list.append(likers_general)
+            general_users_list.append(haters_general)
+
+        tags.append(list(zip(tag_names, users_list, general_users_list)))
         segmented.append(info)
+
+    doc = list(zip(segmented, tags))
 
     total_pages = total_number_of_movies()[0][0]
     movie_number = math.ceil(total_pages / 20)
-    return render(request, 'movieapp/user_segmentation.html', {'segments':segmented, 'cur_page':page, 'movie_number': movie_number})
+    return render(request, 'movieapp/user_segmentation.html', {'segments':doc, 'cur_page':page, 'movie_number':movie_number})
 
-def user_segmentation_by_genres(request):
-    # genre = request.POST.get()
+
+def predict_personality_traits(request):
+    movies_info = get_personality_qualified_movies()
+    infors = [[movie_info] for movie_info in movies_info]
+    movie_number = len(movies_info)
+    page_number = math.ceil(movie_number / 20)
+    logger.info(movies_info[-1][-1])
+
+    return render(request, 'movieapp/predict_personality_traits.html', {'infors': infors, 'cur_page': 1, 'movie_number': page_number, 'page_title': "Predict Personality Traits"})
     
-    # print("THE received genere = {}".format(genre))
-    data = ("123")
-    return render(request, 'movieapp/user_segmentation.html',{'info':data})
