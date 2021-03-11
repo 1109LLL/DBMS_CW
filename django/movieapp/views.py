@@ -4,15 +4,18 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from .models import *
 from .crawler import *
+from .helpers import *
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db import connection
 from django.core.paginator import Paginator
 import math
 import logging
+import csv
 
 # Get an instance of a logger
 logger = logging.getLogger('debug')
+
 def get_genres_by_movieid(movie_id):
     if movie_id:
         query = '''
@@ -29,44 +32,24 @@ def get_genres_by_movieid(movie_id):
     else:
         return []
 
-
-
 def index(request):
     movie_search = request.GET.get('search')
-    query = ''
-    if movie_search:
-        movie_id = get_movieID_by_title(movie_search)
-        genre_list = get_genres_by_movieid(movie_id)
-        query = """
-                SELECT movieID, movieTitle, movieAlias, MovieReleased 
-                FROM movies 
-                WHERE movieTitle = %s
-                """
-        with connection.cursor() as cursor:
-            cursor.execute(query, [movie_search.strip()])
-            row = cursor.fetchall()
-            infors = zip(row, [genre_list])
-            return render(request, 'movieapp/index.html', {'infors': infors})
-    else:
-        page = request.GET.get('page')
-        page = int(page) if page else 1
-        query = '''
-                SELECT movieID, movieTitle, movieAlias, MovieReleased 
-                FROM movies limit {}, 20;
-                '''.format((int(page))*20 - 20)
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            row = cursor.fetchall()
-            movieID_list = []
-            for i in row:
-                movieID_list.append(i[0])
-            full_genres_list = []
-            for id in movieID_list:
-                full_genres_list.append(get_genres_by_movieid(id))
-            infors = zip(row, full_genres_list) 
-            total_pages = get_table_row_number('movies')[0][0] 
-            movie_number = math.ceil(total_pages / 20)
-            return render(request, 'movieapp/index.html', {'infors': infors, 'cur_page':page, 'movie_number': movie_number})
+    page = request.GET.get('page')
+    page = int(page) if page and int(page) > 0 else 1
+    ### either show all or show search results ###
+    movies_info = get_search_movies_info(movie_search, page) if movie_search else get_index_movies_info(page)
+    ### genres csv to list ###
+    movies_info = fix_movies_info_genres(movies_info, genres_index=4)
+    movie_num = total_number_of_movies()
+    page_num = get_page_num(movie_num)
+
+    context = {
+        'movies_info': movies_info, 
+        'cur_page':page, 
+        'page_num': page_num
+    }
+
+    return render(request, 'movieapp/index.html', context)
 
 def movie_panel(request):
     movie_selected = request.GET.get('select')
@@ -97,15 +80,13 @@ def movie_panel(request):
             'img': url_img, 
             'imdb_id': imdb_id, 
             'tmdb_id': tmdb_id
-                   }
+        }
 
         # predict personality trait
         if has_traits:
             user_group = get_personality_user_group_by_movie_id(movie_id)
-            logger.info(user_group)
             traits = get_personality_traits(user_group)
             traits = [round(trait, 2) for trait in traits[0]] if traits else []
-            personalities = ["openness", "agreeableness", "emotionalStability", "conscientiousness", "extraversion"]
             personality_traits = list(zip(personalities, traits))
             context['traits'] = personality_traits
             
@@ -242,6 +223,33 @@ def get_avg_ratings_from_seen_people(page):
         avg_rating.append([i[0]])
     return avg_rating
 
+def get_avg_ratings_from_similar_genres(page):
+    query = '''
+            SELECT AVG(rg.ratingFigure)
+            FROM (
+            SELECT mg.genreID, AVG(r.ratingFigure) AS ratingFigure
+            FROM ratings AS r, 
+                moviesGenres AS mg
+            WHERE r.movieID = mg.movieID
+                AND
+                r.movieID IN (SELECT m.movieID 
+                        FROM movies AS m 
+                        WHERE movieReleased = 0)
+            GROUP BY mg.genreID
+                ) AS rg,
+            moviesGenres AS mg
+            WHERE mg.genreID = rg.genreID
+            AND
+            mg.movieID IN (SELECT m.movieID 
+                    FROM movies AS m 
+                    WHERE movieReleased = 0)
+            GROUP BY mg.movieID
+            LIMIT {}, 20;
+            '''.format((int(page))*20 - 20)
+    result = execute_query(query)
+    return result
+
+
 def get_avg_ratings_of_lists_of_movies(movies_list):
     if not movies_list:
         return None
@@ -270,19 +278,11 @@ def soon_to_be_released_movie_prediction(request):
             LIMIT {}, 20;
             '''.format((int(page))*20 - 20)
     result = execute_query(query)
-    avg_rating_list = []
-    genreid_lists = []
-    for i in result:
-        genreid_lists.append(get_genre_lists_from_movieid(i[0]))
-
-    avg_rating_list_by_genres = [] # ratings from movies with same genres as soon to be released movies
-    movies_list = get_movie_list_containing_same_genres(genreid_lists) # lists storing movies with same genres as soon to be released movies
-    for i in movies_list:
-        avg_rating_list_by_genres.append(get_avg_ratings_of_lists_of_movies(i))
 
     avg_rating_list = get_avg_ratings_from_seen_people(page) # people who have seen avg rating
-
+    avg_rating_list_by_genres = get_avg_ratings_from_similar_genres(page)
     # calculate average ratings calculated from three different factors (JAMES TODO here :))
+    
     avg_rating_from_3_factors = []
     for i in range(0, len(avg_rating_list)):
         temp_rating = 0.5 * (avg_rating_list[i][0] + avg_rating_list_by_genres[i][0])
@@ -370,10 +370,15 @@ def user_segmentation_by_ratings(request):
 
 def predict_personality_traits(request):
     movies_info = get_personality_qualified_movies()
-    infors = [[movie_info] for movie_info in movies_info]
-    movie_number = len(movies_info)
-    page_number = math.ceil(movie_number / 20)
-    logger.info(movies_info[-1][-1])
+    movies_info = fix_movies_info_genres(movies_info, genres_index=4)
+    page_num = get_page_num(len(movies_info))
 
-    return render(request, 'movieapp/predict_personality_traits.html', {'infors': infors, 'cur_page': 1, 'movie_number': page_number, 'page_title': "Predict Personality Traits"})
+    context = {
+        'movies_info': movies_info, 
+        'cur_page': 1, 
+        'page_num': page_num, 
+        'page_title': "Predict Personality Traits"
+    }
+
+    return render(request, 'movieapp/predict_personality_traits.html', context)
     
