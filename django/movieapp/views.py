@@ -89,7 +89,12 @@ def movie_panel(request):
         return redirect('index')
 
 def most_popular(request):
-    query = "SELECT m.movieID, m.movieTitle, m.movieReleased, ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) FROM movies m JOIN ratings r ON m.movieID = r.movieID GROUP BY m.movieID ORDER BY COUNT(m.movieID), m.movieReleased DESC limit 50"
+    query = '''
+            SELECT m.movieID, m.movieTitle, m.movieReleased, ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) 
+            FROM movies m JOIN ratings r ON m.movieID = r.movieID
+            GROUP BY m.movieID ORDER BY COUNT(m.movieID), m.movieReleased 
+            DESC limit 50 
+            '''
     with connection.cursor() as cursor:
         cursor.execute(query)
         row = cursor.fetchall()
@@ -172,3 +177,20 @@ def polarising(request):
                 polarizing_movies.append(info)
 
         return render(request, 'movieapp/polarising.html', {'polarizing_movies':polarizing_movies})
+
+
+def average_using_tags(request, movie_id):
+    tags = get_tag_names_by_movie_id(movie_id)
+    query = '''
+
+           SELECT AVG(ratingFigure) FROM ratings
+           INNER JOIN (SELECT m.userID, m.movieID 
+           FROM (SELECT tagID FROM tags WHERE tagName = 'funny') t
+           INNER JOIN userTagsMovie m ON t.tagID = m.tagID) table1 
+           ON ratings.userID = table1.userID AND ratings.movieID = table1.movieID;
+
+           '''
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        row = cursor.fetchall()
+        return render(request, 'movieapp/popular.html', {'movies': row})     
