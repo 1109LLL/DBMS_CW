@@ -182,15 +182,13 @@ def polarising(request):
 def average_using_tags(request, movie_id):
     tags = get_tag_names_by_movie_id(movie_id)
     query = '''
-
            SELECT AVG(ratingFigure) FROM ratings
            INNER JOIN (SELECT m.userID, m.movieID 
-           FROM (SELECT tagID FROM tags WHERE tagName = 'funny') t
+           FROM (SELECT tagID FROM tags WHERE tagName = '%s') t
            INNER JOIN userTagsMovie m ON t.tagID = m.tagID) table1 
            ON ratings.userID = table1.userID AND ratings.movieID = table1.movieID;
-
            '''
     with connection.cursor() as cursor:
-        cursor.execute(query)
+        cursor.execute(query, tags[0])
         row = cursor.fetchall()
         return render(request, 'movieapp/popular.html', {'movies': row})     
