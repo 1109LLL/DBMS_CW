@@ -7,6 +7,8 @@ from django.db import connection
 
 from .crawler import Crawler, LinkType
 
+from .helpers import *
+
 import logging
 
 logger = logging.getLogger('debug')
@@ -200,6 +202,55 @@ def total_number_of_movies():
             FROM movies;
             '''
     result = execute_query(query)
+    ### guarantee to exist and type-correct ###
+    return int(result[0][0])
+
+def get_index_movies_info(page=1):
+    index = page - 1
+    query = '''
+            SELECT DISTINCT m.movieID, 
+                            m.movieTitle, 
+                            m.movieAlias, 
+                            m.movieReleased, 
+                            GROUP_CONCAT(DISTINCT g.genreName) AS genres
+            FROM movies AS m, 
+                moviesGenres AS mg, 
+                genres AS g
+            WHERE mg.movieID = m.movieID
+                AND
+                g.genreID = mg.genreID
+            GROUP BY m.movieID, m.movieTitle, m.movieAlias, m.movieReleased
+            LIMIT %s, 20
+            ;
+            '''
+    result = execute_query(query, [index])
+    return result
+
+def get_search_movies_info(key="", page=1):
+    key += '%' + key + '%'
+    query = '''
+            SELECT DISTINCT m.movieID, 
+                            m.movieTitle, 
+                            m.movieAlias, 
+                            m.movieReleased, 
+                            GROUP_CONCAT(DISTINCT g.genreName) AS genres
+            FROM movies AS m, 
+                moviesGenres AS mg, 
+                genres AS g
+            WHERE mg.movieID = m.movieID
+                AND
+                g.genreID = mg.genreID
+                AND
+                (
+                    m.movieTitle LIKE "%s"
+                OR
+                    m.movieAlias LIKE "%s" 
+                )
+            GROUP BY m.movieID, m.movieTitle, m.movieAlias, m.movieReleased
+            LIMIT 0, 20
+            ;
+            '''
+    result = execute_query(query, [key, key])
     return result
 
 def gather_user_groups(movie_id):
@@ -270,7 +321,6 @@ def get_personality_user_group_by_movie_id(movie_id):
 def get_personality_traits(user_group):
     if not user_group:
         return []
-    personalities = ["openness", "agreeableness", "emotionalStability", "conscientiousness", "extraversion"]
     personalitiy_avgs = []
     query_avg = """
                 SELECT AVG({})
@@ -293,6 +343,7 @@ def get_personality_traits(user_group):
     user_group_str = ",".join(user_group_list)
     result_traints = execute_query(query_traits.format(*personalitiy_avgs, user_group_str), [])
     return result_traints
+
 def preference_by_tag(tag):
     likers = '''
             SELECT ratings.userID
