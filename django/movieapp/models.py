@@ -227,7 +227,7 @@ def get_index_movies_info(page=1):
     return result
 
 def get_search_movies_info(key="", page=1):
-    key += '%' + key + '%'
+    key = '%' + key + '%'
     query = '''
             SELECT DISTINCT m.movieID, 
                             m.movieTitle, 
@@ -242,15 +242,16 @@ def get_search_movies_info(key="", page=1):
                 g.genreID = mg.genreID
                 AND
                 (
-                    m.movieTitle LIKE "%s"
+                    m.movieTitle LIKE %s
                 OR
-                    m.movieAlias LIKE "%s" 
+                    m.movieAlias LIKE %s
                 )
             GROUP BY m.movieID, m.movieTitle, m.movieAlias, m.movieReleased
-            LIMIT 0, 20
+            LIMIT %s, 20
             ;
             '''
-    result = execute_query(query, [key, key])
+    result = execute_query(query, [key, key, page])
+    logger.info(result)
     return result
 
 def gather_user_groups(movie_id):
