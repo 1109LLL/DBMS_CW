@@ -225,6 +225,23 @@ def get_movie_list_containing_same_genres(genreid_lists): # [[0, 6, 4, 11, 12], 
         movies_list.append(temp_list)
     return movies_list
 
+def get_avg_ratings_from_seen_people(page):
+    query = '''
+            SELECT avg(r.ratingFigure) AS AverageRating 
+            FROM ratings AS r 
+            WHERE r.movieID IN 
+            (SELECT m.movieID 
+            FROM movies AS m 
+            WHERE movieReleased = 0) 
+            GROUP BY r.movieID
+            LIMIT {}, 20;
+            '''.format((int(page))*20 - 20)
+    result = execute_query(query)
+    avg_rating = []
+    for i in result:
+        avg_rating.append([i[0]])
+    return avg_rating
+
 def get_avg_ratings_of_lists_of_movies(movies_list):
     if not movies_list:
         return None
@@ -263,16 +280,7 @@ def soon_to_be_released_movie_prediction(request):
     for i in movies_list:
         avg_rating_list_by_genres.append(get_avg_ratings_of_lists_of_movies(i))
 
-    ##################################################################################
-    # James TODO add ratings from movies with same tags as soon to be released movies#
-    ##################################################################################
-    
-    for movie_search in result:
-        movie_search = movie_search[1]
-        movie_id = get_movieID_by_title(movie_search)
-        # TODO can select parts of user as 先看过的人
-        avg_rating = get_avg_rating_by_movie_id(movie_id[0][0]) # soon to be realeased movies avg ratings from people who have seen
-        avg_rating_list.append([avg_rating])
+    avg_rating_list = get_avg_ratings_from_seen_people(page) # people who have seen avg rating
 
     # calculate average ratings calculated from three different factors (JAMES TODO here :))
     avg_rating_from_3_factors = []
