@@ -13,6 +13,8 @@ import logging
 
 logger = logging.getLogger('debug')
 
+# use pre-compiled sql executor
+# in order to prevend injections
 def execute_query(query, params=[]):
     with connection.cursor() as cursor:
         cursor.execute(query, params)
@@ -154,12 +156,11 @@ def determine_polarization(movie_id):
             SELECT g, b, (g/(g+b)) AS goodRatio, (b/(g+b)) AS badRatio
             FROM 
                 (SELECT COUNT(ratingFigure) AS g
-                FROM ratings
-                WHERE movieID = %s AND ratingFigure >= 4) AS goodRatings,
+                 FROM ratings
+                 WHERE movieID = %s AND ratingFigure >= 4) AS goodRatings,
                 (SELECT COUNT(ratingFigure) AS b
-                FROM ratings
-                WHERE movieID = %s AND ratingFigure <= 2) AS badRatings;
-
+                 FROM ratings
+                 WHERE movieID = %s AND ratingFigure <= 2) AS badRatings;
             '''
     result = execute_query(query, [movie_id, movie_id])
     
