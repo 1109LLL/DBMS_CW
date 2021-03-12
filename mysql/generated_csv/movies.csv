@@ -30,7 +30,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 29,The City of Lost Children,"Cité des enfants perdus, La ",1995,112682.0,902.0
 30,Shanghai Triad,Yao a yao yao dao waipo qiao ,1995,115012.0,37557.0
 31,Dangerous Minds,,1995,112792.0,9909.0
-32,Twelve Monkeys,a.k.a. 12 Monkeys ,1995,114746.0,63.0
+32,Twelve Monkeys,12 Monkeys ,1995,114746.0,63.0
 34,Babe,,1995,112431.0,9598.0
 36,Dead Man Walking,,1995,112818.0,687.0
 38,It Takes Two,,1995,113442.0,33689.0
@@ -42,7 +42,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 44,Mortal Kombat,,1995,113855.0,9312.0
 45,To Die For,,1995,114681.0,577.0
 46,How to Make an American Quilt,,1995,113347.0,11861.0
-47,Seven,a.k.a. Se7en ,1995,114369.0,807.0
+47,Seven,Se7en ,1995,114369.0,807.0
 48,Pocahontas,,1995,114148.0,10530.0
 49,When Night Is Falling,,1995,114916.0,8391.0
 50,The Usual Suspects,,1995,114814.0,629.0
@@ -253,7 +253,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 290,Once Were Warriors,,1994,110729.0,527.0
 291,Poison Ivy II,,1996,114151.0,18220.0
 292,Outbreak,,1995,114069.0,6950.0
-293,Léon: The Professional,a.k.a. The Professional ,Léon ,110413.0,101.0
+293,Léon: The Professional,The Professional ,Léon ,110413.0,101.0
 294,The Perez Family,,1995,114113.0,63020.0
 295,A Pyromaniac's Love Story,,1995,114210.0,2307.0
 296,Pulp Fiction,,1994,110912.0,680.0
@@ -349,7 +349,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 390,Faster Pussycat! Kill! Kill!,,1965,59170.0,315.0
 391,Jason's Lyric,,1994,110186.0,22067.0
 393,Street Fighter,,1994,111301.0,11667.0
-405,Highlander III: The Sorcerer,a.k.a. Highlander: The Final Dimension ,1994,110027.0,8011.0
+405,Highlander III: The Sorcerer,Highlander: The Final Dimension ,1994,110027.0,8011.0
 406,Federal Hill,,1994,109785.0,171857.0
 407,In the Mouth of Madness,,1995,113409.0,2654.0
 408,8 Seconds,,1994,109021.0,18069.0
@@ -554,7 +554,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 662,Fear,,1996,116287.0,10543.0
 663,Kids in the Hall: Brain Candy,,1996,116768.0,18414.0
 665,Underground,,1995,114787.0,11902.0
-667,Bloodsport 2,a.k.a. Bloodsport II: The Next Kumite ,1996,112536.0,25087.0
+667,Bloodsport 2,Bloodsport II: The Next Kumite ,1996,112536.0,25087.0
 668,Song of the Little Road,Pather Panchali ,1955,48473.0,5801.0
 670,The World of Apu,Apur Sansar ,1959,52572.0,896.0
 671,Mystery Science Theater 3000: The Movie,,1996,117128.0,3065.0
@@ -614,7 +614,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 775,Spirits of the Dead,,1968,63715.0,41225.0
 778,Trainspotting,,1996,117951.0,627.0
 779,'Til There Was You,,1997,118523.0,32872.0
-780,Independence Day,a.k.a. ID4 ,1996,116629.0,602.0
+780,Independence Day,ID4 ,1996,116629.0,602.0
 781,Stealing Beauty,,1996,117737.0,14553.0
 782,The Fan,,1996,116277.0,9566.0
 783,The Hunchback of Notre Dame,,1996,116583.0,10545.0
@@ -703,7 +703,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 919,The Wizard of Oz,,1939,32138.0,630.0
 920,Gone with the Wind,,1939,31381.0,770.0
 921,My Favorite Year,,1982,84370.0,31044.0
-922,Sunset Blvd.,a.k.a. Sunset Boulevard ,1950,43014.0,599.0
+922,Sunset Blvd.,Sunset Boulevard ,1950,43014.0,599.0
 923,Citizen Kane,,1941,33467.0,15.0
 924,2001: A Space Odyssey,,1968,62622.0,62.0
 926,All About Eve,,1950,42192.0,705.0
@@ -987,7 +987,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 1286,Somewhere in Time,,1980,81534.0,16633.0
 1287,Ben-Hur,,1959,52618.0,665.0
 1288,This Is Spinal Tap,,1984,88258.0,11031.0
-1289,Koyaanisqatsi,a.k.a. Koyaanisqatsi: Life Out of Balance ,1983,85809.0,11314.0
+1289,Koyaanisqatsi,Koyaanisqatsi: Life Out of Balance ,1983,85809.0,11314.0
 1290,Some Kind of Wonderful,,1987,94006.0,15143.0
 1291,Indiana Jones and the Last Crusade,,1989,97576.0,89.0
 1292,Being There,,1979,78841.0,10322.0
@@ -1008,7 +1008,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 1310,Hype!,,1996,116589.0,30180.0
 1312,Female Perversions,,1996,116293.0,41801.0
 1318,Blue Juice,,1995,112537.0,18762.0
-1320,Alien³,a.k.a. Alien 3 ,1992,103644.0,8077.0
+1320,Alien³,Alien 3 ,1992,103644.0,8077.0
 1321,An American Werewolf in London,,1981,82010.0,814.0
 1322,Amityville 1992: It's About Time,,1992,103678.0,41671.0
 1323,Amityville 3-D,,1983,85159.0,27214.0
@@ -1126,7 +1126,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 1466,Donnie Brasco,,1997,119008.0,9366.0
 1468,Booty Call,,1997,118750.0,21915.0
 1473,Best Men,,1997,118702.0,19952.0
-1474,Jungle2Jungle,a.k.a. Jungle 2 Jungle ,1997,119432.0,9446.0
+1474,Jungle2Jungle,Jungle 2 Jungle ,1997,119432.0,9446.0
 1475,Kama Sutra: A Tale of Love,,1996,116743.0,28005.0
 1476,Private Parts,,1997,119951.0,9403.0
 1477,Love Jones,,1997,119572.0,27322.0
@@ -1182,7 +1182,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 1572,Contempt,"Mépris, Le ",1963,57345.0,266.0
 1573,Face/Off,,1997,119094.0,754.0
 1574,Fall,,1997,119098.0,37567.0
-1580,Men in Black,a.k.a. MIB ,1997,119654.0,607.0
+1580,Men in Black,MIB ,1997,119654.0,607.0
 1581,Out to Sea,,1997,119848.0,18080.0
 1582,Wild America,,1997,120512.0,38225.0
 1583,A Simple Wish,,1997,120133.0,17834.0
@@ -1232,11 +1232,11 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 1635,The Ice Storm,,1997,119349.0,68924.0
 1639,Chasing Amy,,1997,118842.0,2255.0
 1641,The Full Monty,,1997,119164.0,9427.0
-1642,Indian Summer,a.k.a. Alive & Kicking ,1996,116631.0,172545.0
-1643,Mrs. Brown,"a.k.a. Her Majesty, Mrs. Brown ",1997,119280.0,17589.0
+1642,Indian Summer,Alive & Kicking ,1996,116631.0,172545.0
+1643,Mrs. Brown,"Her Majesty, Mrs. Brown ",1997,119280.0,17589.0
 1644,I Know What You Did Last Summer,,1997,119345.0,3597.0
 1645,The Devil's Advocate,,1997,118971.0,1813.0
-1646,RocketMan,a.k.a. Rocket Man ,1997,120029.0,36797.0
+1646,RocketMan,Rocket Man ,1997,120029.0,36797.0
 1647,Playing God,,1997,119906.0,12628.0
 1648,The House of Yes,,1997,119324.0,33344.0
 1649,Cheap & Out of Control Fast,,1997,119107.0,25099.0
@@ -1396,7 +1396,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 1912,Out of Sight,,1998,120780.0,1389.0
 1913,Picnic at Hanging Rock,,1975,73540.0,11020.0
 1914,Smoke Signals,,1998,120321.0,20862.0
-1916,Buffalo '66,a.k.a. Buffalo 66 ,1998,118789.0,9464.0
+1916,Buffalo '66,Buffalo 66 ,1998,118789.0,9464.0
 1917,Armageddon,,1998,120591.0,95.0
 1918,Lethal Weapon 4,,1998,122151.0,944.0
 1919,Madeline,,1998,123987.0,35680.0
@@ -1626,7 +1626,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 2169,Dead Man on Campus,,1998,118301.0,14557.0
 2170,Wrongfully Accused,,1998,120901.0,9417.0
 2171,Next Stop Wonderland,,1998,119778.0,41469.0
-2172,Strike!,"a.k.a. All I Wanna Do, The Hairy Bird ",1998,120692.0,19381.0
+2172,Strike!,"All I Wanna Do, The Hairy Bird ",1998,120692.0,19381.0
 2174,Beetlejuice,,1988,94721.0,4011.0
 2175,Déjà Vu,,1997,119033.0,161795.0
 2176,Rope,,1948,40746.0,1580.0
@@ -1760,7 +1760,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 2356,Celebrity,,1998,120533.0,9466.0
 2357,Central Station,Central do Brasil ,1998,140888.0,666.0
 2358,Savior,,1998,120070.0,2042.0
-2359,Waking Ned Devine,a.k.a. Waking Ned ,1998,166396.0,10162.0
+2359,Waking Ned Devine,Waking Ned ,1998,166396.0,10162.0
 2360,The Celebration,Festen ,1998,154420.0,309.0
 2361,Pink Flamingos,,1972,69089.0,692.0
 2362,Glen or Glenda,,1953,45826.0,24018.0
@@ -1851,7 +1851,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 2458,Armed and Dangerous,,1986,90660.0,2620.0
 2459,The Texas Chainsaw Massacre,,1974,72271.0,30497.0
 2460,The Texas Chainsaw Massacre 2,,1986,92076.0,16337.0
-2462,Texas Chainsaw Massacre: The Next Generation,a.k.a. The Return of the Texas Chainsaw Massacre ,1994,110978.0,16780.0
+2462,Texas Chainsaw Massacre: The Next Generation,The Return of the Texas Chainsaw Massacre ,1994,110978.0,16780.0
 2463,Ruthless People,,1986,91877.0,12151.0
 2465,Deadly Friend,,1986,90917.0,33278.0
 2467,The Name of the Rose,"Name der Rose, Der ",1986,91605.0,192.0
@@ -1968,7 +1968,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 2611,The Winslow Boy,,1999,155388.0,28519.0
 2612,Mildred Pierce,,1945,37913.0,3309.0
 2613,Night of the Comet,,1984,87799.0,18462.0
-2614,Chopping Mall,a.k.a. Killbots ,1986,90837.0,28941.0
+2614,Chopping Mall,Killbots ,1986,90837.0,28941.0
 2615,My Science Project,,1985,89652.0,18252.0
 2616,Dick Tracy,,1990,99422.0,8592.0
 2617,The Mummy,,1999,120616.0,564.0
@@ -1980,7 +1980,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 2625,Black Mask,Hak hap ,1996,115693.0,9460.0
 2628,Star Wars: Episode I - The Phantom Menace,,1999,120915.0,1893.0
 2629,The Love Letter,,1999,166252.0,31342.0
-2630,Besieged,a.k.a. L' Assedio ,1998,149723.0,44297.0
+2630,Besieged,L' Assedio ,1998,149723.0,44297.0
 2632,The Saragossa Manuscript,Rekopis znaleziony w Saragossie ,1965,59643.0,8785.0
 2633,The Mummy,,1932,23245.0,15849.0
 2634,The Mummy,,1959,53085.0,18990.0
@@ -2018,7 +2018,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 2687,Tarzan,,1999,120855.0,37135.0
 2688,The General's Daughter,,1999,144214.0,2275.0
 2690,An Ideal Husband,,1999,122541.0,24137.0
-2691,The Legend of 1900,a.k.a. The Legend of the Pianist on the Ocean ,Leggenda del pianista sull'oceano ,120731.0,10376.0
+2691,The Legend of 1900,The Legend of the Pianist on the Ocean ,Leggenda del pianista sull'oceano ,120731.0,10376.0
 2692,Run Lola Run,Lola rennt ,1998,130827.0,104.0
 2693,Trekkies,,1997,120370.0,15800.0
 2694,Big Daddy,,1999,142342.0,9032.0
@@ -2037,7 +2037,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 2710,The Blair Witch Project,,1999,185937.0,2667.0
 2712,Eyes Wide Shut,,1999,120663.0,345.0
 2713,Lake Placid,,1999,139414.0,9825.0
-2716,Ghostbusters,a.k.a. Ghost Busters ,1984,87332.0,620.0
+2716,Ghostbusters,Ghost Busters ,1984,87332.0,620.0
 2717,Ghostbusters II,,1989,97428.0,2978.0
 2718,Drop Dead Gorgeous,,1999,157503.0,10490.0
 2719,The Haunting,,1999,171363.0,11618.0
@@ -2095,7 +2095,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 2787,Cat's Eye,,1985,88889.0,10552.0
 2788,Monty Python's And Now for Something Completely Different,,1971,66765.0,9267.0
 2789,Damien: Omen II,,1978,77394.0,10766.0
-2790,The Final Conflict,a.k.a. Omen III: The Final Conflict ,1981,82377.0,10768.0
+2790,The Final Conflict,Omen III: The Final Conflict ,1981,82377.0,10768.0
 2791,Airplane!,,1980,80339.0,813.0
 2792,Airplane II: The Sequel,,1982,83530.0,2665.0
 2793,An American Werewolf in Paris,,1997,118604.0,9406.0
@@ -2106,7 +2106,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 2798,Problem Child,,1990,100419.0,11077.0
 2799,Problem Child 2,,1991,102719.0,28597.0
 2800,Little Nemo: Adventures in Slumberland,,1992,104740.0,22611.0
-2801,Oscar and Lucinda,a.k.a. Oscar & Lucinda ,1997,119843.0,39780.0
+2801,Oscar and Lucinda,Oscar & Lucinda ,1997,119843.0,39780.0
 2802,Tequila Sunrise,,1988,96244.0,10396.0
 2803,The Pelican Brief,,1993,107798.0,9944.0
 2804,A Christmas Story,,1983,85334.0,850.0
@@ -2331,7 +2331,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 3086,Babes in Toyland,,1934,24852.0,25898.0
 3087,Scrooged,,1988,96061.0,9647.0
 3088,Harvey,,1950,42546.0,11787.0
-3089,Bicycle Thieves,a.k.a. The Bicycle Thief ,a.k.a. The Bicycle Thieves ,40522.0,5156.0
+3089,Bicycle Thieves,The Bicycle Thief ,a.k.a. The Bicycle Thieves ,40522.0,5156.0
 3090,Matewan,,1987,93509.0,24276.0
 3091,Kagemusha,,1980,80979.0,11953.0
 3093,McCabe & Mrs. Miller,,1971,67411.0,29005.0
@@ -2404,7 +2404,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 3186,Interrupted Girl,,1999,172493.0,3558.0
 3189,My Dog Skip,,1999,156812.0,17908.0
 3190,Supernova,,2000,134983.0,10384.0
-3192,The Terrorist,a.k.a. Malli ,Theeviravaathi ,169302.0,48233.0
+3192,The Terrorist,Malli ,Theeviravaathi ,169302.0,48233.0
 3194,The Way We Were,,1973,70903.0,10236.0
 3196,Stalag 17,,1953,46359.0,632.0
 3197,The Presidio,,1988,95897.0,11851.0
@@ -2511,7 +2511,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 3357,East-West,Est-ouest ,1999,181530.0,28463.0
 3358,Defending Your Life,,1991,101698.0,12186.0
 3359,Breaking Away,,1979,78902.0,20283.0
-3360,Hoosiers,a.k.a. Best Shot ,1986,91217.0,5693.0
+3360,Hoosiers,Best Shot ,1986,91217.0,5693.0
 3361,Bull Durham,,1988,94812.0,287.0
 3362,Dog Day Afternoon,,1975,72890.0,968.0
 3363,American Graffiti,,1973,69704.0,838.0
@@ -2702,7 +2702,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 3623,Mission: Impossible II,,2000,120755.0,955.0
 3624,Shanghai Noon,,2000,184894.0,8584.0
 3625,Better Living Through Circuitry,,1999,207998.0,47295.0
-3626,8 ½ Women,a.k.a. 8 1/2 Women ,a.k.a. Eight and a Half Women ,154443.0,11332.0
+3626,8 ½ Women,8 1/2 Women ,a.k.a. Eight and a Half Women ,154443.0,11332.0
 3627,Carnival of Souls,,1962,55830.0,16093.0
 3628,Flying Tigers,,1942,34742.0,29372.0
 3629,The Gold Rush,,1925,15864.0,962.0
@@ -2719,7 +2719,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 3646,Big Momma's House,,2000,208003.0,9600.0
 3648,The Abominable Snowman,"Abominable Snowman of the Himalayas, The ",1957,50095.0,38006.0
 3649,American Gigolo,,1980,80365.0,2768.0
-3652,City of the Living Dead,"a.k.a. Gates of Hell, The ",Paura nella città dei morti viventi ,81318.0,24920.0
+3652,City of the Living Dead,"Gates of Hell, The ",Paura nella città dei morti viventi ,81318.0,24920.0
 3653,The Endless Summer,,1966,60371.0,21.0
 3654,The Guns of Navarone,,1961,54953.0,10911.0
 3655,Blow-Out,La grande bouffe ,1973,70130.0,10102.0
@@ -2815,7 +2815,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 3760,The Kentucky Fried Movie,,1977,76257.0,11598.0
 3761,Blood Out Blood In,,1993,106469.0,9702.0
 3763,F/X,,1986,89118.0,9873.0
-3764,F/X2,a.k.a. F/X 2 - The Deadly Art of Illusion ,1991,101846.0,16820.0
+3764,F/X2,F/X 2 - The Deadly Art of Illusion ,1991,101846.0,16820.0
 3765,The Hot Spot,,1990,99797.0,14864.0
 3766,Missing in Action,,1984,87727.0,15379.0
 3767,Missing in Action 2: The Beginning,,1985,89604.0,12764.0
@@ -2975,7 +2975,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 3985,The Eagle Has Landed,,1976,74452.0,11372.0
 3986,The 6th Day,,2000,216216.0,8452.0
 3987,Bounce,,2000,186894.0,10862.0
-3988,How the Grinch Stole Christmas,a.k.a. The Grinch ,2000,170016.0,8871.0
+3988,How the Grinch Stole Christmas,The Grinch ,2000,170016.0,8871.0
 3989,One Day in September,,1999,230591.0,34045.0
 3990,Rugrats in Paris: The Movie,,2000,213203.0,16340.0
 3991,102 Dalmatians,,2000,211181.0,10481.0
@@ -3182,7 +3182,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 4285,Frankie and Johnny,,1991,101912.0,3784.0
 4289,The City of Women,"Città delle donne, La ",1980,80539.0,11936.0
 4290,For the Boys,,1991,101902.0,25221.0
-4291,Nine to Five,a.k.a. 9 to 5 ,1980,80319.0,19494.0
+4291,Nine to Five,9 to 5 ,1980,80319.0,19494.0
 4292,Norma Rae,,1979,79638.0,40842.0
 4293,Summer Rental,,1985,90098.0,19357.0
 4294,The 000 Fingers of Dr. T 5,,1953,45464.0,33743.0
@@ -3278,12 +3278,12 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 4436,Obsession,,1976,74991.0,4780.0
 4437,Suspiria,,1977,76786.0,11906.0
 4438,Fist of Fury,"Chinese Connection, The ",Jing wu men ,68767.0,11713.0
-4439,Christiane F.,a.k.a. We Children from Bahnhof Zoo ,Christiane F. - Wir Kinder vom Bahnhof Zoo ,82176.0,9589.0
+4439,Christiane F.,We Children from Bahnhof Zoo ,Christiane F. - Wir Kinder vom Bahnhof Zoo ,82176.0,9589.0
 4440,The Big Boss,Fists of Fury ,Tang shan da xiong ,67824.0,12481.0
 4441,Game of Death,,1978,77594.0,13333.0
 4442,The Last Dragon,,1985,89461.0,13938.0
 4443,Outland,,1981,82869.0,10540.0
-4444,The Way of the Dragon,a.k.a. Return of the Dragon ,Meng long guo jiang ,68935.0,9462.0
+4444,The Way of the Dragon,Return of the Dragon ,Meng long guo jiang ,68935.0,9462.0
 4445,T-Rex: Back to the Cretaceous,,1998,163862.0,82623.0
 4446,Final Fantasy: The Spirits Within,,2001,173840.0,2114.0
 4447,Legally Blonde,,2001,250494.0,8835.0
@@ -3333,7 +3333,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 4509,The Great Outdoors,,1988,95253.0,2617.0
 4511,High Spirits,,1988,95304.0,21362.0
 4516,Johnny Be Good,,1988,95409.0,20443.0
-4517,Lady in White,a.k.a. The Mystery of the Lady in White ,1988,95484.0,49365.0
+4517,Lady in White,The Mystery of the Lady in White ,1988,95484.0,49365.0
 4518,The Lair of the White Worm,,1988,95488.0,11347.0
 4519,The Land Before Time,,1988,95489.0,12144.0
 4520,License to Drive,,1988,95519.0,13704.0
@@ -3346,7 +3346,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 4529,Bagdad Cafe,Out of Rosenheim ,1987,95801.0,3543.0
 4531,Red Heat,,1988,95963.0,9604.0
 4533,The Return of the Living Dead,,1985,89907.0,10925.0
-4534,Return to Snowy River,a.k.a. The Man From Snowy River II ,1988,95993.0,13965.0
+4534,Return to Snowy River,The Man From Snowy River II ,1988,95993.0,13965.0
 4535,The Man from Snowy River,,1982,84296.0,24266.0
 4537,Running on Empty,,1988,96018.0,18197.0
 4541,The Serpent and the Rainbow,,1988,96071.0,11503.0
@@ -3381,7 +3381,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 4595,Fat Man and Little Boy,,1989,97336.0,27461.0
 4597,Gleaming the Cube,,1989,97438.0,1380.0
 4599,Great Balls of Fire!,,1989,97457.0,11465.0
-4600,Gross Anatomy,a.k.a. A Cut Above ,1989,97458.0,17190.0
+4600,Gross Anatomy,A Cut Above ,1989,97458.0,17190.0
 4602,Harlem Nights,,1989,97481.0,9085.0
 4603,Her Alibi,,1989,97500.0,17819.0
 4605,How to Get Ahead in Advertising,,1989,97531.0,14776.0
@@ -3559,7 +3559,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 4871,Focus,,2001,246628.0,18192.0
 4873,Waking Life,,2001,243017.0,9081.0
 4874,K-PAX,,2001,272152.0,167.0
-4876,Thirteen Ghosts,a.k.a. Thir13en Ghosts ,2001,245674.0,9378.0
+4876,Thirteen Ghosts,Thir13en Ghosts ,2001,245674.0,9378.0
 4877,Better Than Sex,,2000,236019.0,27444.0
 4878,Donnie Darko,,2001,246578.0,141.0
 4879,High Heels and Low Lifes,,2001,253126.0,10034.0
@@ -3573,7 +3573,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 4889,Heist,,2001,252503.0,11088.0
 4890,Shallow Hal,,2001,256380.0,9889.0
 4893,When a Stranger Calls,,1979,80130.0,45964.0
-4896,Harry Potter and the Sorcerer's Stone,a.k.a. Harry Potter and the Philosopher's Stone ,2001,241527.0,671.0
+4896,Harry Potter and the Sorcerer's Stone,Harry Potter and the Philosopher's Stone ,2001,241527.0,671.0
 4898,Novocaine,,2001,234354.0,20794.0
 4899,Black Knight,,2001,265087.0,11469.0
 4900,Out Cold,,2001,253798.0,14369.0
@@ -3606,7 +3606,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 4951,Lord of the Flies,,1990,100054.0,10847.0
 4952,Morons From Outer Space,,1985,89622.0,33525.0
 4953,The People That Time Forgot,,1977,76535.0,27591.0
-4954,Ocean's Eleven,a.k.a. Ocean's 11 ,1960,54135.0,299.0
+4954,Ocean's Eleven,Ocean's 11 ,1960,54135.0,299.0
 4956,The Stunt Man,,1980,81568.0,42160.0
 4957,Sudden Impact,,1983,86383.0,10650.0
 4958,Behind Enemy Lines,,2001,159273.0,8007.0
@@ -3672,7 +3672,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5054,Brainstorm,,1983,85271.0,15050.0
 5055,Dragon: The Bruce Lee Story,,1993,106770.0,10423.0
 5059,Little Dieter Needs to Fly,,1997,145046.0,57976.0
-5060,M*A*S*H,a.k.a. MASH ,1970,66026.0,651.0
+5060,M*A*S*H,MASH ,1970,66026.0,651.0
 5062,Seconds,,1966,60955.0,20620.0
 5063,One-Eyed Jacks,,1961,55257.0,18647.0
 5064,The Count of Monte Cristo,,2002,245844.0,11362.0
@@ -3727,7 +3727,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5155,The Big Bird Cage,,1972,68273.0,22910.0
 5156,The Big Doll House,,1971,66830.0,42517.0
 5159,Ferngully: The Last Rainforest,,1992,104254.0,13225.0
-5165,Zombie,a.k.a. Zombie 2: The Dead Are Among Us ,Zombi 2 ,80057.0,7219.0
+5165,Zombie,Zombie 2: The Dead Are Among Us ,Zombi 2 ,80057.0,7219.0
 5168,Royal Wedding,,1951,43983.0,18646.0
 5170,All About the Benjamins,,2002,278295.0,13950.0
 5171,The Time Machine,,2002,268695.0,2135.0
@@ -3792,7 +3792,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5299,My Big Fat Greek Wedding,,2002,259446.0,8346.0
 5300,3:10 to Yuma,,1957,50086.0,14168.0
 5303,Joe Versus the Volcano,,1990,99892.0,2565.0
-5304,Open City Rome,a.k.a. Open City ,"Roma, città aperta ",38890.0,307.0
+5304,Open City Rome,Open City ,"Roma, città aperta ",38890.0,307.0
 5307,Taking Care of Business,,1990,103035.0,6393.0
 5308,Three Men and a Baby,,1987,94137.0,12154.0
 5309,Three Men and a Little Lady,,1990,98966.0,11630.0
@@ -3841,7 +3841,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5388,Insomnia,,2002,278504.0,320.0
 5389,Spirit: Stallion of the Cimarron,,2002,166813.0,9023.0
 5390,CQ,,2001,254199.0,27834.0
-5391,Thirteen Conversations About One Thing,a.k.a. 13 Conversations ,2001,268690.0,17734.0
+5391,Thirteen Conversations About One Thing,13 Conversations ,2001,268690.0,17734.0
 5397,Monkey Business,,1952,44916.0,24008.0
 5398,Requiem for a Heavyweight,,1962,56406.0,53229.0
 5400,The Sum of All Fears,,2002,164184.0,4614.0
@@ -3884,7 +3884,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5455,The Object of Beauty,,1991,102573.0,88818.0
 5456,Wagons East,,1994,111653.0,30114.0
 5458,Like Mike,,2002,308506.0,21972.0
-5459,Men in Black II,a.k.a. MIIB ,a.k.a. MIB 2 ,120912.0,608.0
+5459,Men in Black II,MIIB ,a.k.a. MIB 2 ,120912.0,608.0
 5460,The Powerpuff Girls,,2002,289408.0,59387.0
 5461,Me Without You,,2001,263725.0,26290.0
 5462,The Crocodile Hunter: Collision Course,,2002,305396.0,17043.0
@@ -3934,7 +3934,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5529,Serving Sara,,2002,261289.0,12771.0
 5530,Simone,S1m0ne ,2002,258153.0,9296.0
 5531,Undisputed,,2002,281322.0,15070.0
-5532,Amy's O,a.k.a. Amy's Orgasm ,2001,280424.0,26942.0
+5532,Amy's O,Amy's Orgasm ,2001,280424.0,26942.0
 5537,Satin Rouge,,2002,300453.0,97447.0
 5538,The Care Bears Movie,,1985,88885.0,11243.0
 5539,Care Bears Movie II: A New Generation,,1986,90799.0,19975.0
@@ -3945,7 +3945,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5548,Down and Out in Beverly Hills,,1986,90966.0,9941.0
 5550,Love Me Tender,,1956,49452.0,39833.0
 5553,Stakeout,,1987,94025.0,10859.0
-5556,FearDotCom,a.k.a. Fear.com ,a.k.a. Fear Dot Com ,295254.0,9544.0
+5556,FearDotCom,Fear.com ,a.k.a. Fear Dot Com ,295254.0,9544.0
 5560,À nous la liberté,Freedom for Us ,1931,22599.0,31514.0
 5562,Snipes,,2001,275688.0,26056.0
 5563,City by the Sea,,2002,269095.0,13536.0
@@ -3980,7 +3980,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5611,The Four Feathers,,2002,240510.0,9093.0
 5612,Trapped,,2002,280380.0,9039.0
 5613,8 Women,,2002,283832.0,1958.0
-5614,His Secret Life,"a.k.a. Ignorant Fairies, The ","Fate ignoranti, Le ",274497.0,23550.0
+5614,His Secret Life,"Ignorant Fairies, The ","Fate ignoranti, Le ",274497.0,23550.0
 5615,Invincible,,2001,245171.0,68569.0
 5617,Secretary,,2002,274812.0,11013.0
 5618,Spirited Away,Sen to Chihiro no kamikakushi ,2001,245429.0,129.0
@@ -4013,7 +4013,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5668,White Oleander,,2002,283139.0,10994.0
 5669,Bowling for Columbine,,2002,310793.0,1430.0
 5670,Comedian,,2002,328962.0,19973.0
-5672,Pokemon 4 Ever,a.k.a. Pokémon 4: The Movie ,2002,313487.0,12600.0
+5672,Pokemon 4 Ever,Pokémon 4: The Movie ,2002,313487.0,12600.0
 5673,Punch-Drunk Love,,2002,272338.0,8051.0
 5675,Swept Away,,2002,291502.0,12779.0
 5678,Formula 51,,2001,227984.0,1613.0
@@ -4030,7 +4030,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5696,Urban Cowboy,,1980,81696.0,17496.0
 5699,Tom Horn,,1980,80031.0,5917.0
 5700,The Pumaman,,1980,81693.0,31278.0
-5704,Without Warning,a.k.a. Alien Warning ,a.k.a. It Came Without Warning ,81764.0,44932.0
+5704,Without Warning,Alien Warning ,a.k.a. It Came Without Warning ,81764.0,44932.0
 5706,...All the Marbles,,1981,81964.0,30709.0
 5707,Absence of Malice,,1981,81974.0,19429.0
 5710,Banana Joe,,1981,82045.0,11340.0
@@ -4120,7 +4120,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 5903,Equilibrium,,2002,238380.0,7299.0
 5909,Visitor Q,Bizita Q ,2001,290329.0,4241.0
 5912,Hit the Bank,Vabank ,1981,83271.0,22257.0
-5915,Victory,a.k.a. Escape to Victory ,1981,83284.0,17360.0
+5915,Victory,Escape to Victory ,1981,83284.0,17360.0
 5919,Android,,1982,83557.0,38849.0
 5922,Attila,Attila Flagello di Dio ,1982,80393.0,29743.0
 5925,The Beast Within,,1982,83629.0,40219.0
@@ -4208,7 +4208,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 6086,the Jury I,,1982,84112.0,37191.0
 6090,Kiss Me Goodbye,,1982,84210.0,81001.0
 6093,The Last Unicorn,,1982,84237.0,10150.0
-6095,Dragon Lord,a.k.a. Dragon Strike ,Long Xiao Ye ,84266.0,16407.0
+6095,Dragon Lord,Dragon Strike ,Long Xiao Ye ,84266.0,16407.0
 6100,A Midsummer Night's Sex Comedy,,1982,84329.0,8288.0
 6101,Missing,,1982,84335.0,15600.0
 6104,Monty Python Live at the Hollywood Bowl,,1982,84352.0,11949.0
@@ -4221,7 +4221,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 6124,Savannah Smiles,,1982,84633.0,17132.0
 6125,The Secret Policeman's Other Ball,,1982,84648.0,59533.0
 6140,Tenebre,,1982,84777.0,29702.0
-6141,They Call Me Bruce?,a.k.a. A Fistful of Chopsticks ,1982,84786.0,24830.0
+6141,They Call Me Bruce?,A Fistful of Chopsticks ,1982,84786.0,24830.0
 6143,Trail of the Pink Panther,,1982,84814.0,9699.0
 6145,Venom,,1982,84854.0,30789.0
 6148,White Dog,,1982,84899.0,47955.0
@@ -4306,7 +4306,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 6290,House of 1000 Corpses,,2003,251736.0,2662.0
 6291,Lilya 4-Ever,Lilja 4-ever ,2002,300140.0,12093.0
 6294,Bulletproof Monk,,2003,245803.0,11817.0
-6295,Chasing Papi,a.k.a. Papi Chulo ,2003,323572.0,24621.0
+6295,Chasing Papi,Papi Chulo ,2003,323572.0,24621.0
 6296,A Mighty Wind,,2003,310281.0,13370.0
 6297,Holes,,2003,311289.0,8326.0
 6298,Malibu's Most Wanted,,2003,328099.0,13411.0
@@ -4369,7 +4369,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 6386,Nevada Smith,,1966,60748.0,5921.0
 6387,Once a Thief,Zong heng si hai ,1991,101020.0,47423.0
 6390,Silk Stockings,,1957,50972.0,43239.0
-6395,The Crazies,a.k.a. Code Name: Trixie ,1973,69895.0,29425.0
+6395,The Crazies,Code Name: Trixie ,1973,69895.0,29425.0
 6400,Murder on a Sunday Morning,Un coupable idéal ,2001,307197.0,51391.0
 6402,Siam Sunset,,1999,178022.0,50285.0
 6405,Treasure Island,,1950,43067.0,6646.0
@@ -4427,7 +4427,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 6537,Terminator 3: Rise of the Machines,,2003,181852.0,296.0
 6538,Swimming Pool,,2003,324133.0,302.0
 6539,Pirates of the Caribbean: The Curse of the Black Pearl,,2003,325980.0,22.0
-6541,The League of Extraordinary Gentlemen,a.k.a. LXG ,2003,311429.0,8698.0
+6541,The League of Extraordinary Gentlemen,LXG ,2003,311429.0,8698.0
 6542,The Cuckoo,Kukushka ,2002,308476.0,554.0
 6545,I Capture the Castle,,2003,300015.0,17920.0
 6547,Northfork,,2003,322659.0,32235.0
@@ -4578,7 +4578,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 6797,Bugsy,,1991,101516.0,10337.0
 6798,Bugsy Malone,,1976,74256.0,8446.0
 6800,Cobra,,1986,90859.0,9874.0
-6803,Phenomena,a.k.a. Creepers ,1985,87909.0,29161.0
+6803,Phenomena,Creepers ,1985,87909.0,29161.0
 6804,Crimewave,,1985,88967.0,21627.0
 6807,Monty Python's The Meaning of Life,,1983,85959.0,4543.0
 6808,Where Eagles Dare,,1968,65207.0,11046.0
@@ -4639,7 +4639,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 6927,The Human Stain,,2003,308383.0,10922.0
 6932,Shattered Glass,,2003,323944.0,13537.0
 6934,The Matrix Revolutions,,2003,242653.0,605.0
-6935,The Revolution Will Not Be Televised,a.k.a. Chavez: Inside the Coup ,2003,363510.0,33222.0
+6935,The Revolution Will Not Be Televised,Chavez: Inside the Coup ,2003,363510.0,33222.0
 6936,Elf,,2003,319343.0,10719.0
 6938,Billabong Odyssey,,2003,379713.0,23995.0
 6939,Gloomy Sunday,Ein Lied von Liebe und Tod ,1999,155722.0,1277.0
@@ -4714,7 +4714,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 7030,Radio Flyer,,1992,105211.0,20763.0
 7031,The Real McCoy,,1993,107927.0,2047.0
 7032,Revenge,,1990,100485.0,14249.0
-7033,The Secret of My Succe$s,a.k.a. The Secret of My Success ,1987,93936.0,10021.0
+7033,The Secret of My Succe$s,The Secret of My Success ,1987,93936.0,10021.0
 7034,Show Me Love,Fucking Åmål ,1998,150662.0,11634.0
 7036,Teen Wolf,,1985,90142.0,11824.0
 7037,High Heels,Tacones lejanos ,1991,103030.0,8222.0
@@ -4744,7 +4744,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 7064,Beauty and the Beast,La belle et la bête ,1946,38348.0,648.0
 7065,The Birth of a Nation,,1915,4972.0,618.0
 7067,Juliet of the Spirits,Giulietta degli spiriti ,1965,59229.0,19120.0
-7069,Macbeth,"a.k.a. Tragedy of Macbeth, The ",1971,67372.0,11316.0
+7069,Macbeth,"Tragedy of Macbeth, The ",1971,67372.0,11316.0
 7070,Red River,,1948,40724.0,3089.0
 7071,A Woman Under the Influence,,1974,72417.0,29845.0
 7072,Stagecoach,,1939,31971.0,995.0
@@ -4837,7 +4837,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 7217,Dark Passage,,1947,39302.0,16227.0
 7218,The Ox-Bow Incident,,1943,36244.0,980.0
 7219,They Drive by Night,,1940,33149.0,16933.0
-7222,Reefer Madness,a.k.a. Tell Your Children ,1938,28346.0,37833.0
+7222,Reefer Madness,Tell Your Children ,1938,28346.0,37833.0
 7223,D.O.A.,,1950,42369.0,18995.0
 7225,Pumping Iron,,1977,76578.0,5205.0
 7228,Cool World,,1992,104009.0,14239.0
@@ -4848,7 +4848,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 7243,Intolerance: Love's Struggle Throughout the Ages,,1916,6864.0,3059.0
 7245,Tormented,,1960,54393.0,28586.0
 7247,Chitty Chitty Bang Bang,,1968,62803.0,11708.0
-7248,Suriyothai,"a.k.a. Legend of Suriyothai, The ",2001,290879.0,27329.0
+7248,Suriyothai,"Legend of Suriyothai, The ",2001,290879.0,27329.0
 7251,Where the Day Takes You,,1992,105810.0,17736.0
 7254,The Butterfly Effect,,2004,289879.0,1954.0
 7255,Win a Date with Tad Hamilton!,,2004,335559.0,13476.0
@@ -4954,7 +4954,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 7479,Watch on the Rhine,,1943,36515.0,68440.0
 7481,Enemy Mine,,1985,89092.0,11864.0
 7482,Enter the Dragon,,1973,70034.0,9461.0
-7486,Happy Together,a.k.a. Buenos Aires Affair ,Chun gwong cha sit ,118845.0,18329.0
+7486,Happy Together,Buenos Aires Affair ,Chun gwong cha sit ,118845.0,18329.0
 7487,Henry & June,,1990,99762.0,17993.0
 7492,Martin,,1977,77914.0,26517.0
 7493,The Three Faces of Eve,,1957,51077.0,28285.0
@@ -5006,7 +5006,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 7743,Explorers,,1985,89114.0,9872.0
 7745,The Scent of Green Papaya,Mùi du du xhan - L'odeur de la papaye verte ,1993,107617.0,19552.0
 7748,Pierrot le fou,,1965,59592.0,2786.0
-7749,Weekend,a.k.a. Le Week-end ,Week End ,62480.0,8075.0
+7749,Weekend,Le Week-end ,Week End ,62480.0,8075.0
 7753,Tuesdays with Morrie,,1999,207805.0,26133.0
 7756,Alexander Nevsky,Aleksandr Nevskiy ,1938,29850.0,10235.0
 7757,Jason and the Argonauts,,1963,57197.0,11533.0
@@ -5133,7 +5133,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 8199,Ugetsu,Ugetsu monogatari ,1953,46478.0,14696.0
 8207,The Day of the Jackal,,1973,69947.0,4909.0
 8225,Night of the Living Dead,,1990,100258.0,19185.0
-8228,The Maltese Falcon,a.k.a. Dangerous Female ,1931,22111.0,28257.0
+8228,The Maltese Falcon,Dangerous Female ,1931,22111.0,28257.0
 8232,I Love You Again,,1940,32617.0,20643.0
 8235,Safety Last!,,1923,14429.0,22596.0
 8236,While the City Sleeps,,1956,49949.0,36786.0
@@ -5325,7 +5325,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 8838,Alice Doesn't Live Here Anymore,,1974,71115.0,16153.0
 8840,Who's That Knocking at My Door?,,1967,63803.0,42694.0
 8844,Camera Buff,Amator ,1979,78763.0,42164.0
-8848,I Vitelloni,a.k.a. The Young and the Passionate ,1953,46521.0,12548.0
+8848,I Vitelloni,The Young and the Passionate ,1953,46521.0,12548.0
 8860,Cellular,,2004,337921.0,9759.0
 8861,Resident Evil: Apocalypse,,2004,318627.0,1577.0
 8864,Mr. 3000,,2004,339412.0,16232.0
@@ -5466,7 +5466,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 26158,Closely Watched Trains,Ostre sledované vlaky ,1966,60802.0,789.0
 26159,Tokyo Drifter,Tôkyô nagaremono ,1966,61101.0,45706.0
 26169,Branded to Kill,Koroshi no rakuin ,1967,61882.0,17905.0
-26171,Play Time,a.k.a. Playtime ,1967,62136.0,10227.0
+26171,Play Time,Playtime ,1967,62136.0,10227.0
 26172,Point Blank,,1967,62138.0,26039.0
 26176,Titicut Follies,,1967,62374.0,41212.0
 26183,Asterix and Cleopatra,Astérix et Cléopâtre ,1968,62687.0,9929.0
@@ -5516,7 +5516,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 26492,Twilight Zone: The Movie,,1983,86491.0,15301.0
 26498,Boy Meets Girl,,1984,86994.0,63418.0
 26504,Cloak & Dagger,,1984,87065.0,48677.0
-26510,The Ewok Adventure,a.k.a. Caravan of Courage: An Ewok Adventure ,1984,87225.0,1884.0
+26510,The Ewok Adventure,Caravan of Courage: An Ewok Adventure ,1984,87225.0,1884.0
 26523,Deadly Night Silent Night,,1984,88117.0,27414.0
 26524,The Times of Harvey Milk,,1984,88275.0,33138.0
 26527,What Have I Done to Deserve This?,¿Qué he hecho yo para merecer esto!! ,1984,88461.0,8221.0
@@ -5684,7 +5684,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 27716,The Green Butchers,"Grønne slagtere, De ",2003,342492.0,4972.0
 27721,A Very Long Engagement,Un long dimanche de fiançailles ,2004,344510.0,2841.0
 27722,Last Life in the Universe,Ruang rak noi nid mahasan ,2003,345549.0,11606.0
-27728,Ghost in the Shell 2: Innocence,a.k.a. Innocence ,Inosensu ,347246.0,12140.0
+27728,Ghost in the Shell 2: Innocence,Innocence ,Inosensu ,347246.0,12140.0
 27731,The Cat Returns,Neko no ongaeshi ,2002,347618.0,15370.0
 27741,The Twilight Samurai,Tasogare Seibei ,2002,351817.0,12496.0
 27744,Facing Windows,"Finestra di fronte, La ",2003,352343.0,29987.0
@@ -5727,7 +5727,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 27878,Born into Brothels,,2004,388789.0,1392.0
 27879,DiG!,,2004,388888.0,1843.0
 27882,Riding Giants,,2004,389326.0,291.0
-27899,What the #$*! Do We Know!?,a.k.a. What the Bleep Do We Know!? ,2004,399877.0,8357.0
+27899,What the #$*! Do We Know!?,What the Bleep Do We Know!? ,2004,399877.0,8357.0
 27904,A Scanner Darkly,,2006,405296.0,3509.0
 27905,Casshern,,2004,405821.0,11662.0
 27912,Outfoxed: Rupert Murdoch's War on Journalism,,2004,418038.0,13372.0
@@ -5824,7 +5824,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 32116,God! You Devil Oh,,1984,87835.0,38148.0
 32139,The Agony and the Ecstasy,,1965,58886.0,36815.0
 32160,Twentieth Century,,1934,25919.0,31835.0
-32179,Elevator to the Gallows,a.k.a. Frantic ,Ascenseur pour l'échafaud ,51378.0,1093.0
+32179,Elevator to the Gallows,Frantic ,Ascenseur pour l'échafaud ,51378.0,1093.0
 32213,Cube Zero,,2004,377713.0,438.0
 32234,Julia,,1977,76245.0,42222.0
 32243,Stealing Rembrandt,Rembrandt ,2003,345853.0,11196.0
@@ -5841,7 +5841,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 32392,800 Bullets,800 Balas ,2002,292886.0,37748.0
 32440,If Looks Could Kill,,1991,102095.0,22434.0
 32442,Greedy,,1994,109936.0,12778.0
-32456,Pom Poko,"a.k.a. Raccoon War, The ",Heisei tanuki gassen pompoko ,110008.0,15283.0
+32456,Pom Poko,"Raccoon War, The ",Heisei tanuki gassen pompoko ,110008.0,15283.0
 32460,Knockin' on Heaven's Door,,1997,119472.0,158.0
 32469,We're No Angels,,1955,48801.0,5996.0
 32511,A Touch of Zen,Xia nu ,1971,64451.0,44154.0
@@ -5866,7 +5866,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 32799,Maidens in Uniform,Mädchen in Uniform ,1931,22183.0,9653.0
 32862,With Six You Get Eggroll,,1968,63821.0,39225.0
 32875,Holiday,Jour de fête ,1949,40497.0,4595.0
-32892,Ivan's Childhood,a.k.a. My Name is Ivan ,Ivanovo detstvo ,56111.0,31442.0
+32892,Ivan's Childhood,My Name is Ivan ,Ivanovo detstvo ,56111.0,31442.0
 32898,A Trip to the Moon,"Voyage dans la lune, Le ",1902,417.0,775.0
 32906,The Ascent,Voskhozhdeniye ,1977,75404.0,50183.0
 32914,Carrie,,2002,319970.0,7342.0
@@ -5890,7 +5890,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 33201,Between Your Legs,Entre las piernas ,1999,177747.0,53116.0
 33237,San Francisco,,1936,28216.0,43881.0
 33294,Vampire Hunter D,,1985,90248.0,9463.0
-33310,A Common Thread,a.k.a. Sequins ,Brodeuses ,387892.0,26810.0
+33310,A Common Thread,Sequins ,Brodeuses ,387892.0,26810.0
 33312,The Cocoanuts,,1929,19777.0,20625.0
 33421,Dear Wendy,,2005,342272.0,10913.0
 33435,Los Angeles Plays Itself,,2003,379357.0,38643.0
@@ -5973,7 +5973,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 35807,The Teahouse of the August Moon,,1956,49830.0,43313.0
 35836,The 40-Year-Old Virgin,,2005,405422.0,6957.0
 35957,Red Eye,,2005,421239.0,11460.0
-36276,Hidden,a.k.a. Cache ,Caché ,387898.0,445.0
+36276,Hidden,Cache ,Caché ,387898.0,445.0
 36289,Asterix & Obelix vs. Caesar,Astérix et Obélix contre César ,1999,133385.0,9564.0
 36363,Kin-Dza-Dza!,,1986,91341.0,20874.0
 36397,Valiant,,2005,361089.0,14175.0
@@ -5985,7 +5985,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 36525,Just Like Heaven,,2005,425123.0,9007.0
 36527,Proof,,2005,377107.0,9777.0
 36529,Lord of War,,2005,399295.0,1830.0
-36533,Cry_Wolf,a.k.a. Cry Wolf ,2005,384286.0,10092.0
+36533,Cry_Wolf,Cry Wolf ,2005,384286.0,10092.0
 36535,Everything Is Illuminated,,2005,404030.0,340.0
 36537,Thumbsucker,,2005,318761.0,1546.0
 36708,Family Guy Presents Stewie Griffin: The Untold Story,,2005,385690.0,65215.0
@@ -6005,7 +6005,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 37720,The Exorcism of Emily Rose,,2005,404032.0,8643.0
 37727,Flightplan,,2005,408790.0,9315.0
 37729,Corpse Bride,,2005,121164.0,3933.0
-37731,Green Street Hooligans,a.k.a. Hooligans ,2005,385002.0,8923.0
+37731,Green Street Hooligans,Hooligans ,2005,385002.0,8923.0
 37733,A History of Violence,,2005,399146.0,59.0
 37736,Oliver Twist,,2005,380599.0,257.0
 37739,The Greatest Game Ever Played,,2005,388980.0,15487.0
@@ -6130,7 +6130,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 43677,The Tuskegee Airmen,,1995,114745.0,31894.0
 43679,Final Destination 3,,2006,414982.0,9286.0
 43684,Something New,,2006,437777.0,15363.0
-43708,Block Party,a.k.a. Dave Chappelle's Block Party ,2005,425598.0,292.0
+43708,Block Party,Dave Chappelle's Block Party ,2005,425598.0,292.0
 43744,Imagine Me & You,,2005,421994.0,1544.0
 43836,The Pink Panther,,2006,383216.0,12096.0
 43869,Curious George,,2006,381971.0,9975.0
@@ -6197,7 +6197,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 45081,Silent Hill,,2006,384537.0,588.0
 45106,American Dreamz,,2006,465142.0,9310.0
 45175,Kinky Boots,,2005,434124.0,16367.0
-45183,The Protector,a.k.a. Warrior King ,Tom yum goong ,427954.0,8982.0
+45183,The Protector,Warrior King ,Tom yum goong ,427954.0,8982.0
 45186,Mission: Impossible III,,2006,317919.0,956.0
 45208,RV,,2006,449089.0,9530.0
 45210,United 93,,2006,475276.0,9829.0
@@ -6344,7 +6344,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 49132,Shut Up & Sing,,2006,811136.0,2152.0
 49220,For Your Consideration,,2006,470765.0,14799.0
 49263,Fuck,,2005,486585.0,21710.0
-49265,Shooting Dogs,a.k.a. Beyond the Gates ,2005,420901.0,8588.0
+49265,Shooting Dogs,Beyond the Gates ,2005,420901.0,8588.0
 49272,Casino Royale,,2006,381061.0,36557.0
 49274,Happy Feet,,2006,366548.0,9836.0
 49276,Let's Go to Prison,,2006,454987.0,9809.0
@@ -6502,7 +6502,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 53435,Hostel: Part II,,2007,498353.0,1691.0
 53447,Paranoid Park,,2007,842929.0,1990.0
 53450,The Legend of Sleepy Hollow,,1980,79453.0,170261.0
-53453,Starcrash,a.k.a. Star Crash ,1978,79946.0,22049.0
+53453,Starcrash,Star Crash ,1978,79946.0,22049.0
 53460,Surf's Up,,2007,423294.0,9408.0
 53464,Fantastic Four: Rise of the Silver Surfer,,2007,486576.0,1979.0
 53466,Nancy Drew,,2007,479500.0,14043.0
@@ -6775,7 +6775,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 60072,Wanted,,2008,493464.0,8909.0
 60074,Hancock,,2008,448157.0,8960.0
 60126,Get Smart,,2008,425061.0,11665.0
-60128,Young People Fucking,a.k.a. YPF ,2007,913445.0,13019.0
+60128,Young People Fucking,YPF ,2007,913445.0,13019.0
 60141,St. Trinian's,,2007,964587.0,10748.0
 60161,Futurama: The Beast with a Billion Backs,,2008,1054485.0,12889.0
 60289,Kit Kittredge: An American Girl,,2008,846308.0,8359.0
@@ -6831,7 +6831,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 61248,Death Race,,2008,452608.0,10483.0
 61250,The House Bunny,,2008,852713.0,12620.0
 61255,The Rocker,,2008,1031969.0,10186.0
-61257,I.O.U.S.A.,a.k.a. IOUSA ,2008,963807.0,15320.0
+61257,I.O.U.S.A.,IOUSA ,2008,963807.0,15320.0
 61262,Mirrors,,2008,790686.0,13515.0
 61289,Sukiyaki Western Django,,2008,906665.0,13637.0
 61319,Somers Town,,2008,1172206.0,14298.0
@@ -7082,7 +7082,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 69860,Eichmann,,2007,901481.0,14687.0
 69904,Open Water 2: Adrift,,2006,470055.0,9592.0
 69951,The Imaginarium of Doctor Parnassus,,2009,1054606.0,8054.0
-69953,9to5: Days in Porn,a.k.a. 9 to 5: Days in Porn ,2008,1278293.0,19929.0
+69953,9to5: Days in Porn,9 to 5: Days in Porn ,2008,1278293.0,19929.0
 69988,Humpday,,2009,1334537.0,23720.0
 70015,Polytechnique,,2009,1194238.0,22302.0
 70159,Orphan,,2009,1148204.0,21208.0
@@ -7138,7 +7138,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 71302,Attack of the 50 Foot Woman,,1958,51380.0,18724.0
 71304,Thirst,Bakjwi ,2009,762073.0,22536.0
 71327,Bright Star,,2009,810784.0,29963.0
-71341,Blood Creek,a.k.a. Town Creek ,2009,450336.0,30685.0
+71341,Blood Creek,Town Creek ,2009,450336.0,30685.0
 71379,Paranormal Activity,,2009,1179904.0,23827.0
 71429,World's Greatest Dad,,2009,1262981.0,20178.0
 71438,Still Walking,Aruitemo aruitemo ,2008,1087578.0,25050.0
@@ -7221,7 +7221,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 73211,Pontypool,,2008,1226681.0,23963.0
 73266,Youth in Revolt,,2009,403702.0,22327.0
 73268,Daybreakers,,2010,433362.0,19901.0
-73290,Hachiko: A Dog's Story,a.k.a. Hachi: A Dog's Tale ,2009,1028532.0,28178.0
+73290,Hachiko: A Dog's Story,Hachi: A Dog's Tale ,2009,1028532.0,28178.0
 73319,Leap Year,,2010,1216492.0,25195.0
 73321,The Book of Eli,,2010,1037705.0,20504.0
 73323,The Girl Who Kicked the Hornet's Nest,Luftslottet som sprängdes ,2009,1343097.0,33613.0
@@ -7248,10 +7248,10 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 74089,Peter Pan,,1960,54176.0,51120.0
 74095,Wicked City,Yôjû toshi ,1987,98692.0,21453.0
 74154,When in Rome,,2010,1185416.0,13477.0
-74226,Dream of Light,"a.k.a. Quince Tree Sun, The ","Sol del membrillo, El ",105438.0,94706.0
+74226,Dream of Light,"Quince Tree Sun, The ","Sol del membrillo, El ",105438.0,94706.0
 74228,Triangle,,2009,1187064.0,26466.0
 74275,I Love You Phillip Morris,,2009,1045772.0,8952.0
-74282,Anne of Green Gables: The Sequel,a.k.a. Anne of Avonlea ,1987,92571.0,40724.0
+74282,Anne of Green Gables: The Sequel,Anne of Avonlea ,1987,92571.0,40724.0
 74324,Temple Grandin,,2010,1278469.0,33602.0
 74342,M.D. Captain Newman,,1963,56903.0,33728.0
 74370,The House of the Devil,,2009,1172994.0,25983.0
@@ -7359,7 +7359,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 78574,Winter's Bone,,2010,1399683.0,39013.0
 78620,The Scalphunters,,1968,63557.0,32068.0
 78626,Barking Dogs Never Bite,Flandersui gae ,2000,269743.0,21531.0
-78637,Shrek Forever After,a.k.a. Shrek: The Final Chapter ,2010,892791.0,10192.0
+78637,Shrek Forever After,Shrek: The Final Chapter ,2010,892791.0,10192.0
 78703,TiMER,,2009,1179794.0,39545.0
 78746,Best Worst Movie,,2009,1144539.0,40819.0
 78772,The Twilight Saga: Eclipse,,2010,1325004.0,24021.0
@@ -7385,7 +7385,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 79333,Watch Out for the Automobile,Beregis avtomobilya ,1966,60161.0,39768.0
 79357,Mr. Nobody,,2009,485947.0,31011.0
 79428,Dinner for Schmucks,,2010,427152.0,38778.0
-79501,Deadly Outlaw: Rekka,a.k.a. Violent Fire ,Jitsuroku Andô Noboru kyôdô-den: Rekka ,352465.0,36274.0
+79501,Deadly Outlaw: Rekka,Violent Fire ,Jitsuroku Andô Noboru kyôdô-den: Rekka ,352465.0,36274.0
 79536,Hellsinki,Rööperi ,2009,1227536.0,25335.0
 79553,Ip Man 2,,2010,1386932.0,37472.0
 79572,Ramona and Beezus,,2010,493949.0,38843.0
@@ -7657,7 +7657,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 88405,Friends with Benefits,,2011,1632708.0,50544.0
 88448,Paper Birds,Pájaros de papel ,2010,1360822.0,50004.0
 88515,Blitz,,2011,1297919.0,55846.0
-88593,The Yellow Sea,a.k.a. The Murderer ,Hwanghae ,1230385.0,57361.0
+88593,The Yellow Sea,The Murderer ,Hwanghae ,1230385.0,57361.0
 88672,Our Idiot Brother,,2011,1637706.0,59968.0
 88697,SUBWAYStories: Tales from the Underground,,1997,120240.0,209802.0
 88699,Death Race 2,,2010,1500491.0,51620.0
@@ -7904,7 +7904,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 95147,Dragon Ball: Sleeping Princess in Devil's Castle,Doragon bôru: Majinjô no nemuri hime ,1987,142249.0,39145.0
 95149,Superman/Batman: Public Enemies,,2009,1398941.0,22855.0
 95163,Dragon Ball: Mystical Adventure,Doragon bôru: Makafushigi dai bôken ,1988,142248.0,116776.0
-95165,Dragon Ball Z the Movie: The World's Strongest,a.k.a. Dragon Ball Z: The Strongest Guy in The World ,Doragon bôru Z: Kono yo de ichiban tsuyoi yatsu ,142240.0,39100.0
+95165,Dragon Ball Z the Movie: The World's Strongest,Dragon Ball Z: The Strongest Guy in The World ,Doragon bôru Z: Kono yo de ichiban tsuyoi yatsu ,142240.0,39100.0
 95167,Brave,,2012,1217209.0,62177.0
 95170,Beauty and the Beast: The Enchanted Christmas,,1997,118692.0,13313.0
 95175,Front of the Class,,2008,1292594.0,63193.0
@@ -7967,7 +7967,7 @@ movieId,movieTitle,movieAlias,releaseDate,imdbId,tmdbId
 96417,Premium Rush,,2012,1547234.0,49526.0
 96430,The Odd Life of Timothy Green,,2012,1462769.0,71864.0
 96432,Lawless,,2012,1212450.0,82633.0
-96448,Piranha 3DD,a.k.a. Piranha DD ,2012,1714203.0,71668.0
+96448,Piranha 3DD,Piranha DD ,2012,1714203.0,71668.0
 96471,Prime Suspect 3,,1993,106104.0,202043.0
 96488,Searching for Sugar Man,,2012,2125608.0,84334.0
 96518,Prime Suspect 6: The Last Witness,,2003,365651.0,263947.0

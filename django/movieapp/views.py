@@ -318,7 +318,7 @@ def soon_to_be_released_movie_prediction(request):
             LIMIT {}, 20;
             '''.format((int(page))*20 - 20)
     result = execute_query(query)
-
+    
     avg_rating_list_by_seen_people = get_avg_ratings_from_seen_people(page) # people who have seen avg rating
     avg_rating_list_by_genres = get_avg_ratings_from_similar_genres(page)
     avg_rating_list_by_tags = []
