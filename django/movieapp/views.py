@@ -103,28 +103,15 @@ def predicted_movie_panel(request):
     movie_id = get_movie_id_by_title(movie_selected)
     
     if movie_selected and movie_id:
-        # TODO add movie info logics
-        # TODO can do in one search
-        
-        # get predicted rating
-        genres_list = get_genre_lists_from_movieid(movie_id)
-        movies_list = []
-        for genre in genres_list:
-            movieid = get_movieid_by_genreid(genre)
-            if movieid == None:
-                continue
-            else:
-                movies_list.append(movieid)
-
-        avg_rating1 = get_avg_rating_by_movie_id(movie_id)
-        avg_rating2 = get_avg_ratings_of_lists_of_movies(movies_list[0])
+        avg_rating1 = get_avg_rating_for_a_movie_from_seen_people(movie_id)
+        avg_rating2 = get_avg_rating_for_a_movie_from_similar_genres(movie_id)
         avg_rating3 = get_average_rating_from_similar_tags(movie_id)
 
         # Check if tags exist
         if avg_rating3 == -1:
-            avg_rating = (avg_rating1+avg_rating2[0]) / 2
+            avg_rating = (avg_rating1+avg_rating2) / 2
         else:
-            avg_rating = (avg_rating1+avg_rating2[0]+avg_rating3) / 3
+            avg_rating = (avg_rating1+avg_rating2+avg_rating3) / 3
         # round the rating to 2s.f.
         avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
 
@@ -245,6 +232,16 @@ def get_avg_ratings_from_seen_people(page):
         avg_rating.append([i[0]])
     return avg_rating
 
+def get_avg_rating_for_a_movie_from_seen_people(movieID):
+    query = '''
+            SELECT AVG(r.ratingFigure) 
+            FROM ratings AS r 
+            WHERE r.movieID = %s
+            '''
+
+    result = execute_query(query,[movieID])
+    return result[0][0]
+
 def get_avg_ratings_from_similar_genres(page):
     query = '''
             SELECT AVG(rg.ratingFigure)
@@ -268,6 +265,28 @@ def get_avg_ratings_from_similar_genres(page):
             '''.format((int(page))*20 - 20)
     result = execute_query(query)
     return result
+
+def get_avg_rating_for_a_movie_from_similar_genres(movieID):
+    query = '''
+            SELECT AVG(rg.ratingFigure)
+            FROM (
+            SELECT mg.genreID AS genreID, AVG(r.ratingFigure) AS ratingFigure
+            FROM ratings AS r, 
+            moviesGenres AS mg
+            WHERE r.movieID = mg.movieID
+            AND r.movieID IN (SELECT m.movieID 
+            FROM movies AS m 
+            WHERE movieReleased = 0)
+            GROUP BY mg.genreID) 
+            AS rg
+            WHERE rg.genreID IN
+            (SELECT mg.genreID AS genreID 
+            FROM moviesGenres AS mg 
+            WHERE movieID = %s)
+            ;
+            '''
+    result = execute_query(query,[movieID])
+    return result[0][0]
 
 
 def get_avg_ratings_of_lists_of_movies(movies_list):
