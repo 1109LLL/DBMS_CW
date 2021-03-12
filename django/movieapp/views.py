@@ -11,7 +11,6 @@ from django.db import connection
 from django.core.paginator import Paginator
 import math
 import logging
-import csv
 
 # Get an instance of a logger
 logger = logging.getLogger('debug')
