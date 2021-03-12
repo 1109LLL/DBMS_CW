@@ -173,13 +173,8 @@ def determine_polarization(movie_id):
                  FROM ratings
                  WHERE movieID = %s AND ratingFigure >= 4) AS goodRatings,
                 (SELECT COUNT(ratingFigure) AS b
-<<<<<<< HEAD
-                FROM ratings
-                WHERE movieID = %s AND ratingFigure <= 2) AS badRatings;
-=======
                  FROM ratings
                  WHERE movieID = %s AND ratingFigure <= 2) AS badRatings;
->>>>>>> 6522ea4945620b64d8b05482622962734b2d8712
             '''
     result = execute_query(query, [movie_id, movie_id])
     

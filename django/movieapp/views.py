@@ -408,7 +408,7 @@ def user_segmentation_by_ratings(request):
 
     doc = list(zip(segmented, tags))
 
-    total_pages = total_number_of_movies()[0][0]
+    total_pages = total_number_of_movies()
     movie_number = math.ceil(total_pages / 20)
     return render(request, 'movieapp/user_segmentation.html', {'segments':doc, 'cur_page':page, 'movie_number':movie_number})
 
