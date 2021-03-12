@@ -19,8 +19,13 @@ logger = logging.getLogger('debug')
 def get_genres_by_movieid(movie_id):
     if movie_id:
         query = '''
-                SELECT g.genreName FROM genres AS g, moviesGenres AS mg, movies AS m 
-                WHERE g.genreID = mg.genreID AND m.movieID = mg.movieID AND m.movieID = %s;
+                SELECT g.genreName 
+                FROM genres AS g, 
+                moviesGenres AS mg, 
+                movies AS m 
+                WHERE g.genreID = mg.genreID 
+                AND m.movieID = mg.movieID 
+                AND m.movieID = %s;
                 '''
         with connection.cursor() as cursor:
             cursor.execute(query, [movie_id])
@@ -111,7 +116,6 @@ def predicted_movie_panel(request):
                 continue
             else:
                 movies_list.append(movieid)
-        logger.info(genres_list)
 
         avg_rating1 = get_avg_rating_by_movie_id(movie_id)
         avg_rating2 = get_avg_ratings_of_lists_of_movies(movies_list[0])
@@ -163,14 +167,14 @@ def most_popular(request):
     year = request.GET.get('option')
     row = []
     option = 1
-    if year == "past_year":
+    if year == "":
         query = '''
                 SELECT m.movieID, m.movieTitle, m.movieReleased, COUNT(m.movieID), ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) 
                 FROM movies m JOIN ratings r ON m.movieID = r.movieID AND m.movieReleased = 2018
                 GROUP BY m.movieID 
                 ORDER BY COUNT(m.movieID) DESC
                 limit 100
-            '''
+                '''
         option = 2
         row = execute_query(query)
     else:
@@ -181,7 +185,7 @@ def most_popular(request):
                 GROUP BY m.movieID 
                 ORDER BY COUNT(m.movieID) DESC
                 limit 100
-            '''
+                '''
         row = execute_query(query)
     return render(request, 'movieapp/popular.html', {'movies': row, 'option': option})
 
@@ -248,20 +252,18 @@ def get_avg_ratings_from_similar_genres(page):
             FROM (
             SELECT mg.genreID, AVG(r.ratingFigure) AS ratingFigure
             FROM ratings AS r, 
-                moviesGenres AS mg
+            moviesGenres AS mg
             WHERE r.movieID = mg.movieID
-                AND
-                r.movieID IN (SELECT m.movieID 
-                        FROM movies AS m 
-                        WHERE movieReleased = 0)
-            GROUP BY mg.genreID
-                ) AS rg,
+            AND r.movieID IN (SELECT m.movieID 
+            FROM movies AS m 
+            WHERE movieReleased = 0)
+            GROUP BY mg.genreID) 
+            AS rg,
             moviesGenres AS mg
             WHERE mg.genreID = rg.genreID
-            AND
-            mg.movieID IN (SELECT m.movieID 
-                    FROM movies AS m 
-                    WHERE movieReleased = 0)
+            AND mg.movieID IN (SELECT m.movieID 
+            FROM movies AS m 
+            WHERE movieReleased = 0)
             GROUP BY mg.movieID
             LIMIT {}, 20;
             '''.format((int(page))*20 - 20)
@@ -289,6 +291,7 @@ def get_avg_ratings_of_lists_of_movies(movies_list):
 
 def soon_to_be_released_movie_prediction(request):
     page = request.GET.get('page')
+    classification = request.GET.get('option')
     page = page if page else 1
     query = '''
             SELECT movieID, movieTitle, movieAlias, movieReleased 
@@ -298,23 +301,37 @@ def soon_to_be_released_movie_prediction(request):
             '''.format((int(page))*20 - 20)
     result = execute_query(query)
 
-    avg_rating_list = get_avg_ratings_from_seen_people(page) # people who have seen avg rating
+    avg_rating_list_by_seen_people = get_avg_ratings_from_seen_people(page) # people who have seen avg rating
     avg_rating_list_by_genres = get_avg_ratings_from_similar_genres(page)
-    # calculate average ratings calculated from three different factors (JAMES TODO here :))
     
     avg_rating_from_3_factors = []
-    for i in range(0, len(avg_rating_list)):
-        if avg_rating_list_by_tags[i] != -1:
-            temp_rating = (avg_rating_list[i][0] + avg_rating_list_by_genres[i][0] + avg_rating_list_by_tags[i]) / 3
-        else:
-            temp_rating = (avg_rating_list[i][0] + avg_rating_list_by_genres[i][0]) / 2
-        temp_rating = round(float(temp_rating), 1) if temp_rating else temp_rating
-        avg_rating_from_3_factors.append([temp_rating])
+
+    option = 0
+    if classification == 'People':
+        option = 1
+        avg_rating_from_3_factors = [[round(float(x[0]), 1) if x else x] for x in avg_rating_list_by_seen_people]
+
+    elif classification == 'Genres':
+        option = 2
+        avg_rating_from_3_factors = [[round(float(x[0]), 1) if x else x] for x in avg_rating_list_by_genres]
+
+    elif classification == 'Tags':
+        option = 3
+        avg_rating_from_3_factors = [[round(float(x[0]), 1) if x else x] for x in avg_rating_list_by_genres]
+
+    else:
+        option = 0
+        for i in range(0, len(avg_rating_list_by_seen_people)):
+            temp_rating = (avg_rating_list_by_seen_people[i][0] + avg_rating_list_by_genres[i][0]) / 2
+            temp_rating = round(float(temp_rating), 1) if temp_rating else temp_rating
+            avg_rating_from_3_factors.append([temp_rating])
+    
+    logger.info(avg_rating_from_3_factors)
     infors = zip(result, avg_rating_from_3_factors)
 
     total_pages = get_prediction_movies_row_number()
-    movie_number = math.ceil(total_pages / 20)
-    return render(request, 'movieapp/soon_released_prediction.html', {'soon_to_be_released':result, 'cur_page':page, 'movie_number': movie_number, 'infors':infors, 'movieid':avg_rating_from_3_factors})
+    page_number = math.ceil(total_pages / 20)
+    return render(request, 'movieapp/soon_released_prediction.html', {'soon_to_be_released':result, 'cur_page':page, 'page_number': page_number, 'infors':infors, 'option':option})
 
 def polarising(request):
     pointer = request.GET.get('pointer')

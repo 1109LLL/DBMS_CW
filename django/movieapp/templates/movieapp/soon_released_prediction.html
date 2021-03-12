@@ -2,13 +2,50 @@
 {% load static %}
 {% block content %}
 <h1>Soon To Be Released Movies</h1>
+
+<div class="row">
+  <div class="col-sm"></div>
+  <form class="form-inline" action="{% url 'soon_released_prediction' %}" >
+    <div class="form-group mx-sm-3 mb-2">
+      <select class="form-control" name="option">
+        {% if option == 1 %}
+        <option value="People">Seen People</option>
+        <option value="Genres">Genres</option>        
+        <option value="Tags">Tags</option>
+        <option value="Average">Average</option>
+
+        {% elif option == 2%}
+        <option value="Genres">Genres</option>
+        <option value="People">Seen People</option>        
+        <option value="Tags">Tags</option>
+        <option value="Average">Average</option>
+
+        {% elif option == 3%}
+        <option value="Tags">Tags</option>
+        <option value="People">Seen People</option>        
+        <option value="Average">Average</option>
+        <option value="Genres">Genres</option>
+
+        {% else %}
+        <option value="Average">Average</option>
+        <option value="People">Seen People</option>        
+        <option value="Tags">Tags</option>
+        <option value="Genres">Genres</option>
+
+        {% endif %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Apply</button>
+  </form>
+</div>
+<br>
 <table class="table table-hover">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Title</th>
       <th scope="col">Alias</th>
-      <th scope="col">Ratings</th>
+      <th scope="col">Predicted Rating</th>
     </tr>
   </thead>
   
@@ -36,12 +73,12 @@
 
       <li class="page-item active"><a class="page-link" href="?page={{cur_page}}">{{cur_page}}</a></li>
 
-    {% if cur_page != movie_number %}
-      {% if cur_page < movie_number|add:-1 %}
+    {% if cur_page != page_number %}
+      {% if cur_page < page_number|add:-1 %}
       <li class="page-item"><a class="page-link">...</a></li>
       {% endif %}
-      <li class="page-item"><a class="page-link" href="?page={{movie_number}}">{{movie_number}}</a></li>
-      <li class="page-item"><a class="page-link" href="?page={{cur_page|add:1}}">Next</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{page_number}}&option={{request.GET.option}}">{{page_number}}</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{cur_page|add:1}}&option={{request.GET.option}}">Next</a></li>
     {% endif %}
   </ul>
 </nav>
