@@ -58,16 +58,6 @@ services:
       - backend
     container_name: redis
     
-     
-
-  redis:
-    container_name: redis
-    image: redis:latest
-    networks: 
-      - backend
-    ports:
-      - 6379:6379
-
 networks:
   frontend:
   backend:
