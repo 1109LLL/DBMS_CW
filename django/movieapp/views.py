@@ -36,9 +36,9 @@ def index(request):
     movie_search = request.GET.get('search')
     page = request.GET.get('page')
     page = int(page) if page and int(page) > 0 else 1
-    ### either show all or show search results ###
+    # either show all or show search results
     movies_info = get_search_movies_info(movie_search, page) if movie_search else get_index_movies_info(page)
-    ### genres csv to list ###
+    # genres csv to list
     movies_info = fix_movies_info_genres(movies_info, genres_index=4)
     movie_num = total_number_of_movies()
     page_num = get_page_num(movie_num)
