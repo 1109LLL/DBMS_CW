@@ -326,7 +326,7 @@ def soon_to_be_released_movie_prediction(request):
             temp_rating = round(float(temp_rating), 1) if temp_rating else temp_rating
             avg_rating_from_3_factors.append([temp_rating])
     
-    logger.info(avg_rating_from_3_factors)
+    logger.info(classification)
     infors = zip(result, avg_rating_from_3_factors)
 
     total_pages = get_prediction_movies_row_number()

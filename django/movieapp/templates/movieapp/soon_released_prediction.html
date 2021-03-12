@@ -64,7 +64,7 @@
 <nav>
   <ul class="pagination justify-content-center">
     {% if cur_page != 1 %}
-      <li class="page-item"><a class="page-link" href="?page={{cur_page|add:-1}}">Previous</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{cur_page|add:-1}}&&option={{request.GET.option}}">Previous</a></li>
       <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
       {% if cur_page > 2 %}
       <li class="page-item"><a class="page-link">...</a></li>
