@@ -142,6 +142,8 @@ def predicted_movie_panel(request):
 
 def get_average_rating_from_similar_tags(movie_id):
     tags = get_tag_names_by_movie_id(movie_id)
+    if len(tags) == 0:
+        return -1
     tags_list = []
     for t in tags:
         tags_list.append(t[0])
@@ -153,8 +155,6 @@ def get_average_rating_from_similar_tags(movie_id):
             INNER JOIN ratings ON ratings.movieID = utm.movieID;
             '''
     result = execute_query(query, (tags_list,))
-    if len(result) == 0:
-        return -1
     return result[0][0]
 
 
@@ -303,11 +303,16 @@ def soon_to_be_released_movie_prediction(request):
     avg_rating_list_by_genres = get_avg_ratings_from_similar_genres(page)
     # calculate average ratings calculated from three different factors (JAMES TODO here :))
     avg_rating_list_by_tags = []
+
+
+    #for i in range(length, length+20):
+     #   avg_rating_list_by_tags.append(get_average_rating_from_similar_tags(result[i][0][0]))
+
    
     for movie in result:
-        avg_rating_list_by_tags.append(get_average_rating_from_similar_tags(result[0][0]))
+        avg_rating_list_by_tags.append(get_average_rating_from_similar_tags(movie[0]))
 
-
+    print(avg_rating_list_by_tags)
     
     avg_rating_from_3_factors = []
     for i in range(0, len(avg_rating_list)):
