@@ -55,7 +55,11 @@
       <td>{{soon.0.0}}</td>
       <td><a class="nav-link" href="predicted_movie_panel?select={{soon.0.1}}">{{soon.0.1}}</a></td>
       <td>{{soon.0.2}}</td>
-      <td>{{soon.1.0}}</td>
+      {% if soon.1.0 < 0 %}
+        <td>N/A</td>
+      {% else %}
+        <td>{{soon.1.0}}</td>
+      {% endif %}
     </tr>
   {% endfor %}
   </tbody>

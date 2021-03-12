@@ -1,16 +1,5 @@
 version: "3.2"
 services:
-  # php:
-  #   build: 
-  #     context: './php/'
-  #     args:
-  #      PHP_VERSION: ${PHP_VERSION}
-  #   networks:
-  #     - backend
-  #   volumes:
-  #     - ${PROJECT_ROOT}/:/var/www/html/
-  #   # container_name: php
-
   # apache:
   #   build:
   #     context: './apache/'
@@ -39,6 +28,7 @@ services:
       - ./django/:/app
     depends_on:
       - mysql
+      - redis
     command: ["./wait-for-it.sh", "db:3306", "--strict", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
     networks:
       - backend
@@ -54,6 +44,21 @@ services:
     networks:
       - backend
     container_name: db
+    
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+       - "6379:6379"
+    volumes:
+       - ./redis/redis_data:/data
+       - ./redis/redis.conf:/etc/redis/redis.conf
+    command: redis-server /etc/redis/redis.conf
+    networks:
+      - backend
+    container_name: redis
+    
+     
 
   redis:
     container_name: redis
