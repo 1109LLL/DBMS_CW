@@ -115,8 +115,13 @@ def predicted_movie_panel(request):
 
         avg_rating1 = get_avg_rating_by_movie_id(movie_id)
         avg_rating2 = get_avg_ratings_of_lists_of_movies(movies_list[0])
-        avg_rating3 = get_avg_rating_by_tags(movie_id)
-        avg_rating = (avg_rating1+avg_rating2[0]+avg_rating3) / 3
+        avg_rating3 = get_average_rating_from_similar_tags(movie_id)
+
+        # Check if tags exist
+        if avg_rating3 == -1:
+            avg_rating = (avg_rating1+avg_rating2[0]) / 2
+        else:
+            avg_rating = (avg_rating1+avg_rating2[0]+avg_rating3) / 3
         # round the rating to 2s.f.
         avg_rating = round(float(avg_rating), 1) if avg_rating else avg_rating
 
@@ -129,34 +134,29 @@ def predicted_movie_panel(request):
         tmdb_id = link_ids[1] 
         url_img = get_imdb_img(imdb_id, movie_title)
 
-        return render(request, 'movieapp/predicted_movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags,\
+        return render(request, 'movieapp/predicted_movie_panel.html', {'movie': movie_title, 'year': released_year, 'rating': avg_rating, 'tags': tags,
                                                              'genres': genres, 'img': url_img, 'imdb_id': imdb_id, 'tmdb_id': tmdb_id})
     else:
         return redirect('index')
 
-# Get average review of all similar tags
-def get_avg_rating_by_tags(movie_id):
+
+def get_average_rating_from_similar_tags(movie_id):
     tags = get_tag_names_by_movie_id(movie_id)
-    if len(tags) > 0:
-        total = 0
-        for tag in tags:
-            total += get_tag_average(tag[0])
-        return total / len(tags)
-    return -1
+    tags_list = []
+    for t in tags:
+        tags_list.append(t[0])
+    tag_list = tuple(tags_list)
 
-        
-# Get average review of one tag
-def get_tag_average(tag_name):
-    query = '''
-            SELECT AVG(ratingFigure) FROM ratings
-            INNER JOIN (SELECT m.userID, m.movieID
-            FROM (SELECT tagID FROM tags WHERE tagName = %s) t
-            INNER JOIN userTagsMovie m ON t.tagID = m.tagID) table1
-            ON ratings.userID = table1.userID AND ratings.movieID = table1.movieID
-
+    query = '''  
+            SELECT AVG(ratingFigure) FROM tags AS t
+            INNER JOIN userTagsMovie AS utm ON t.tagID = utm.tagID AND t.tagName IN %s
+            INNER JOIN ratings ON ratings.movieID = utm.movieID;
             '''
-    row = execute_query(query, tag_name)
-    return row[0][0]
+    result = execute_query(query, (tags_list,))
+    if len(result) == 0:
+        return -1
+    return result[0][0]
+
 
 
 def most_popular(request):
@@ -298,12 +298,20 @@ def soon_to_be_released_movie_prediction(request):
             '''.format((int(page))*20 - 20)
     result = execute_query(query)
 
+
     avg_rating_list = get_avg_ratings_from_seen_people(page) # people who have seen avg rating
     avg_rating_list_by_genres = get_avg_ratings_from_similar_genres(page)
     # calculate average ratings calculated from three different factors (JAMES TODO here :))
+    avg_rating_list_by_tags = []
+   
+    for movie in result:
+        avg_rating_list_by_tags.append(get_average_rating_from_similar_tags(result[0][0]))
+
+
     
     avg_rating_from_3_factors = []
     for i in range(0, len(avg_rating_list)):
+        # Check if tags exist
         if avg_rating_list_by_tags[i] != -1:
             temp_rating = (avg_rating_list[i][0] + avg_rating_list_by_genres[i][0] + avg_rating_list_by_tags[i]) / 3
         else:
