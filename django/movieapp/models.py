@@ -5,6 +5,8 @@ from django.db import models
 
 from django.db import connection
 
+from django.core.cache import cache
+
 from .crawler import Crawler, LinkType
 
 from .helpers import *
@@ -135,11 +137,23 @@ def get_movie_name_by_movie_id(movie_id):
     return result if result else []
 
 def get_imdb_img(movie_id, movie_title):
+    cache_key = str(movie_id) + "_imdb_img_url"
+    img_url_cached = get_cache(cache, cache_key)
+    # cache hit, return directly
+    if img_url_cached:
+        logger.info("cache hit!")
+        return img_url_cached
+    logger.info("cache miss!")
+    # cache miss, crawl and write
     crawler = Crawler(movie_id, movie_title, LinkType.IMDB)
-    if crawler:
-        return crawler.get_imdb_img_url()
-    else:
-        return "" 
+    # not available in imdb
+    if not crawler:
+        return ""
+    img_url = crawler.get_imdb_img_url()
+    # only write to cache if found
+    if img_url:
+        set_cache(cache, cache_key, img_url, 30)
+    return img_url 
     
 def get_summary_text(movie_id, movie_title):
     crawler = Crawler(movie_id, movie_title, LinkType.IMDB)
