@@ -58,9 +58,6 @@ services:
       - backend
     container_name: redis
     
-     
-
-  
 networks:
   frontend:
   backend:
