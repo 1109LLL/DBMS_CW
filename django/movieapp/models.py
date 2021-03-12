@@ -173,13 +173,8 @@ def determine_polarization(movie_id):
                  FROM ratings
                  WHERE movieID = %s AND ratingFigure >= 4) AS goodRatings,
                 (SELECT COUNT(ratingFigure) AS b
-<<<<<<< HEAD
-                FROM ratings
-                WHERE movieID = %s AND ratingFigure <= 2) AS badRatings;
-=======
                  FROM ratings
                  WHERE movieID = %s AND ratingFigure <= 2) AS badRatings;
->>>>>>> 6522ea4945620b64d8b05482622962734b2d8712
             '''
     result = execute_query(query, [movie_id, movie_id])
     
@@ -211,7 +206,7 @@ def get_limited_movies(limit):
     query = '''
             SELECT movieID
             FROM movies
-            LIMIT %s, 20;
+            LIMIT %s, 5;
             '''
     result = execute_query(query, [limit])
     return result
@@ -435,5 +430,38 @@ def general_preference_by_tag(tag):
                 GROUP BY ratings.userID;
             '''
     haters_list = execute_query(haters, [tag])
+
+    return likers_list, haters_list
+
+def get_genre_user_groups(genre):
+    likers ='''
+            SELECT DISTINCT ratings.userID
+            FROM 
+                ratings,
+                (SELECT movieID
+                FROM 
+                    moviesGenres,
+                    (SELECT genreID
+                    FROM genres
+                    WHERE genreName = %s) AS select_genre
+                WHERE select_genre.genreID = moviesGenres.genreID) as movie_with_genre
+            WHERE movie_with_genre.movieID = ratings.movieID AND ratings.ratingFigure > 3;
+            '''
+    likers_list = execute_query(likers, [genre])
+
+    haters ='''
+            SELECT DISTINCT ratings.userID
+            FROM 
+                ratings,
+                (SELECT movieID
+                FROM 
+                    moviesGenres,
+                    (SELECT genreID
+                    FROM genres
+                    WHERE genreName = %s) AS select_genre
+                WHERE select_genre.genreID = moviesGenres.genreID) as movie_with_genre
+            WHERE movie_with_genre.movieID = ratings.movieID AND ratings.ratingFigure <= 3;
+            '''
+    haters_list = execute_query(haters, [genre])
 
     return likers_list, haters_list
