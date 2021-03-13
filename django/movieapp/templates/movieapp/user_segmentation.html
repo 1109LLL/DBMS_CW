@@ -24,13 +24,13 @@
           <span class="badge bg-success rounded-pill text-white">Users who would enjoy this movie </span><br/>
           <span class="badge bg-danger rounded-pill text-white">Users who wouldn't enjoy this movie </span>
         </th>
+        <th scope="col">Segmentation by genre</th>
         <th scope="col">Segmentation by tags (users who did watch this movie)</th>
         <th scope="col">Segmentation by tags (users in general)</th>
-        <th scope="col">Segmentation by genre</th>
       </tr>
     </thead>
     <tbody>
-      {% for segment, tags in segments%}
+      {% for segment, tags, genres in segments%}
         <tr>
           <th scope="row"><a href="movie_panel?select={{segment.0}}"><button type="button" class="btn btn-outline-light text-dark">{{segment.0}}</button><a></th>
           <td>
@@ -55,6 +55,28 @@
               </div>
             </div>
           </td>
+
+          <td>
+            <div class="btn-group">
+              {% for genre_list, users_list in genres %}
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{genre_list}}
+                </button>
+                <div class="dropdown-menu scrollable-menu">
+                  <li>Liked:</li>
+                  {% for users in users_list %}
+                    <li>{{users.0}}</li>
+                  {% endfor %}
+                  <div class="dropdown-divider"></div>
+                  <li>Disliked:</li>
+                  {% for users in users_list %}
+                    <li>{{users.1}}</li>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          </td>
+
           <td>
             <div class="btn-group">
               {% for tag, users_list, general_users_list in tags %}

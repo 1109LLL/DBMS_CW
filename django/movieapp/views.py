@@ -393,12 +393,13 @@ def polarising(request):
 def user_segmentation_by_ratings(request):
     page = request.GET.get('page')
     page = page if page else 1
-    limit = (int(page))*20 - 20
+    limit = (int(page))*5 - 5
     movie_id_list = get_limited_movies(limit)
 
     segmented = []
     tags = []
     #  tags = [movie1[zip(tag_names|users(likers,haters|general_users_list))]]
+    genres = []
 
     for movie_id in movie_id_list:
         info = []
@@ -421,14 +422,22 @@ def user_segmentation_by_ratings(request):
             likers_general, haters_general = general_preference_by_tag(curr_tag)
             general_users_list.append(likers_general)
             general_users_list.append(haters_general)
+        
+        genre_list = get_genres_by_movieid(movie_id)
+        genre_users = []
+        for genre in genre_list:
+            likers, haters = get_genre_user_groups(genre)
+            genre_users.append(likers)
+            genre_users.append(haters)
 
-        tags.append(list(zip(tag_names, users_list, general_users_list)))
         segmented.append(info)
+        tags.append(list(zip(tag_names, users_list, general_users_list)))
+        genres.append(list(zip(genre_list, genre_users)))
 
-    doc = list(zip(segmented, tags))
+    doc = list(zip(segmented, tags, genres))
 
     total_pages = total_number_of_movies()
-    movie_number = math.ceil(total_pages / 20)
+    movie_number = math.ceil(total_pages / 5)
     return render(request, 'movieapp/user_segmentation.html', {'segments':doc, 'cur_page':page, 'movie_number':movie_number})
 
 

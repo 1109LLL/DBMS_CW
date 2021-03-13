@@ -133,6 +133,9 @@ pythonenv*
 .dmypy.json
 dmypy.json
 
+# redis
+./redis/redis_data/*
+
 # Pyre type checker
 .pyre/
 
