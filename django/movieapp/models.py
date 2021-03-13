@@ -141,9 +141,9 @@ def get_imdb_img(movie_id, movie_title):
     img_url_cached = get_cache(cache, cache_key)
     # cache hit, return directly
     if img_url_cached:
-        logger.info("cache hit!")
+        logger.info("img cache hit!")
         return img_url_cached
-    logger.info("cache miss!")
+    logger.info("img cache miss!")
     # cache miss, crawl and write
     crawler = Crawler(movie_id, movie_title, LinkType.IMDB)
     # not available in imdb
@@ -152,7 +152,7 @@ def get_imdb_img(movie_id, movie_title):
     img_url = crawler.get_imdb_img_url()
     # only write to cache if found
     if img_url:
-        set_cache(cache, cache_key, img_url, 30)
+        set_cache(cache, cache_key, img_url, 60)
     return img_url 
     
 def get_summary_text(movie_id, movie_title):
@@ -334,7 +334,7 @@ def get_personality_user_group_by_movie_id(movie_id):
     result = execute_query(query, [movie_id])
     return result
 
-def get_personality_traits(user_group):
+def get_personality_traits_by_user_group(user_group):
     if not user_group:
         return []
     personalitiy_avgs = []
@@ -465,3 +465,34 @@ def get_genre_user_groups(genre):
     haters_list = execute_query(haters, [genre])
 
     return likers_list, haters_list
+    
+def get_personality_traits_by_movie_id(movie_id):
+    traits_cache = get_cache_personality_traits(movie_id)
+    if traits_cache:
+        # cache hit
+        logger.info("traits cache hit!")
+        return traits_cache
+    # cache miss
+    logger.info("traits cache miss!")
+    user_group = get_personality_user_group_by_movie_id(movie_id)
+    traits = get_personality_traits_by_user_group(user_group)
+    if traits and traits[0]:
+        set_cache_personality_traits(movie_id, traits[0])
+    return traits[0]
+
+def get_cache_personality_traits(movie_id):
+    key_trait_base = str(movie_id) + "_personality_traits_{0}"
+    traits_cache = []
+    for i in range(5):
+        key_trait = key_trait_base.format(i)
+        trait_cache = get_cache(cache, key_trait)
+        if not trait_cache:
+            return None
+        traits_cache.append(trait_cache)
+    return traits_cache
+
+def set_cache_personality_traits(movie_id, traits):
+    key_trait_base = str(movie_id) + "_personality_traits_{0}"
+    for i in range(5):
+        set_cache(cache, key=key_trait_base.format(i), value=traits[i], ttl=60)
+        

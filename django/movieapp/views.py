@@ -59,10 +59,8 @@ def movie_panel(request):
     movie_selected = request.GET.get('select')
     has_traits = True if request.GET.get('traits') else False
     movie_id = get_movie_id_by_title(movie_selected)
+    # param exists and movie exists
     if movie_selected and movie_id:
-        # TODO add movie info logics
-        # TODO can do in one search
-
         movie_title = movie_selected
         released_year = get_released_year_by_movie_id(movie_id)
         avg_rating = get_avg_rating_by_movie_id(movie_id)
@@ -88,9 +86,8 @@ def movie_panel(request):
 
         # predict personality trait
         if has_traits:
-            user_group = get_personality_user_group_by_movie_id(movie_id)
-            traits = get_personality_traits(user_group)
-            traits = [round(trait, 2) for trait in traits[0]] if traits else []
+            traits = get_personality_traits_by_movie_id(movie_id)
+            traits = [round(trait, 2) for trait in traits] if traits else []
             personality_traits = list(zip(personalities, traits))
             context['traits'] = personality_traits
             
@@ -318,7 +315,7 @@ def soon_to_be_released_movie_prediction(request):
             LIMIT {}, 20;
             '''.format((int(page))*20 - 20)
     result = execute_query(query)
-    
+
     avg_rating_list_by_seen_people = get_avg_ratings_from_seen_people(page) # people who have seen avg rating
     avg_rating_list_by_genres = get_avg_ratings_from_similar_genres(page)
     avg_rating_list_by_tags = []
