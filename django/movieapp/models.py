@@ -142,7 +142,7 @@ def get_imdb_img(movie_id, movie_title):
     # cache hit, return directly
     if img_url_cached:
         logger.info("img cache hit!")
-        return img_url_cached
+        return img_url_cached if img_url_cached != "null" else ""
     logger.info("img cache miss!")
     # cache miss, crawl and write
     crawler = Crawler(movie_id, movie_title, LinkType.IMDB)
@@ -150,9 +150,9 @@ def get_imdb_img(movie_id, movie_title):
     if not crawler:
         return ""
     img_url = crawler.get_imdb_img_url()
-    # only write to cache if found
-    if img_url:
-        set_cache(cache, cache_key, img_url, 60)
+    # also cache if empty
+    cache_value = img_url if img_url else "null"
+    set_cache(cache, cache_key, cache_value, 60)
     return img_url 
     
 def get_summary_text(movie_id, movie_title):
