@@ -396,12 +396,16 @@ def user_segmentation_by_ratings(request):
     limit = (int(page))*5 - 5
     movie_id_list = get_limited_movies(limit)
 
+    
+
+
     segmented = []
     tags = []
     #  tags = [movie1[zip(tag_names|users(likers,haters|general_users_list))]]
     genres = []
 
     for movie_id in movie_id_list:
+
         info = []
         counts, likers, haters = gather_user_groups(movie_id[0])
         info.append(get_movie_name_by_movie_id(movie_id)[0][0])
@@ -422,6 +426,8 @@ def user_segmentation_by_ratings(request):
             likers_general, haters_general = general_preference_by_tag(curr_tag)
             general_users_list.append(likers_general)
             general_users_list.append(haters_general)
+        
+        get_cached_genres_info(movie_id)
         
         genre_list = get_genres_by_movieid(movie_id)
         genre_users = []
