@@ -16,9 +16,10 @@ ignore 1 lines;
 
 load data local infile './generated_csv/movies.csv' 
 into table movies
-FIELDS TERMINATED BY "," 
+FIELDS TERMINATED BY ',' 
 lines terminated by '\n'
-ignore 1 lines;
+ignore 1 lines
+SET movieAlias = REPLACE(movieAlias, '"', '');
  
 load data local infile './generated_csv/tags.csv' 
 into table tags
