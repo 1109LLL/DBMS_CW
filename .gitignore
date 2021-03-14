@@ -133,9 +133,6 @@ pythonenv*
 .dmypy.json
 dmypy.json
 
-# redis
-./redis/redis_data/*
-
 # Pyre type checker
 .pyre/
 
@@ -152,7 +149,7 @@ dmypy.json
 
 ### Redis ###
 # Ignore redis binary dump (dump.rdb) files
-
+./redis/redis_data/*
 *.rdb
 
 # End of https://www.toptal.com/developers/gitignore/api/redis
