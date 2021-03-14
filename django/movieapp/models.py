@@ -360,30 +360,6 @@ def get_personality_traits_by_user_group(user_group):
     result_traints = execute_query(query_traits.format(*personalitiy_avgs, user_group_str), [])
     return result_traints
 
-def get_cached_genres_info(movie_id):
-    cache_key = "genres_user_preference_for_"+str(movie_id)
-    genre_segmentation_info_cached = get_cache(cache, cache_key)
-    # cache hit, return directly
-    if genre_segmentation_info_cached:
-        logger.info("cache hit!")
-        return True, genre_segmentation_info_cached
-    logger.info("cache miss!")
-
-    return False, []
-
-    # cache miss, crawl and write
-    # crawler = Crawler(movie_id, movie_title, LinkType.IMDB)
-    # not available in imdb
-    if not crawler:
-        return ""
-    img_url = crawler.get_imdb_img_url()
-    # only write to cache if found
-    if img_url:
-        set_cache(cache, cache_key, img_url, 30)
-    return img_url 
-
-
-
 def preference_by_tag(tag):
     likers = '''
             SELECT ratings.userID

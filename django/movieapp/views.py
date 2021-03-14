@@ -393,9 +393,6 @@ def user_segmentation_by_ratings(request):
     limit = (int(page))*5 - 5
     movie_id_list = get_limited_movies(limit)
 
-    
-
-
     segmented = []
     tags = []
     #  tags = [movie1[zip(tag_names|users(likers,haters|general_users_list))]]
