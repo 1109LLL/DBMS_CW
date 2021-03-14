@@ -1,4 +1,4 @@
-Containerize This: PHP/Apache/MySQL
+Database and Information Management Systems coursework 2021: TEAM 6
 ===================================
 ### Manual
 After pulling, cd into directory with `docker-compose.yml` file
