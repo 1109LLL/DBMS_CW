@@ -141,7 +141,7 @@ def get_average_rating_from_similar_tags(movie_id):
             INNER JOIN userTagsMovie AS utm ON t.tagID = utm.tagID AND t.tagName IN %s
             INNER JOIN ratings ON ratings.movieID = utm.movieID;
             '''
-    result = execute_query(query, (tags_list,))
+    result = execute_query(query, (tag_list,))
     return result[0][0]
 
 
@@ -150,7 +150,7 @@ def most_popular(request):
     year = request.GET.get('option')
     row = []
     option = 1
-    if year == "":
+    if year == "past_year":
         query = '''
                 SELECT m.movieID, m.movieTitle, m.movieReleased, COUNT(m.movieID), ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) 
                 FROM movies m JOIN ratings r ON m.movieID = r.movieID AND m.movieReleased = 2018
