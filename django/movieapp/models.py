@@ -220,8 +220,8 @@ def total_number_of_movies():
     ### guarantee to exist and type-correct ###
     return int(result[0][0])
 
-def get_index_movies_info(page=1):
-    index = page - 1
+def get_index_movies_info(page):
+    index = page
     query = '''
             SELECT DISTINCT m.movieID, 
                             m.movieTitle, 

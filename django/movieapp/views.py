@@ -39,9 +39,11 @@ def get_genres_by_movieid(movie_id):
 def index(request):
     movie_search = request.GET.get('search')
     page = request.GET.get('page')
-    page = int(page) if page and int(page) > 0 else 1
+    page = int(page) if page else 1
+    limit = page*20 - 20
+
     # either show all or show search results
-    movies_info = get_search_movies_info(movie_search, page) if movie_search else get_index_movies_info(page)
+    movies_info = get_search_movies_info(movie_search, page) if movie_search else get_index_movies_info(limit)
     # genres csv to list
     movies_info = fix_movies_info_genres(movies_info, genres_index=4)
     movie_num = total_number_of_movies()
@@ -420,8 +422,6 @@ def user_segmentation_by_ratings(request):
             likers_general, haters_general = general_preference_by_tag(curr_tag)
             general_users_list.append(likers_general)
             general_users_list.append(haters_general)
-        
-        get_cached_genres_info(movie_id)
         
         genre_list = get_genres_by_movieid(movie_id)
         genre_users = []
