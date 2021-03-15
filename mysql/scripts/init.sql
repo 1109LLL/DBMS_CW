@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS admins(
     userID INT NOT NULL PRIMARY KEY,
     adminLevel INT,
+    pw VARCHAR(255) NOT NULL,
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
