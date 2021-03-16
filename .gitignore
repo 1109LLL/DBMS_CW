@@ -154,3 +154,6 @@ dmypy.json
 
 # End of https://www.toptal.com/developers/gitignore/api/redis
 
+mysql/tmp/app/mysqld/mysqld.pid
+mysql/tmp/app/mysqld/mysqld.sock.lock
+mysql/tmp/app/mysqld/mysqlx.sock.lock
