@@ -125,6 +125,45 @@ def get_ratings_by_movie_id(movie_id):
     result = execute_query(query, [movie_id])
     return result if result else []
 
+
+def get_most_popular_movies(option):
+    if option == "past_year":
+        query = '''
+                SELECT m.movieID, m.movieTitle, m.movieReleased, COUNT(m.movieID), ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) 
+                FROM movies m JOIN ratings r ON m.movieID = r.movieID AND m.movieReleased = 2018
+                GROUP BY m.movieID 
+                ORDER BY COUNT(m.movieID) DESC
+                limit 100
+                '''
+        return execute_query(query)
+    else:
+        option = 1
+        query = '''
+                SELECT m.movieID, m.movieTitle, m.movieReleased, COUNT(m.movieID), ROUND(SUM(r.ratingFigure)/COUNT(m.movieID), 1) 
+                FROM movies m JOIN ratings r ON m.movieID = r.movieID
+                GROUP BY m.movieID 
+                ORDER BY COUNT(m.movieID) DESC
+                limit 100
+                '''
+        return execute_query(query)
+
+def get_average_rating_from_similar_tags(movie_id):
+    tags = get_tag_names_by_movie_id(movie_id)
+    if len(tags) == 0:
+        return -1
+    tags_list = []
+    for t in tags:
+        tags_list.append(t[0])
+    tag_list = tuple(tags_list)
+
+    query = '''  
+            SELECT AVG(ratingFigure) FROM tags AS t
+            INNER JOIN userTagsMovie AS utm ON t.tagID = utm.tagID AND t.tagName IN %s
+            INNER JOIN ratings ON ratings.movieID = utm.movieID;
+            '''
+    result = execute_query(query, (tag_list,))
+    return result[0][0]
+
 def get_movie_name_by_movie_id(movie_id):
     if not movie_id:
         return None
@@ -192,6 +231,99 @@ def determine_polarization(movie_id):
         b = result[0][1]
         return polarized, good_ratio, bad_ratio, g, b
 
+def get_avg_ratings_from_similar_genres(page):
+    query = '''
+            SELECT AVG(rg.ratingFigure)
+            FROM (
+            SELECT mg.genreID, AVG(r.ratingFigure) AS ratingFigure
+            FROM ratings AS r, 
+            moviesGenres AS mg
+            WHERE r.movieID = mg.movieID
+            AND r.movieID IN (SELECT m.movieID 
+            FROM movies AS m 
+            WHERE movieReleased = 0)
+            GROUP BY mg.genreID) 
+            AS rg,
+            moviesGenres AS mg
+            WHERE mg.genreID = rg.genreID
+            AND mg.movieID IN (SELECT m.movieID 
+            FROM movies AS m 
+            WHERE movieReleased = 0)
+            GROUP BY mg.movieID
+            LIMIT {}, 20;
+            '''.format((int(page))*20 - 20)
+    result = execute_query(query)
+    return result
+
+def get_avg_rating_for_a_movie_from_similar_genres(movieID):
+    query = '''
+            SELECT AVG(rg.ratingFigure)
+            FROM (
+            SELECT mg.genreID AS genreID, AVG(r.ratingFigure) AS ratingFigure
+            FROM ratings AS r, 
+            moviesGenres AS mg
+            WHERE r.movieID = mg.movieID
+            AND r.movieID IN (SELECT m.movieID 
+            FROM movies AS m 
+            WHERE movieReleased = 0)
+            GROUP BY mg.genreID) 
+            AS rg
+            WHERE rg.genreID IN
+            (SELECT mg.genreID AS genreID 
+            FROM moviesGenres AS mg 
+            WHERE movieID = %s)
+            ;
+            '''
+    result = execute_query(query,[movieID])
+    return result[0][0]
+
+def get_avg_ratings_from_seen_people(page):
+    query = '''
+            SELECT avg(r.ratingFigure) AS AverageRating 
+            FROM ratings AS r 
+            WHERE r.movieID IN 
+            (SELECT m.movieID 
+            FROM movies AS m 
+            WHERE movieReleased = 0) 
+            GROUP BY r.movieID
+            LIMIT {}, 20;
+            '''.format((int(page))*20 - 20)
+    result = execute_query(query)
+    avg_rating = []
+    for i in result:
+        avg_rating.append([i[0]])
+    return avg_rating
+
+def get_avg_rating_for_a_movie_from_seen_people(movieID):
+    query = '''
+            SELECT AVG(r.ratingFigure) 
+            FROM ratings AS r 
+            WHERE r.movieID = %s
+            '''
+
+    result = execute_query(query,[movieID])
+    return result[0][0]
+
+def get_genres_by_movieid(movie_id):
+    if movie_id:
+        query = '''
+                SELECT g.genreName 
+                FROM genres AS g, 
+                moviesGenres AS mg, 
+                movies AS m 
+                WHERE g.genreID = mg.genreID 
+                AND m.movieID = mg.movieID 
+                AND m.movieID = %s;
+                '''
+        with connection.cursor() as cursor:
+            cursor.execute(query, [movie_id])
+            row = cursor.fetchall()
+            genre_list = []
+            for i in row:
+                genre_list.append(i[0])
+            return genre_list
+    else:
+        return []
 
 def get_prediction_movies_row_number():
     query = '''
@@ -220,8 +352,8 @@ def total_number_of_movies():
     ### guarantee to exist and type-correct ###
     return int(result[0][0])
 
-def get_index_movies_info(page=1):
-    index = page - 1
+def get_index_movies_info(page):
+    index = page
     query = '''
             SELECT DISTINCT m.movieID, 
                             m.movieTitle, 
@@ -465,6 +597,65 @@ def get_genre_user_groups(genre):
     haters_list = execute_query(haters, [genre])
 
     return likers_list, haters_list
+
+def get_genre_lists_from_movieid(movieid):
+    if not movieid:
+        return None
+    query = '''
+            SELECT genreID
+            FROM moviesGenres
+            WHERE movieID = %s; 
+            '''
+    genres = execute_query(query, [movieid])
+    genres_list = []
+    for i in genres:
+        genres_list.append(i[0])
+    return genres_list
+
+def get_movieid_by_genreid(genreid):
+    if not genreid:
+        return None
+    query = '''
+            SELECT movieID from moviesGenres
+            WHERE genreID = %s;
+            '''
+    result = execute_query(query, [genreid])
+    movieid_list = []
+    for i in result:
+        movieid_list.append(i[0])
+    return movieid_list
+
+def get_movie_list_containing_same_genres(genreid_lists): # [[0, 6, 4, 11, 12], [3, 6, 5]]
+    movies_list = []
+    for genreid_list in genreid_lists:
+        temp_list = []
+        for genreid in genreid_list:
+            temp = get_movieid_by_genreid(genreid)
+            if temp == None:
+                continue
+            else:
+                temp_list = temp_list + temp
+        movies_list.append(temp_list)
+    return movies_list
+
+
+def get_avg_ratings_of_lists_of_movies(movies_list):
+    if not movies_list:
+        return None
+    splicing_movies_list = ""
+    for i in movies_list:
+        splicing_movies_list = splicing_movies_list + str(i) + ','
+    splicing_movies_list = splicing_movies_list.strip(",") 
+    query = '''
+            SELECT AVG(ratingFigure)
+            FROM ratings
+            WHERE movieID in (%s);
+            '''
+    result = execute_query(query, [splicing_movies_list])
+    avg_rating = []
+    for i in result:
+        avg_rating.append(i[0])
+    return avg_rating
     
 def get_personality_traits_by_movie_id(movie_id):
     traits_cache = get_cache_personality_traits(movie_id)
@@ -495,4 +686,3 @@ def set_cache_personality_traits(movie_id, traits):
     key_trait_base = str(movie_id) + "_personality_traits_{0}"
     for i in range(5):
         set_cache(cache, key=key_trait_base.format(i), value=traits[i], ttl=60)
-        

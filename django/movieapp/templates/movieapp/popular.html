@@ -36,7 +36,7 @@
         {% for movie in movies%}
           <tr>
             <td><h5><span class="badge badge-pill badge-light">{{forloop.counter}}</span></td>
-            <td><a class="nav-link movie-link" href="movie_panel?select={{movie.0}}">{{movie.1}}</a></td>
+            <td><a class="nav-link" href="movie_panel?select={{movie.1}}">{{movie.1}}</a></td>
             <td>{{movie.2}}</td>
             <td>{{movie.3}}</td>
             <td>{{movie.4}}</td>
