@@ -21,7 +21,7 @@
             <td><h5><span class="badge badge-pill badge-light">{{movie_info.0}}</span></h5></td>
              <td><a class="nav-link movie-link" href="movie_panel?select={{movie_info.1}}">{{movie_info.1}}</a></td>
             <td>{{movie_info.2}}</td>
-            <td>{{movie_info.3}}</td>
+            <td>{% if movie_info.3 == 0 %}Coming soon...{% else %}{{movie_info.3}}{% endif %}</td>
             <td><h5>{%for genre in movie_info.4%} <span class="badge badge-pill badge-light">{{genre}}</span> {%endfor%}</h5></td>
           </tr>
         {% endfor %}
