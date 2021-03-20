@@ -505,7 +505,7 @@ def preference_by_tag(tag):
                             FROM tags 
                             WHERE tagName = %s) AS selected_tagID
                     ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
-            WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.movieID = associated_user_movie_ID.movieID AND ratings.ratingFigure >= 4
+            WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.movieID = associated_user_movie_ID.movieID AND ratings.ratingFigure > 3
             GROUP BY ratings.userID;
             '''
     likers_list = execute_query(likers, [tag])
@@ -522,7 +522,7 @@ def preference_by_tag(tag):
                             FROM tags 
                             WHERE tagName = %s) AS selected_tagID
                     ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
-            WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.movieID = associated_user_movie_ID.movieID AND ratings.ratingFigure <= 2
+            WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.movieID = associated_user_movie_ID.movieID AND ratings.ratingFigure <= 3
             GROUP BY ratings.userID;
             '''
     haters_list = execute_query(haters, [tag])
@@ -541,7 +541,7 @@ def general_preference_by_tag(tag):
                                 FROM tags 
                                 WHERE tagName = %s) AS selected_tagID
                         ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
-                WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.ratingFigure >= 4
+                WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.ratingFigure > 3
                 GROUP BY ratings.userID;
             '''
     likers_list = execute_query(likers, [tag])
@@ -558,7 +558,7 @@ def general_preference_by_tag(tag):
                                 FROM tags 
                                 WHERE tagName = %s) AS selected_tagID
                         ON userTagsMovie.tagID = selected_tagID.tagID) AS associated_user_movie_ID
-                WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.ratingFigure <= 2
+                WHERE ratings.userID = associated_user_movie_ID.userID AND ratings.ratingFigure <= 3
                 GROUP BY ratings.userID;
             '''
     haters_list = execute_query(haters, [tag])
