@@ -374,7 +374,9 @@ def get_index_movies_info(page):
     return result
 
 def get_search_movies_info(key="", page=1):
-    key = '%' + key + '%'
+    index = page - 1
+    logger.info(key)
+    logger.info(index)
     query = '''
             SELECT DISTINCT m.movieID, 
                             m.movieTitle, 
@@ -389,15 +391,19 @@ def get_search_movies_info(key="", page=1):
                 g.genreID = mg.genreID
                 AND
                 (
+                    m.movieTitle = %s
+                OR
+                    m.movieAlias = %s
+                OR
                     m.movieTitle LIKE %s
                 OR
-                    m.movieAlias LIKE %s
+                    m.movieTitle LIKE %s
                 )
             GROUP BY m.movieID, m.movieTitle, m.movieAlias, m.movieReleased
             LIMIT %s, 20
             ;
             '''
-    result = execute_query(query, [key, key, page])
+    result = execute_query(query, [key, key, key+"%", "%"+key, index])
     logger.info(result)
     return result
 

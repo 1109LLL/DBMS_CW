@@ -27,6 +27,7 @@ def index(request):
     # genres csv to list
     movies_info = fix_movies_info_genres(movies_info, genres_index=4)
     movie_num = total_number_of_movies()
+    logger.info("movie size: {}".format(movie_num))
     page_num = get_page_num(movie_num)
 
     context = {
